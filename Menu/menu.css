@@ -1,0 +1,15 @@
+#menu{
+    height: 800px;
+    width: 1200px;
+    border: solid;
+    background-image: url("BG%20Menu.png");
+    font-size: 200%;
+}
+
+H1, Ul, li, p{
+    text-align: center
+}
+
+ul{
+    display: inline
+}
