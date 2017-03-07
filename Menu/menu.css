@@ -13,3 +13,13 @@ H1, Ul, li, p{
 ul{
     display: inline
 }
+
+a{
+    color: darkblue
+}
+
+h4{
+    text-align: center;
+    font-size: 13px;
+    line-height: 1px
+}
