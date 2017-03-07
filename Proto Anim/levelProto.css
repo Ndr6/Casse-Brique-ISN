@@ -2,3 +2,16 @@ canvas{
 	border-color: green;
 	border: solid;
 }
+
+table{
+    
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 1280px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
