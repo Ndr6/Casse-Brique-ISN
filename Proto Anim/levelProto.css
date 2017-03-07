@@ -1,6 +1,7 @@
 canvas{
 	border-color: green;
 	border: solid;
+  background-image: "../Space/BGSpace.png"
 }
 
 table{
@@ -14,4 +15,4 @@ td, th {
     border: 1px solid #dddddd;
     text-align: center;
     padding: 8px;
-}
+ }
