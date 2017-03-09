@@ -24,3 +24,7 @@ body{
 a{
     color: lightcyan
 }
+
+p{
+    text-align: left;
+}
