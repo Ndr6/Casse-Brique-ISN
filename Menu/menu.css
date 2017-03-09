@@ -7,19 +7,19 @@
 }
 
 H1, Ul, li, p{
-    text-align: center
+    text-align: center;
 }
 
 ul{
-    display: inline
+    display: inline;
 }
 
 a{
-    color: darkblue
+    color: darkblue;
 }
 
 h4{
     text-align: center;
     font-size: 13px;
-    line-height: 1px
+    line-height: 1px;
 }
