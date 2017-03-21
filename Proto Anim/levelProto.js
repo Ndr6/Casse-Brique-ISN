@@ -1,55 +1,53 @@
-  window.addEventListener("load", function() {
+/*global Audio: false*/
+var x = 100;
+var y = 700;
+var test = new Audio("son_robot.mp3");
+var image = new Image();
+image.src = "barreSpatiale.png";
+image.width = 200;
+image.height = 50;
+var canvas = document.getElementById('canvas');
+var scene = canvas.getContext("2d");
+alert("test");
+var rayon = 25;
+var pas = 5;
+var posx = 100;
+var posy = 600;
+var revx = false;
+var revy = false;
+var flag = false;
+var image2 = new Image();
+image2.src = "briquecaillou.png";
+image2.width = 80;
+image2.height = 40;
+var grand = false;
+var image3 = new Image();
+image3.src = "terre.png";
+image3.width = 50;
+image3.height = 50;
 
-    //variables
-   
-    x = 100;
-    y = 700;
-    test = new Audio("son_robot.mp3");
-    image = new Image();
-    image.src = "barreSpatiale.png" ; 
-	image.width = 200;
-	image.height = 50;
-    canvas = document.getElementById('canvas');
-    scene = canvas.getContext("2d");
-	rayon = 25;
-	pas = 5;
-	posx = 100;
-	posy = 600;
-	revx=false;
-	revy=false;
-    flag = false;
-    
-	image2 = new Image();
-	
-	image2.src = "briquecaillou.png" ; 
-	image2.width = 80;
-	image2.height = 40;
-	grand = false;
-	image3 = new Image();
-	image3.src = "terre.png" ;
-	image3.width = 50;
-	image3.height = 50;
-    //variables
-    //création briques
-    var briques = function (pos2x, pos2y,flag2){                   
-			this.x=pos2x; 
-			this.y=pos2y;
-			this.flag2 = flag2;
-		}	
-		obj=new Array();
-			for(v=0; v<6; v++){
-				for(i=0; i<15; i++){
-					pos2x=83*i+19;
-					pos2y=43*v+5;
-					flag2=true;
-					obj.push(new briques(pos2x,pos2y,flag2))
-				}
-			}
-    //création briques
-  })
+var creaBriques = function () {//création briques (apparement...)
+    "use strict";
+    alert("main");
+    var obj = [], v, briques = function (pos2x, pos2y, flag2) {
+        this.x = pos2x;
+        this.y = pos2y;
+        this.flag2 = flag2;
+    };
+    for (v = 0, v < 6, v++) {
+         for(i=0; i<15; i++) {
+            pos2x=83*i+19;
+            pos2y=43*v+5;
+            flag2=true;
+            obj.push(new Briques(pos2x,pos2y,flag2))
+    }
+     }
+}
 
-        
-  window.onkeydown = function(event){
+window.addEventListener("load", creaBriques);
+
+window.onkeydown = function(event)
+{
 	if (event.keyCode===39){
 		if (!flag){
 			flag=true;
@@ -59,7 +57,7 @@
 	if (event.keyCode===38){
 		flag=false;
 	}
-    }
+}
 //balle deplacement
   function animation(){
 		scene.clearRect(0,0,1280,800);
