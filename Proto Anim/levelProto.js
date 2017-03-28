@@ -34,8 +34,8 @@ var creaBriques = function () {//création briques (apparement...)
         this.y = pos2y;
         this.flag2 = flag2;
     };
-    for (v = 0; v < 6; v + 1) {
-        for (i = 0; i < 15; i + 1) {
+    for (v = 0; v < 6; v++) {
+        for (i = 0; i < 15; i++) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
