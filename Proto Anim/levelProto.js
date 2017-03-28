@@ -29,6 +29,7 @@ var creaBriques = function () {//création briques (apparement...)
     "use strict";
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
+
     var v, i, Briques = function (pos2x, pos2y, flag2) {
         this.x = pos2x;
         this.y = pos2y;
@@ -46,7 +47,6 @@ var creaBriques = function () {//création briques (apparement...)
 
 window.addEventListener("load", creaBriques);
 
-//balle deplacement
 var k, animation = function () {
     "use strict";
     scene.clearRect(0, 0, 1280, 800);
@@ -87,6 +87,22 @@ var k, animation = function () {
     if (flag) {
         setTimeout(animation, 10);
     }
+    for(j=1;j<obj.length;j++){
+    var distx=posx-obj[j].x; //comparaison distance en x
+    var disty=posy-obj[j].y; //comparaison distance en y
+    var distance=Math.pow((Math.pow(distx,2)+Math.pow(disty,2)),0.5); //calcule distance entre 
+    if (distance<(2*(rayon))){
+    posx=posx+1;
+    posy=posy+1;
+    revy=false;
+    if(revy=false){
+    obj[j].flag2=false;
+    }    
+    }
+    }
+    if (flag){
+	  setTimeout(animation, 10);
+		}
 };
 
 //Déplacement de la balle PROTO, appui sur haut pour pause
@@ -101,7 +117,6 @@ window.onkeydown = function (event) {
 	if (event.keyCode === 38) {
 		flag = false;
 	}
-
 };
 
 document.addEventListener("keydown", function (event) {     // commande barre    
