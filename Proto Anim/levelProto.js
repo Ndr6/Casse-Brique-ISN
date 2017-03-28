@@ -87,6 +87,8 @@ var k, animation = function () {
     if (flag) {
         setTimeout(animation, 10);
     }
+    
+    //Bout de code chelou de Gabeing et Antho
     for(j=1;j<obj.length;j++){
     var distx=posx-obj[j].x; //comparaison distance en x
     var disty=posy-obj[j].y; //comparaison distance en y
@@ -100,6 +102,8 @@ var k, animation = function () {
     }    
     }
     }
+    //Fin du bout de code chelou qui marche plus parce que je l'ai mis au mauvais endroit, probablement...
+    
     if (flag){
 	  setTimeout(animation, 10);
 		}
