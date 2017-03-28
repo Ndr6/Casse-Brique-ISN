@@ -1,4 +1,5 @@
-  window.addEventListener("load", function() {
+var obj = [];  
+window.addEventListener("load", function() {
 
     //variables
    
@@ -31,12 +32,12 @@
 	image3.height = 50;
     //variables
     //création briques
-    var briques = function (pos2x, pos2y,flag2){                   
+    var briques = function (pos2x, pos2y,flag2) {
 			this.x=pos2x; 
 			this.y=pos2y;
 			this.flag2 = flag2;
 		}	
-		obj=new Array();
+		
 			for(v=0; v<6; v++){
 				for(i=0; i<15; i++){
 					pos2x=83*i+19;
@@ -107,9 +108,27 @@
 		
 			posy=posy-pas;
 		}
-		if (flag){
+		
+        for(j=1;j<obj.length;j++){
+            var distx=posx-obj[j].x; //comparaison distance en x
+            var disty=posy-obj[j].y; //comparaison distance en y
+            var distance=Math.pow((Math.pow(distx,2)+Math.pow(disty,2)),0.5); //calcule distance entre 
+            if (distance<(2*(rayon))){
+                posx=posx+1;
+                posy=posy+1;
+                revy=false;
+                
+            if(revy=false){
+                obj[j].flag2=false;
+            }    
+            }
+        }
+            if (flag){
 			setTimeout(animation, 10);
 		}
+        
+        
+            
 		}
 //balle deplacement
     document.addEventListener("keydown", function (event) {    
