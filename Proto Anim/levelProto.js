@@ -25,7 +25,8 @@ image3.height = 50;
 var pos2x, pos2y, flag2;
 var obj = [];
 
-var creaBriques = function () {//création briques (apparement...)
+//Fonction de création des briques (apparement...)
+var creaBriques = function () {
     "use strict";
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
@@ -35,8 +36,8 @@ var creaBriques = function () {//création briques (apparement...)
         this.y = pos2y;
         this.flag2 = flag2;
     };
-    for (v = 0; v < 6; v++) {
-        for (i = 0; i < 15; i++) {
+    for (v = 0; v < 6; v += 1) {
+        for (i = 0; i < 15; i += 1) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
@@ -44,7 +45,9 @@ var creaBriques = function () {//création briques (apparement...)
         }
     }
 };
+//Fin création briques
 
+//Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
 var k, animation = function () {
@@ -84,29 +87,27 @@ var k, animation = function () {
     } else {
 		posy = posy - pas;
     }
+
+    //Collisions briques
+    var j, distx, disty, distance;
+    for (j = 1; j < obj.length; j += 1) {
+        distx = posx - obj[j].x; //comparaison distance en x
+        disty = posy - obj[j].y; //comparaison distance en y
+        distance = Math.pow((Math.pow(distx, 2) + Math.pow(disty, 2)), 0.5); //calcule distance entre 
+        if (distance < (2 * rayon)) {
+            posx = posx + 1;
+            posy = posy + 1;
+            revy = false;
+            if (revy === false) {
+                obj[j].flag2 = false;
+            }
+        }
+    }
+    //Fin collisions briques
+    
     if (flag) {
         setTimeout(animation, 10);
     }
-    
-    //Bout de code chelou de Gabeing et Antho
-    for(j=1;j<obj.length;j++){
-    var distx=posx-obj[j].x; //comparaison distance en x
-    var disty=posy-obj[j].y; //comparaison distance en y
-    var distance=Math.pow((Math.pow(distx,2)+Math.pow(disty,2)),0.5); //calcule distance entre 
-    if (distance<(2*(rayon))){
-    posx=posx+1;
-    posy=posy+1;
-    revy=false;
-    if(revy=false){
-    obj[j].flag2=false;
-    }    
-    }
-    }
-    //Fin du bout de code chelou qui marche plus parce que je l'ai mis au mauvais endroit, probablement...
-    
-    if (flag){
-	  setTimeout(animation, 10);
-		}
 };
 
 //Déplacement de la balle PROTO, appui sur haut pour pause
@@ -123,6 +124,7 @@ window.onkeydown = function (event) {
 	}
 };
 
+//Partie commande (touches)
 document.addEventListener("keydown", function (event) {     // commande barre    
     "use strict";
     switch (event.keyCode) {
@@ -162,5 +164,5 @@ document.addEventListener("keydown", function (event) {     // commande barre
         }
         break;
     }
-// commande barre
 });
+//Fin partie commande
