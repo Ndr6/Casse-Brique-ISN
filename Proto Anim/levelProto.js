@@ -1,6 +1,6 @@
 /*global Audio: false*/
 /*global alert: false*/
-var x = 100, y = 700;
+var x = 540, y = 700;
 var test = new Audio("son_robot.mp3");
 var image = new Image();
 image.src = "barreSpatiale.png";
@@ -10,7 +10,7 @@ var canvas;
 var scene;
 var rayon = 25;
 var pas = 5;
-var posx = 100, posy = 600;
+var posx = 615, posy = 649;
 var revx = false, revy = false;
 var flag = false;
 var image2 = new Image();
@@ -24,6 +24,9 @@ image3.width = 50;
 image3.height = 50;
 var pos2x, pos2y, flag2;
 var obj = [];
+var keyState = {};
+var pupDef = false;
+var animation;
 
 //Fonction de création des briques (apparement...)
 var creaBriques = function () {
@@ -50,7 +53,73 @@ var creaBriques = function () {
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
-var k, animation = function () {
+//Écoute des touches
+window.addEventListener('keydown', function (e) {
+    "use strict";
+    keyState[e.keyCode || e.which] = true;
+}, true);
+window.addEventListener('keyup', function (e) {
+    "use strict";
+    keyState[e.keyCode || e.which] = false;
+}, true);
+//Fonction de commnde raquette next gen
+function controls() {
+    "use strict";
+    //Contrôles flèche gauche et "q"
+    if (keyState[37] || keyState[81]) {
+        if (x <= 2) {
+            scene.clearRect(x, y, image.width, image.height);
+            x -= 0;
+            scene.drawImage(image, x, y, image.width, image.height);
+        } else {
+            scene.clearRect(x, y, image.width, image.height);
+            x -= 15;
+            scene.drawImage(image, x, y, image.width, image.height);
+        }
+    }
+    //Contrôles flèche droite et "d"
+    if (keyState[39] || keyState[68]) {
+        if (x >= 1270 - image.width) {
+            scene.clearRect(x, y, image.width, image.height);
+            x += 0;
+            scene.drawImage(image, x, y, image.width, image.height);
+        } else {
+            scene.clearRect(x, y, image.width, image.height);
+            x += 15;
+            scene.drawImage(image, x, y, image.width, image.height);
+        }
+    }
+    //Lancement de la balle (espace)
+    if (keyState[32] && !flag) {
+        flag = true;
+        animation();
+    }
+    //CHEAT Pause de la balle (espace)
+    //if (keyState[32] && flag) {
+    //    flag = false;
+    //    animation();
+    //}
+    //CHEAT Powerup
+    if (keyState[49] && !pupDef) {
+        scene.clearRect(x, y, image.width, image.height);
+        image.src = "barreSpatialeDefense.png";
+        //test.play(); la ferme !
+        image.width = 288;
+        image.height = 50;
+        pupDef = true;
+        x -= 44;
+        scene.drawImage(image, x, y, image.width, image.height);
+        if (x >= 1272 - image.width) {
+            x = 1272 - image.width;
+            scene.clearRect(x, y, image.width, image.height);
+            scene.drawImage(image, x, y, image.width, image.height);
+        }
+    }
+    
+    setTimeout(controls, 15);
+}
+var k;
+animation = function () {
     "use strict";
     scene.clearRect(0, 0, 1280, 800);
     scene.beginPath();
@@ -108,9 +177,12 @@ var k, animation = function () {
     if (flag) {
         setTimeout(animation, 10);
     }
+    //Appel de la fonction contrôle raquette
 };
+setTimeout(animation, 500);
+setTimeout(controls, 750);
 
-//Déplacement de la balle PROTO, appui sur haut pour pause
+/*//Déplacement de la balle PROTO, appui sur haut pour pause
 window.onkeydown = function (event) {
     "use strict";
 	if (event.keyCode === 39) {
@@ -122,47 +194,5 @@ window.onkeydown = function (event) {
 	if (event.keyCode === 38) {
 		flag = false;
 	}
-};
-
-//Partie commande (touches)
-document.addEventListener("keydown", function (event) {     // commande barre    
-    "use strict";
-    switch (event.keyCode) {
-    case 39:
-        if (x >= 1270 - image.width) {
-            scene.clearRect(x, y, image.width, image.height);
-            x += 0;
-            scene.drawImage(image, x, y, image.width, image.height);
-        } else {
-            scene.clearRect(x, y, image.width, image.height);
-            x += 50;
-            scene.drawImage(image, x, y, image.width, image.height);
-        }
-        break;
-    case 37:
-        if (x <= 2) {
-            scene.clearRect(x, y, image.width, image.height);
-            x -= 0;
-            scene.drawImage(image, x, y, image.width, image.height);
-        } else {
-            scene.clearRect(x, y, image.width, image.height);
-            x -= 50;
-            scene.drawImage(image, x, y, image.width, image.height);
-        }
-        break;
-    case 38:
-        scene.clearRect(x, y, image.width, image.height);
-        image.src = "barreSpatialeDefense.png";
-        test.play(); //son
-        image.width = 300;
-        image.height = 50;
-        scene.drawImage(image, x, y, image.width, image.height);
-        if (x >= 1272 - image.width) {
-            x = 1272 - image.width;
-            scene.clearRect(x, y, image.width, image.height);
-            scene.drawImage(image, x, y, image.width, image.height);
-        }
-        break;
-    }
-});
+};*/
 //Fin partie commande
