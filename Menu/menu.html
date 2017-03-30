@@ -4,6 +4,15 @@
         <meta charset="utf-8"/>
         <title>Prototype du menu</title>
         <link rel="stylesheet" type="text/css" href="menu.css">
+        <script>
+            var audioBG = new Audio("journey.mp3");
+            var musicLoop = function (){
+                audioBG.play();
+                audioBG.volume=0.3;
+                setTimeout(musicLoop, 201500);
+            }
+            musicLoop();
+        </script>
     </head>
     <body>
         <div id="menu">

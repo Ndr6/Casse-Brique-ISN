@@ -3,7 +3,16 @@
     <head>
         <meta charset="utf-8" />
         <title>Prototype du menu</title>
-        <link rel="stylesheet" type="text/css" href="credits.css"s>
+        <link rel="stylesheet" type="text/css" href="credits.css">
+        <script>
+            var audioBG = new Audio("loading.mp3");
+            var musicLoop = function (){
+                audioBG.play();
+                audioBG.volume=0.3;
+                setTimeout(musicLoop, 64000);
+            }
+            musicLoop();
+        </script>
     </head>
     <body>
         <div id="credits">
@@ -11,10 +20,11 @@
             <h1>Crédits</h1>
             <h2>Programmation :</h2>
             <li>Nous</li>
-            <h2>Musique :</h2>
-            <li>Peut-être Benji, on sait pas encore... (probablement pas)</li>
             <h2>Graphismes :</h2>
             <li>Gabeing</li>
+            <h2>Musique :</h2>
+            <li>Écran titre  : A different kind of journey - BitPower : <a href="http://www.newgrounds.com/audio/listen/734814" target="_blank">Lien</a></li>
+            <li>Crédits : Loading Screen - CHiLEDAWG : <a href="http://www.newgrounds.com/audio/listen/735287" target="_blank">Lien</a></li>
         </div>     
     </body>
 </html>
