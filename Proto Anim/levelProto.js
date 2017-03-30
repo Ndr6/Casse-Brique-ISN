@@ -1,34 +1,56 @@
 /*global Audio: false*/
 /*global alert: false*/
-var x = 540, y = 700;
-var test = new Audio("son_robot.mp3");
-var image = new Image();
-image.src = "barreSpatiale.png";
-image.width = 200;
-image.height = 50;
+
+/***************************************
+        Déclaration des variables
+***************************************/
+
+//Variables canvas
 var canvas;
 var scene;
-var rayon = 25;
-var pas = 5;
-var posx = 615, posy = 649;
-var revx = false, revy = false;
-var flag = false;
-var image2 = new Image();
-image2.src = "briquecaillou.png";
-image2.width = 80;
-image2.height = 40;
-var grand = false;
+var animation;
+
+//Variables raquette
+var x = 540, y = 700; //Dimensions balle
+
+var image = new Image();
+image.src = "barreSpatiale.png"; //Asset graphique barre
+image.width = 200;
+image.height = 50; //Dimensions asset barre
+
+var pupDef = false; //Flag powerup défense
+var test = new Audio("son_robot.mp3");
+
+//Variables balle
+var flag = false; //Activation de la balle
+var rayon = 25; //Rayon balle
+var pas = 5; //Vitesse animation
+var posx = 615, posy = 649; //Position initiale de la balle
+var revx = false, revy = false; //Sens animation balle
+
 var image3 = new Image();
 image3.src = "terre.png";
 image3.width = 50;
 image3.height = 50;
+
+//Variables briques
+
+var image2 = new Image();
+image2.src = "briquecaillou.png";
+image2.width = 80;
+image2.height = 40;
+
 var pos2x, pos2y, flag2;
 var obj = [];
-var keyState = {};
-var pupDef = false;
-var animation;
 
-//Fonction de création des briques (apparement...)
+//Variables contrôles
+var keyState = {};
+
+/****************************************
+           Début du programme
+****************************************/
+
+//Fonction de définition du pattern de briques (plutôt basique pour l'instant)
 var creaBriques = function () {
     "use strict";
     canvas = document.getElementById('canvas');
@@ -48,12 +70,11 @@ var creaBriques = function () {
         }
     }
 };
-//Fin création briques
 
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
-//Écoute des touches
+//Écoute des touches pour contrôles
 window.addEventListener('keydown', function (e) {
     "use strict";
     keyState[e.keyCode || e.which] = true;
@@ -62,7 +83,8 @@ window.addEventListener('keyup', function (e) {
     "use strict";
     keyState[e.keyCode || e.which] = false;
 }, true);
-//Fonction de commnde raquette next gen
+
+//Fonction de contrôles raquette next gen
 function controls() {
     "use strict";
     //Contrôles flèche gauche et "q"
@@ -94,12 +116,12 @@ function controls() {
         flag = true;
         animation();
     }
-    //CHEAT Pause de la balle (espace)
-    //if (keyState[32] && flag) {
-    //    flag = false;
-    //    animation();
-    //}
-    //CHEAT Powerup
+    //CHEAT Pause de la balle "P"
+    if (keyState[80] && flag) {
+        flag = false;
+        animation();
+    }
+    //CHEAT Powerup ("1/&")
     if (keyState[49] && !pupDef) {
         scene.clearRect(x, y, image.width, image.height);
         image.src = "barreSpatialeDefense.png";
@@ -115,12 +137,14 @@ function controls() {
             scene.drawImage(image, x, y, image.width, image.height);
         }
     }
-    
-    setTimeout(controls, 15);
+    setTimeout(controls, 15); //Bouclage de la fonction controls
 }
-var k;
+
+//Fonction principale : Animation du canvas et contrôle trajectoire de la balle
 animation = function () {
     "use strict";
+    var k, distx, disty, distance, j;
+    //(Re)construction de la scène
     scene.clearRect(0, 0, 1280, 800);
     scene.beginPath();
     scene.drawImage(image3, posx, posy, 50, 50);
@@ -132,6 +156,8 @@ animation = function () {
     scene.drawImage(image, x, y, image.width, image.height);
     scene.closePath();
     scene.fill();
+    
+    //Trajectoire de la balle (à isoler)
     if (posx < rayon) {
 		posx = rayon;
 		revx = false;
@@ -157,8 +183,7 @@ animation = function () {
 		posy = posy - pas;
     }
 
-    //Collisions briques
-    var j, distx, disty, distance;
+    //Collisions balle-briques
     for (j = 1; j < obj.length; j += 1) {
         distx = posx - obj[j].x; //comparaison distance en x
         disty = posy - obj[j].y; //comparaison distance en y
@@ -172,27 +197,17 @@ animation = function () {
             }
         }
     }
-    //Fin collisions briques
     
+    //Bouclage de la fonction animation
     if (flag) {
         setTimeout(animation, 10);
     }
-    //Appel de la fonction contrôle raquette
 };
-setTimeout(animation, 500);
-setTimeout(controls, 750);
 
-/*//Déplacement de la balle PROTO, appui sur haut pour pause
-window.onkeydown = function (event) {
-    "use strict";
-	if (event.keyCode === 39) {
-		if (!flag) {
-			flag = true;
-			animation();
-		}
-	}
-	if (event.keyCode === 38) {
-		flag = false;
-	}
-};*/
-//Fin partie commande
+//Lancement des fonctions principales après chargement de la page
+setTimeout(animation, 250);
+setTimeout(controls, 500);
+
+/******************************************************
+                    Fin du programme
+******************************************************/
