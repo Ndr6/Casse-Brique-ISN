@@ -5,22 +5,49 @@ canvas
     background-color: black;
 }
 
-table
+body
 {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 1280px;
+    background-color: black;
 }
 
 td, th
 {
     border: 1px solid #dddddd;
-    text-align: center;
-    padding: 8px;
+    padding: 20px;
+    background-color:darkgrey;
 }
 
 h1
 {
+    font-size: 25px;
+    color: white;
+    text-align: center;
+}
+
+a
+{
     font-size: large;
-    color: darkcyan;
+    color: floralwhite;
+    text-align: center
+}
+
+h3
+{
+    font-size: 14px;
+    color: darkslategrey;
+}
+
+h4
+{
+    font-size: 12px;
+}
+
+table{
+    text-align: left;
+    background-color: white;
+}
+
+p
+{
+    text-align: center;
 }
