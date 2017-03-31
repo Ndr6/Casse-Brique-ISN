@@ -14,29 +14,30 @@ var animation;
 var x = 540, y = 700; //Dimensions balle
 
 var image = new Image();
-image.src = "barreSpatiale.png"; //Asset graphique barre
+image.src = "Raquette.png"; //Asset graphique barre
 image.width = 200;
 image.height = 50; //Dimensions asset barre
 
 var pupDef = false; //Flag powerup défense
-var test = new Audio("son_robot.mp3");
+var test = new Audio("PUPDef_sound.mp3");
 
 //Variables balle
 var flag = false; //Activation de la balle
+var move = true; //Activation de la raquette
 var rayon = 25; //Rayon balle
 var pas = 5; //Vitesse animation
 var posx = 615, posy = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 
 var image3 = new Image();
-image3.src = "terre.png";
+image3.src = "balle.png";
 image3.width = 50;
 image3.height = 50;
 
 //Variables briques
 
 var image2 = new Image();
-image2.src = "briquecaillou.png";
+image2.src = "briqueProto.png";
 image2.width = 80;
 image2.height = 40;
 
@@ -89,42 +90,48 @@ function controls() {
     "use strict";
     //Contrôles flèche gauche et "q"
     if (keyState[37] || keyState[81]) {
-        if (x <= 2) {
-            scene.clearRect(x, y, image.width, image.height);
-            x -= 0;
-            scene.drawImage(image, x, y, image.width, image.height);
-        } else {
-            scene.clearRect(x, y, image.width, image.height);
-            x -= 15;
-            scene.drawImage(image, x, y, image.width, image.height);
+        if (move) {
+            if (x <= 2) {
+                scene.clearRect(x, y, image.width, image.height);
+                x -= 0;
+                scene.drawImage(image, x, y, image.width, image.height);
+            } else {
+                scene.clearRect(x, y, image.width, image.height);
+                x -= 15;
+                scene.drawImage(image, x, y, image.width, image.height);
+            }
         }
     }
     //Contrôles flèche droite et "d"
     if (keyState[39] || keyState[68]) {
-        if (x >= 1270 - image.width) {
-            scene.clearRect(x, y, image.width, image.height);
-            x += 0;
-            scene.drawImage(image, x, y, image.width, image.height);
-        } else {
-            scene.clearRect(x, y, image.width, image.height);
-            x += 15;
-            scene.drawImage(image, x, y, image.width, image.height);
+        if (move) {
+            if (x >= 1270 - image.width) {
+                scene.clearRect(x, y, image.width, image.height);
+                x += 0;
+                scene.drawImage(image, x, y, image.width, image.height);
+            } else {
+                scene.clearRect(x, y, image.width, image.height);
+                x += 15;
+                scene.drawImage(image, x, y, image.width, image.height);
+            }
         }
     }
     //Lancement de la balle (espace)
     if (keyState[32] && !flag) {
         flag = true;
+        move = true;
         animation();
     }
     //CHEAT Pause de la balle "P"
     if (keyState[80] && flag) {
         flag = false;
+        move = false;
         animation();
     }
     //CHEAT Powerup ("1/&")
     if (keyState[49] && !pupDef) {
         scene.clearRect(x, y, image.width, image.height);
-        image.src = "barreSpatialeDefense.png";
+        image.src = "RaquettePUPDef.png";
         //test.play(); la ferme !
         image.width = 288;
         image.height = 50;
