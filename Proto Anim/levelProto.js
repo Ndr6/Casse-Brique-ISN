@@ -10,6 +10,12 @@ var canvas;
 var scene;
 var animation;
 
+//Variables menu pause
+var pauseImg = new Image();
+pauseImg.src = "pausetest.png";
+pauseImg.width = 400;
+pauseImg.height = 400;
+
 //Variables raquette
 var x = 540, y = 700; //Dimensions balle
 
@@ -152,7 +158,6 @@ function controls() {
     if (keyState[80] && flag) {
         flag = false;
         move = false;
-        animation();
     }
     
     //CHEAT Reset raquette (0/à)
@@ -202,6 +207,9 @@ animation = function () {
         if (flag2) {
             scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
         }
+    }
+    if (!move) {
+        scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
     }
     scene.drawImage(image, x, y, image.width, image.height);
     scene.closePath();
