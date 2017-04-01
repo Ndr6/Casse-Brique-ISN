@@ -8,7 +8,7 @@
 //Variables canvas
 var canvas;
 var scene;
-var animation;
+var animation; //Fonction 
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -38,7 +38,7 @@ var revx = false, revy = false; //Sens animation balle
 var k, distx, disty, distance, j;
 
 var image3 = new Image();
-image3.src = "balle.png";
+image3.src = "balleavril.png";
 image3.width = 50;
 image3.height = 50;
 
