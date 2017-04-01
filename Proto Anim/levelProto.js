@@ -65,7 +65,7 @@ var creaBriques = function () {
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
 
-    var v, i, Briques = function (pos2x, pos2y, flag2) {
+    var v, i, Briques = function (pos2x, pos2y, flag2, life) {
         this.x = pos2x;
         this.y = pos2y;
         this.flag2 = flag2;
@@ -114,7 +114,7 @@ function controls() {
                 scene.beginPath();
                 scene.drawImage(image3, posx, posy, 50, 50);
                 for (k = 0; k < obj.length; k = k + 1) {
-                    if (flag2) {
+                    if (obj[k].flag2) {
                         scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
                     }
                 }
@@ -140,7 +140,7 @@ function controls() {
                 scene.beginPath();
                 scene.drawImage(image3, posx, posy, 50, 50);
                 for (k = 0; k < obj.length; k = k + 1) {
-                    if (flag2) {
+                    if (obj[k].flag2) {
                         scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
                     }
                 }
@@ -204,7 +204,7 @@ animation = function () {
     scene.beginPath();
     scene.drawImage(image3, posx, posy, 50, 50);
     for (k = 0; k < obj.length; k = k + 1) {
-        if (flag2) {
+        if (obj[k].flag2) {
             scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
         }
     }
@@ -242,16 +242,23 @@ animation = function () {
     }
 
     //Collisions balle-briques
-    for (j = 1; j < obj.length; j += 1) {
-        distx = posx - obj[j].x; //comparaison distance en x
-        disty = posy - obj[j].y; //comparaison distance en y
-        distance = Math.pow((Math.pow(distx, 2) + Math.pow(disty, 2)), 0.5); //calcule distance entre 
-        if (distance < (2 * rayon)) {
-            posx = posx + 1;
-            posy = posy + 1;
-            revy = false;
-            if (revy === false) {
-                obj[j].flag2 = false;
+    for (j = 0; j < obj.length; j += 1) {
+        if (obj[j].flag2) {
+            distx = posx - obj[j].x; //comparaison distance en x
+            disty = posy - obj[j].y; //comparaison distance en y
+            distance = Math.pow((Math.pow(distx, 2) + Math.pow(disty, 2)), 0.5); //calcule distance entre 
+            if (distance < (2 * rayon)) {
+                if (posy > obj[j].y && posy < obj[j].y + 35) {
+                    revx = !revx;
+                    posx = posx + 1;
+                    posy = posy + 1;
+                    obj[j].flag2 = false;
+                } else {
+                    revy = !revy;
+                    posx = posx + 1;
+                    posy = posy + 1;
+                    obj[j].flag2 = false;
+                }
             }
         }
     }
