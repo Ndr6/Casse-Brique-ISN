@@ -49,7 +49,7 @@ image2.src = "briqueProto.png";
 image2.width = 80;
 image2.height = 40;
 
-var pos2x, pos2y, flag2;
+var pos2x, pos2y, flag2, life;
 var obj = [];
 
 //Variables contrôles
@@ -69,13 +69,24 @@ var creaBriques = function () {
         this.x = pos2x;
         this.y = pos2y;
         this.flag2 = flag2;
+        this.life = life;
     };
-    for (v = 0; v < 6; v += 1) {
+    for (v = 0; v < 5; v += 1) {
         for (i = 0; i < 15; i += 1) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
-            obj.push(new Briques(pos2x, pos2y, flag2));
+            life = true;
+            obj.push(new Briques(pos2x, pos2y, flag2, life));
+        }
+    }
+    for (v = 5; v < 6; v += 1) {
+        for (i = 0; i < 15; i += 1) {
+            pos2x = 83 * i + 19;
+            pos2y = 43 * v + 5;
+            flag2 = true;
+            life = 2;
+            obj.push(new Briques(pos2x, pos2y, flag2, life));
         }
     }
 };
@@ -246,17 +257,40 @@ animation = function () {
         if (obj[j].flag2) {
             distx = posx - obj[j].x; //comparaison distance en x
             disty = posy - obj[j].y; //comparaison distance en y
-            distance = Math.pow((Math.pow(distx, 2) + Math.pow(disty, 2)), 0.5); //calcule distance entre 
-            if (distance < (2 * rayon)) {
-                if (posy > obj[j].y && posy < obj[j].y + 35) {
-                    revx = !revx;
-                    posx = posx + 1;
-                    posy = posy + 1;
+            distance = Math.pow((Math.pow(distx, 2) + Math.pow(disty, 2)), 0.5); //calcule distance en
+            if (posy > obj[j].y && posy < obj[j].y + 40 && posx + 50 > obj[j].x && posx > obj[j].x - 10 && posx < obj[j].x + 10) {
+                revx = !revx;
+                posx = posx + 1;
+                posy = posy + 1;
+                obj[j].life -= 1;
+                if (obj[j].life <= 0){
                     obj[j].flag2 = false;
-                } else {
-                    revy = !revy;
-                    posx = posx + 1;
-                    posy = posy + 1;
+                }
+            }
+            if (posy > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx < obj[j].x + 90 && posx > obj[j].x + 70) {
+                revx = !revx;
+                posx = posx + 1;
+                posy = posy + 1;
+                obj[j].life -= 1;
+                if (obj[j].life <= 0) {
+                    obj[j].flag2 = false;
+                }
+            }
+            if (posy < obj[j].y + 40 && posy < obj[j].y + 50 && posy > obj[j].y + 30 && posx > obj[j].x && posx < obj[j].x + 80) {
+                revy = !revy;
+                posx = posx + 1;
+                posy = posy + 1;
+                obj[j].life -= 1;
+                if (obj[j].life <= 0) {
+                    obj[j].flag2 = false;
+                }
+            }
+            if (posy + 50 > obj[j].y && posy > obj[j].y -10 && posy < obj[j].y + 10 && posx > obj[j].x && posx < obj[j].x + 80) {
+                revy = !revy;
+                posx = posx + 1;
+                posy = posy + 1;
+                obj[j].life -= 1;
+                if (obj[j].life <= 0) {
                     obj[j].flag2 = false;
                 }
             }
