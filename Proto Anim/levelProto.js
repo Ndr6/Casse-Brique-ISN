@@ -255,10 +255,7 @@ animation = function () {
     //Collisions balle-briques
     for (j = 0; j < obj.length; j += 1) {
         if (obj[j].flag2) {
-            distx = posx - obj[j].x; //comparaison distance en x
-            disty = posy - obj[j].y; //comparaison distance en y
-            distance = Math.pow((Math.pow(distx, 2) + Math.pow(disty, 2)), 0.5); //calcule distance en
-            if (posy > obj[j].y && posy < obj[j].y + 40 && posx + 50 > obj[j].x && posx > obj[j].x - 10 && posx < obj[j].x + 10) {
+            if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx + 50 > obj[j].x && posx > obj[j].x + 40 && posx < obj[j].x + 60) {
                 revx = !revx;
                 posx = posx + 1;
                 posy = posy + 1;
@@ -267,7 +264,7 @@ animation = function () {
                     obj[j].flag2 = false;
                 }
             }
-            if (posy > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx < obj[j].x + 90 && posx > obj[j].x + 70) {
+            if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx < obj[j].x + 90 && posx > obj[j].x + 70) {
                 revx = !revx;
                 posx = posx + 1;
                 posy = posy + 1;
@@ -276,7 +273,7 @@ animation = function () {
                     obj[j].flag2 = false;
                 }
             }
-            if (posy < obj[j].y + 40 && posy < obj[j].y + 50 && posy > obj[j].y + 30 && posx > obj[j].x && posx < obj[j].x + 80) {
+            if (posy < obj[j].y + 40 && posy < obj[j].y + 50 && posy > obj[j].y + 30 && posx + 50> obj[j].x && posx < obj[j].x + 80) {
                 revy = !revy;
                 posx = posx + 1;
                 posy = posy + 1;
@@ -285,7 +282,7 @@ animation = function () {
                     obj[j].flag2 = false;
                 }
             }
-            if (posy + 50 > obj[j].y && posy > obj[j].y -10 && posy < obj[j].y + 10 && posx > obj[j].x && posx < obj[j].x + 80) {
+            if (posy + 50 > obj[j].y && posy - 10 > obj[j].y && posy < obj[j].y + 10 && posx + 50 > obj[j].x && posx < obj[j].x + 80) {
                 revy = !revy;
                 posx = posx + 1;
                 posy = posy + 1;
