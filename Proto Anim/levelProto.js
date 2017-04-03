@@ -251,12 +251,11 @@ animation = function () {
     } else {
 		posy = posy - pas;
     }
-
     //Collisions balle-briques
     for (j = 0; j < obj.length; j += 1) {
         if (obj[j].flag2) {
             if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx + 50 > obj[j].x && posx > obj[j].x + 40 && posx < obj[j].x + 60) {
-                revx = !revx;
+                revx = true;
                 posx = posx + 1;
                 posy = posy + 1;
                 obj[j].life -= 1;
@@ -265,7 +264,7 @@ animation = function () {
                 }
             }
             if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx < obj[j].x + 90 && posx > obj[j].x + 70) {
-                revx = !revx;
+                revx = false;
                 posx = posx + 1;
                 posy = posy + 1;
                 obj[j].life -= 1;
@@ -274,7 +273,7 @@ animation = function () {
                 }
             }
             if (posy < obj[j].y + 40 && posy < obj[j].y + 50 && posy > obj[j].y + 30 && posx + 50> obj[j].x && posx < obj[j].x + 80) {
-                revy = !revy;
+                revy = false;
                 posx = posx + 1;
                 posy = posy + 1;
                 obj[j].life -= 1;
@@ -283,7 +282,7 @@ animation = function () {
                 }
             }
             if (posy + 50 > obj[j].y && posy - 10 > obj[j].y && posy < obj[j].y + 10 && posx + 50 > obj[j].x && posx < obj[j].x + 80) {
-                revy = !revy;
+                revy = true;
                 posx = posx + 1;
                 posy = posy + 1;
                 obj[j].life -= 1;
