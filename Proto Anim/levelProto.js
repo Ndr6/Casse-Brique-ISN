@@ -293,7 +293,7 @@ animation = function () {
     
     //Bouclage de la fonction animation
     if (flag) {
-        setTimeout(animation, 10);
+        setTimeout(animation, 4);
     }
 };
 
