@@ -71,21 +71,19 @@ var creaBriques = function () {
         this.flag2 = flag2;
         this.life = life;
     };
-    for (v = 0; v < 5; v += 1) {
-        for (i = 0; i < 15; i += 1) {
-            pos2x = 83 * i + 19;
-            pos2y = 43 * v + 5;
-            flag2 = true;
-            life = true;
-            obj.push(new Briques(pos2x, pos2y, flag2, life));
-        }
-    }
-    for (v = 5; v < 6; v += 1) {
-        for (i = 0; i < 15; i += 1) {
+    for (v = 0; v < 6; v += 1) {
+        for (i = 0; i < 15;i = i + 2) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
             life = 2;
+            obj.push(new Briques(pos2x, pos2y, flag2, life));
+        }
+        for (i = 1; i < 15;i = i + 2) {
+            pos2x = 83 * i + 19;
+            pos2y = 43 * v + 5;
+            flag2 = true;
+            life = 1;
             obj.push(new Briques(pos2x, pos2y, flag2, life));
         }
     }
