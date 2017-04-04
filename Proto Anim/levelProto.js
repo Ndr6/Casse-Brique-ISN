@@ -1,5 +1,6 @@
 /*global Audio: false*/
 /*global alert: false*/
+/*global console: false*/
 
 /***************************************
         Déclaration des variables
