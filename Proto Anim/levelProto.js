@@ -17,7 +17,7 @@ pauseImg.width = 400;
 pauseImg.height = 400;
 
 //Variables raquette
-var x = 540, y = 700; //Dimensions balle
+var x = 540, y = 700; //Position raquette 
 
 var image = new Image();
 image.src = "Raquette.png"; //Asset graphique barre
@@ -37,14 +37,14 @@ var revx = false, revy = false; //Sens animation balle
 
 var k, distx, disty, distance, j;
 
-var image3 = new Image();
+var image3 = new Image(); //Asset graphique de la balle
 image3.src = "balle.png";
 image3.width = 50;
-image3.height = 50;
+image3.height = 50; //Dimensions balle
 
 //Variables briques
 
-var image2 = new Image();
+var image2 = new Image(); //Asset graphique des briques
 image2.src = "briqueProto.png";
 image2.width = 80;
 image2.height = 40;
@@ -72,14 +72,14 @@ var creaBriques = function () {
         this.life = life;
     };
     for (v = 0; v < 6; v += 1) {
-        for (i = 0; i < 15;i = i + 2) {
+        for (i = 0; i < 15; i = i + 2) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
             life = 2;
             obj.push(new Briques(pos2x, pos2y, flag2, life));
         }
-        for (i = 1; i < 15;i = i + 2) {
+        for (i = 1; i < 15; i = i + 2) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
@@ -249,6 +249,20 @@ animation = function () {
     } else {
 		posy = posy - pas;
     }
+    
+    //Fonction collision avec la raquette :
+    
+    if (posx < x + 200 && posx + 50 > x && posy + 50 > y) {  //collision sur le dessus
+        revy = true;
+        posx = posx + 1;
+        posy = posy + 1;
+    }
+    if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 50 < x + 5) { //collision gauche
+        console.log("collision gauche");
+        revx = !revx;
+        posx = posx + 1;
+        posy = posy + 1;
+    }
     //Collisions balle-briques
     for (j = 0; j < obj.length; j += 1) {
         if (obj[j].flag2) {
@@ -293,7 +307,7 @@ animation = function () {
     
     //Bouclage de la fonction animation
     if (flag) {
-        setTimeout(animation, 4);
+        setTimeout(animation, 10);  //  Vitesse de la balle
     }
 };
 
