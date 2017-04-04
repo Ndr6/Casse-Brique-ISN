@@ -34,6 +34,7 @@ var rayon = 25; //Rayon balle
 var pas = 5; //Vitesse animation
 var posx = 615, posy = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
+var cheatSpeed = 10; //Vitesse balle
 
 var k, distx, disty, distance, j;
 
@@ -72,14 +73,14 @@ var creaBriques = function () {
         this.life = life;
     };
     for (v = 0; v < 6; v += 1) {
-        for (i = 0; i < 15;i = i + 2) {
+        for (i = 0; i < 15; i = i + 2) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
             life = 2;
             obj.push(new Briques(pos2x, pos2y, flag2, life));
         }
-        for (i = 1; i < 15;i = i + 2) {
+        for (i = 1; i < 15; i = i + 2) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
@@ -202,6 +203,16 @@ function controls() {
             scene.drawImage(image, x, y, image.width, image.height);
         }
     }
+    
+    //CHEAT Accéleration balle
+    if (keyState[76] && cheatSpeed === 10) {
+        cheatSpeed = 4;
+    }
+    if (keyState[77] && cheatSpeed === 4) {
+        cheatSpeed = 10;
+    }
+    
+    
     setTimeout(controls, 15); //Bouclage de la fonction controls
 }
 
@@ -293,7 +304,7 @@ animation = function () {
     
     //Bouclage de la fonction animation
     if (flag) {
-        setTimeout(animation, 4);
+        setTimeout(animation, cheatSpeed);
     }
 };
 
