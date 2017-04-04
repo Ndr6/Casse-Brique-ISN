@@ -121,10 +121,10 @@ function controls() {
                 scene.drawImage(image, x, y, image.width, image.height);
             }
             if (!flag && posx >= 65) {
-                posx -= 15;
+                posx = x + 75;
                 scene.clearRect(0, 0, 1280, 800);
                 scene.beginPath();
-                scene.drawImage(image3, posx, posy, 50, 50);
+                scene.drawImage(image3, posx, y - 51, 50, 50);
                 for (k = 0; k < obj.length; k = k + 1) {
                     if (obj[k].flag2) {
                         scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
@@ -146,11 +146,11 @@ function controls() {
                 x += 15;
                 scene.drawImage(image, x, y, image.width, image.height);
             }
-            if (!flag && posx <= 1115) {
-                posx += 15;
+            if (!flag && posx <= 1205) {
+                posx = x + 75;
                 scene.clearRect(0, 0, 1280, 800);
                 scene.beginPath();
-                scene.drawImage(image3, posx, posy, 50, 50);
+                scene.drawImage(image3, posx, y - 51, 50, 50);
                 for (k = 0; k < obj.length; k = k + 1) {
                     if (obj[k].flag2) {
                         scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
