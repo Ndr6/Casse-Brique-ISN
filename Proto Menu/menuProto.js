@@ -8,7 +8,8 @@
 //Variables canvas
 var canvas;
 var scene;
-var animation; //Fonction 
+var animation; //Fonction
+var select; //Fonction de "collisions" choix de niveau
 
 //Variables raquette
 var x = 540, y = 700;
@@ -24,9 +25,6 @@ var move = true; //Activation de la raquette
 var rayon = 25; //Rayon balle
 var pas = 5; //Vitesse animation
 var posx = 615, posy = 649; //Position initiale de la balle
-var revx = false, revy = false; //Sens animation balle
-
-var k, distx, disty, distance, j;
 
 var image3 = new Image();
 image3.src = "balle.png";
@@ -40,11 +38,7 @@ image2.src = "briqueProto.png";
 image2.width = 80;
 image2.height = 40;
 
-var pos2x, pos2y, flag2, life;
-var obj = [];
 
-//Variables contrôles
-var keyState = {};
 
 /****************************************
            Début du programme
@@ -62,42 +56,45 @@ var creaBriques = function () {
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
-// INSERER ICI CONTROLES
 //Partie commande (touches)
 document.addEventListener("keydown", function (event) {     // commande barre    
     "use strict";
-    switch (event.keyCode) {
-    case 39:
-        if (x >= 1270 - image.width) {
-            scene.clearRect(x, y, image.width, image.height);
-            x += 0;
-            scene.drawImage(image, x, y, image.width, image.height);
-        } else {
-            scene.clearRect(x, y, image.width, image.height);
-            x += 100;
-            posx = x + 50;
-            posy = y + 50;
-            scene.drawImage(image, x, y, image.width, image.height);
+    if (move) {
+        switch (event.keyCode) {
+        case 39:
+            if (x >= 1040) {
+                scene.clearRect(x, y, image.width, image.height);
+                x += 0;
+                scene.drawImage(image, x, y, image.width, image.height);
+            } else {
+                scene.clearRect(x, y, image.width, image.height);
+                x += 250;
+                posx = x + 75;
+                posy = y - 50;
+                scene.drawImage(image, x, y, image.width, image.height);
+                animation();
+            }
+            break;
+        case 37:
+            if (x <= 40) {
+                scene.clearRect(x, y, image.width, image.height);
+                x -= 0;
+                scene.drawImage(image, x, y, image.width, image.height);
+            } else {
+                scene.clearRect(x, y, image.width, image.height);
+                x -= 250;
+                posx = x + 75;
+                posy = y - 50;
+                scene.drawImage(image, x, y, image.width, image.height);
+                animation();
+            }
+            break;
+        case 32:
+            flag = true;
+            move = false;
             animation();
+            break;
         }
-        break;
-    case 37:
-        if (x <= 2) {
-            scene.clearRect(x, y, image.width, image.height);
-            x -= 0;
-            scene.drawImage(image, x, y, image.width, image.height);
-        } else {
-            scene.clearRect(x, y, image.width, image.height);
-            x -= 100;
-            posx = x - 50;
-            posy = y - 50;
-            scene.drawImage(image, x, y, image.width, image.height);
-            animation();
-        }
-        break;
-    case 32:
-        animation();
-        break;
     }
 });
 
@@ -108,41 +105,13 @@ animation = function () {
     scene.clearRect(0, 0, 1280, 800);
     scene.beginPath();
     scene.drawImage(image3, posx, posy, 50, 50);
-    for (k = 0; k < obj.length; k = k + 1) {
-        if (obj[k].flag2) {
-            scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
-        }
-    }
+    //Insérer un truc important ici ?
     scene.drawImage(image, x, y, image.width, image.height);
     scene.closePath();
     scene.fill();
     
     //Trajectoire de la balle (à isoler)
-    if (posx < rayon) {
-		posx = rayon;
-		revx = false;
-    } else if (posx + rayon > 1280) {
-        posx = 1280 - rayon;
-        revx = true;
-    }
-	if (!revx) {
-		posx = posx + pas;
-    } else {
-		posx = posx - pas;
-    }
-    if (posy < rayon) {
-        posy = rayon;
-        revy = false;
-    } else if (posy + rayon > 800) {
-        posy = 800 - rayon;
-        revy = true;
-    }
-	if (!revy) {
-        posy = posy + pas;
-    } else {
-		posy = posy - pas;
-    }
-    //Collisions balle-briques
+    if (flag) {posy -= 15; }
     
     
     //Bouclage de la fonction animation
@@ -151,8 +120,17 @@ animation = function () {
     }
 };
 
+select = function () {
+    "use strict";
+    //Fonction de "collisions" aux "briques" de choix de niveau
+    
+    setTimeout(select, 10);
+};
+
 //Lancement des fonctions principales après chargement de la page
 setTimeout(animation, 250);
+setTimeout(select, 251);
+
 
 /******************************************************
                     Fin du programme

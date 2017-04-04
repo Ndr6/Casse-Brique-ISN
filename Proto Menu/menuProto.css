@@ -2,7 +2,8 @@ canvas
 {
 	border-color: green;
 	border: solid;
-    background-color: black;
+    /*background-color: black;*/
+    background-image: url(BGlol.PNG);    
 }
 
 body
