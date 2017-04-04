@@ -36,6 +36,8 @@ var posx = 615, posy = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var cheatSpeed = 10; //Vitesse balle
 
+var pupUnstop = false;
+
 var k, distx, disty, distance, j;
 
 var image3 = new Image();
@@ -170,15 +172,17 @@ function controls() {
         move = false;
     }
     
-    //CHEAT Reset raquette (0/à)
-    if (keyState[48] && pupDef) {
+    //CHEAT Reset powerups (0/à)
+    if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
         scene.clearRect(x, y, image.width, image.height);
         image.src = "Raquette.png";
+        image3.src = "balle.png";
         //Il manque un son pour perdre le PUP
         image.width = 200;
         image.height = 50;
+        if (pupDef) {x += 44; }
         pupDef = false;
-        x += 44;
+        pupUnstop = false;
         scene.drawImage(image, x, y, image.width, image.height);
         if (x >= 1270 - image.width) {
             x = 1270 - image.width;
@@ -203,6 +207,16 @@ function controls() {
             scene.drawImage(image, x, y, image.width, image.height);
         }
     }
+    
+        //CHEAT Unstoppable ("2/é")
+    if (keyState[50] && !pupUnstop) {
+        scene.clearRect(x, y, image.width, image.height);
+        image3.src = "balleUnstop.png";
+        //X.play(); la ferme !
+        pupUnstop = true;
+        scene.drawImage(image, x, y, image.width, image.height);
+    }
+    
     
     //CHEAT Accéleration balle
     if (keyState[76] && cheatSpeed === 10) {
@@ -264,7 +278,7 @@ animation = function () {
     for (j = 0; j < obj.length; j += 1) {
         if (obj[j].flag2) {
             if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx + 50 > obj[j].x && posx + 40 < obj[j].x && posx + 60 > obj[j].x) {
-                revx = true;
+                if (!pupUnstop) {revx = true; }
                 posx = posx + 1;
                 posy = posy + 1;
                 obj[j].life -= 1;
@@ -273,7 +287,7 @@ animation = function () {
                 }
             }
             if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx - 10 < obj[j].x + 80 && posx + 10 > obj[j].x + 80) {
-                revx = false;
+                if (!pupUnstop) {revx = false; }
                 posx = posx + 1;
                 posy = posy + 1;
                 obj[j].life -= 1;
@@ -282,7 +296,7 @@ animation = function () {
                 }
             }
             if (posy < obj[j].y + 40 && posy - 10 < obj[j].y + 40 && posy + 10 > obj[j].y + 40 && posx + 50 > obj[j].x && posx < obj[j].x + 80) {
-                revy = false;
+                if (!pupUnstop) {revy = false; }
                 posx = posx + 1;
                 posy = posy + 1;
                 obj[j].life -= 1;
@@ -291,7 +305,7 @@ animation = function () {
                 }
             }
             if (posy + 50 > obj[j].y && posy + 40 < obj[j].y && posy + 60 > obj[j].y && posx + 50 > obj[j].x && posx < obj[j].x + 80) {
-                revy = true;
+                if (!pupUnstop) {revy = true; }
                 posx = posx + 1;
                 posy = posy + 1;
                 obj[j].life -= 1;
