@@ -17,7 +17,7 @@ pauseImg.width = 400;
 pauseImg.height = 400;
 
 //Variables raquette
-var x = 540, y = 700; //Dimensions balle
+var x = 540, y = 700; //Position raquette 
 
 var image = new Image();
 image.src = "Raquette.png"; //Asset graphique barre
@@ -40,14 +40,14 @@ var pupUnstop = false;
 
 var k, distx, disty, distance, j;
 
-var image3 = new Image();
+var image3 = new Image(); //Asset graphique de la balle
 image3.src = "balle.png";
 image3.width = 50;
-image3.height = 50;
+image3.height = 50; //Dimensions balle
 
 //Variables briques
 
-var image2 = new Image();
+var image2 = new Image(); //Asset graphique des briques
 image2.src = "briqueProto.png";
 image2.width = 80;
 image2.height = 40;
@@ -273,6 +273,20 @@ animation = function () {
         posy = posy + pas;
     } else {
 		posy = posy - pas;
+    }
+    
+    //Fonction collision avec la raquette :
+    
+    if (posx < x + 200 && posx + 50 > x && posy + 50 > y) {  //collision sur le dessus
+        revy = true;
+        posx = posx + 1;
+        posy = posy + 1;
+    }
+    if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 50 < x + 5) { //collision gauche
+        console.log("collision gauche");
+        revx = !revx;
+        posx = posx + 1;
+        posy = posy + 1;
     }
     //Collisions balle-briques
     for (j = 0; j < obj.length; j += 1) {
