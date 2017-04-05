@@ -6,37 +6,39 @@
 ***************************************/
 
 //Variables canvas
-var canvas;
+var canvas; //Le canvas en lui-même
 var scene;
-var animation; //Fonction
+var animation; //Fonction d'animation du canvas
 var select; //Fonction de "collisions" choix de niveau
 
 //Variables raquette
-var x = 540, y = 700;
+var x = 540, y = 700; //Position raquette
 
-var image = new Image();
-image.src = "Raquette.png"; //Asset graphique barre
-image.width = 200;
-image.height = 50; //Dimensions asset barre
+var move = true; //Activation de la raquette
+
+var raquetteImg = new Image();
+raquetteImg.src = "Raquette.png"; //Asset graphique barre
+raquetteImg.width = 200;
+raquetteImg.height = 50; //Dimensions asset barre
 
 //Variables balle
-var flag = false; //Activation de la balle
-var move = true; //Activation de la raquette
-var rayon = 25; //Rayon balle
-var pas = 5; //Vitesse animation
 var posx = 615, posy = 649; //Position initiale de la balle
 
-var image3 = new Image();
-image3.src = "balle.png";
-image3.width = 50;
-image3.height = 50;
+var flag = false; //Activation de la balle
+var pas = 5; //Vitesse animation
+
+var balleImg = new Image();
+balleImg.src = "balle.png";
+balleImg.width = 50;
+balleImg.height = 50;
+var rayon = 25; //Rayon balle
 
 //Variables briques
 
-var image2 = new Image();
-image2.src = "briqueProto.png";
-image2.width = 80;
-image2.height = 40;
+var briqueImg = new Image();
+briqueImg.src = "briqueProto.png";
+briqueImg.width = 80;
+briqueImg.height = 40;
 
 
 
@@ -63,29 +65,29 @@ document.addEventListener("keydown", function (event) {     // commande barre
         switch (event.keyCode) {
         case 39:
             if (x >= 1040) {
-                scene.clearRect(x, y, image.width, image.height);
+                scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
                 x += 0;
-                scene.drawImage(image, x, y, image.width, image.height);
+                scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
             } else {
-                scene.clearRect(x, y, image.width, image.height);
+                scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
                 x += 250;
                 posx = x + 75;
-                posy = y - 50;
-                scene.drawImage(image, x, y, image.width, image.height);
+                posy = y - 51;
+                scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
                 animation();
             }
             break;
         case 37:
             if (x <= 40) {
-                scene.clearRect(x, y, image.width, image.height);
+                scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
                 x -= 0;
-                scene.drawImage(image, x, y, image.width, image.height);
+                scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
             } else {
-                scene.clearRect(x, y, image.width, image.height);
+                scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
                 x -= 250;
                 posx = x + 75;
-                posy = y - 50;
-                scene.drawImage(image, x, y, image.width, image.height);
+                posy = y - 51;
+                scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
                 animation();
             }
             break;
@@ -93,6 +95,10 @@ document.addEventListener("keydown", function (event) {     // commande barre
             flag = true;
             move = false;
             animation();
+            break;
+        case 49: //Donne la position en x de la balle en appuyant sur &/1
+            alert(posx);
+            alert(posy);
             break;
         }
     }
@@ -104,14 +110,14 @@ animation = function () {
     //(Re)construction de la scène
     scene.clearRect(0, 0, 1280, 800);
     scene.beginPath();
-    scene.drawImage(image3, posx, posy, 50, 50);
+    scene.drawImage(balleImg, posx, posy, 50, 50);
     //Insérer un truc important ici ?
-    scene.drawImage(image, x, y, image.width, image.height);
+    scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
     scene.closePath();
     scene.fill();
     
-    //Trajectoire de la balle (à isoler)
-    if (flag) {posy -= 15; }
+    //Trajectoire de la balle
+    if (flag) {posy -= 7; }
     
     
     //Bouclage de la fonction animation
@@ -123,13 +129,41 @@ animation = function () {
 select = function () {
     "use strict";
     //Fonction de "collisions" aux "briques" de choix de niveau
-    
+    if (posy === 383 && flag) { //posy initial 649
+        alert("Collision détectée");
+        if (posx === 115) {
+            //1er choix
+            flag = false;
+            alert("Selectionné : 1");
+            location.reload();
+        } else if (posx === 365) {
+            //2e choix
+            flag = false;
+            alert("Selectionné : 2");
+            location.reload();
+        } else if (posx === 615) {
+            //3e choix
+            flag = false;
+            alert("Selectionné : 3");
+            location.reload();
+        } else if (posx === 865) {
+            //4e choix
+            flag = false;
+            alert("Selectionné : 4");
+            location.reload();
+        } else if (posx === 1115) {
+            //5e choix
+            flag = false;
+            alert("Selectionné : 5");
+            location.reload();
+        }
+    }
     setTimeout(select, 10);
 };
 
 //Lancement des fonctions principales après chargement de la page
 setTimeout(animation, 250);
-setTimeout(select, 251);
+setTimeout(select, 500);
 
 
 /******************************************************
