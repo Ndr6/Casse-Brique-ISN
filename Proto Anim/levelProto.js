@@ -217,8 +217,6 @@ function controls() {
         pupUnstop = true;
         scene.drawImage(image, x, y, image.width, image.height);
     }
-    
-    
     //CHEAT Accéleration balle
     if (keyState[76] && cheatSpeed === 10) {
         cheatSpeed = 4;
@@ -226,8 +224,6 @@ function controls() {
     if (keyState[77] && cheatSpeed === 4) {
         cheatSpeed = 10;
     }
-    
-    
     setTimeout(controls, 15); //Bouclage de la fonction controls
 }
 
@@ -285,8 +281,8 @@ animation = function () {
             posy = posy + 1;
         }
         if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 40 < x && posx + 60 > x) { //collision gauche
-            if (revx){
-            cheatSpeed = 4;
+            if (revx) {
+                cheatSpeed = 4;
             }
             revx = true;
             posx = posx + 1;
@@ -294,7 +290,7 @@ animation = function () {
         }
         if (posy + 50 > y && posy < y + 50 && posx < x + 200 && posx - 10 < x + 200 && posx + 10 > x + 200) {
             if (!revx) {
-            cheatSpeed = 4;
+                cheatSpeed = 4;
             }
             revx = false;
             posx = posx + 1;
