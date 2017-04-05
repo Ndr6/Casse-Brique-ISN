@@ -296,7 +296,7 @@ animation = function () {
             posx = posx + 1;
             posy = posy + 1;
         }
-        if ( posx < x + 200 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
+        if (posx < x + 200 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
             revy = false;
             posx = posx + 1;
             posy = posy + 1;
@@ -308,8 +308,8 @@ animation = function () {
             posy = posy + 1;
         }
         if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 40 < x && posx + 60 > x) { //collision gauche
-            if (revx){
-            cheatSpeed = 4;
+            if (revx) {
+                cheatSpeed = 4;
             }
             revx = true;
             posx = posx + 1;
@@ -317,13 +317,13 @@ animation = function () {
         }
         if (posy + 50 > y && posy < y + 50 && posx < x + 200 && posx - 10 < x + 288 && posx + 10 > x + 288) {
             if (!revx) {
-            cheatSpeed = 4;
+                cheatSpeed = 4;
             }
             revx = false;
             posx = posx + 1;
             posy = posy + 1;
         }
-        if ( posx < x + 288 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
+        if (posx < x + 288 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
             revy = false;
             posx = posx + 1;
             posy = posy + 1;
