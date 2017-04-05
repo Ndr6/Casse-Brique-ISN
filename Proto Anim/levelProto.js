@@ -209,7 +209,7 @@ function controls() {
         }
     }
     
-        //CHEAT Unstoppable ("2/é")
+    //CHEAT Unstoppable ("2/é")
     if (keyState[50] && !pupUnstop) {
         scene.clearRect(x, y, image.width, image.height);
         image3.src = "balleUnstop.png";
@@ -293,11 +293,12 @@ animation = function () {
         posx = posx + 1;
         posy = posy + 1;
     }
-    if ( posx < x + 200 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
+    if (posx < x + 200 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
         revy = false;
         posx = posx + 1;
         posy = posy + 1;
     }
+    
     //Collisions balle-briques
     for (j = 0; j < obj.length; j += 1) {
         if (obj[j].flag2) {
