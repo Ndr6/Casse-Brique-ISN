@@ -278,7 +278,6 @@ animation = function () {
     }
     
     //Fonction collision avec la raquette :
-<<<<<<< HEAD
     if (!pupDef) {
         if (posx < x + 200 && posx + 50 > x && posy + 50 > y && posy + 60 > y && posy + 40 < y) {  //collision sur le dessus
             revy = true;
@@ -333,28 +332,6 @@ animation = function () {
             posx = posx + 1;
             posy = posy + 1;
         }
-=======
-    
-    if (posx < x + 200 && posx + 50 > x && posy + 50 > y && posy + 60 > y && posy + 40 < y) {  //collision sur le dessus
-        revy = true;
-        posx = posx + 1;
-        posy = posy + 1;
-    }
-    if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 40 < x && posx + 60 > x) { //collision gauche
-        revx = true;
-        posx = posx + 1;
-        posy = posy + 1;
-    }
-    if (posy + 50 > y && posy < y + 50 && posx < x + 200 && posx - 10 < x + 200 && posx + 10 > x + 200) {
-        revx = false;
-        posx = posx + 1;
-        posy = posy + 1;
-    }
-    if (posx < x + 200 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
-        revy = false;
-        posx = posx + 1;
-        posy = posy + 1;
->>>>>>> origin/master
     }
     
     //Collisions balle-briques
