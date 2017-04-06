@@ -10,6 +10,9 @@
 var canvas;
 var scene;
 var animation; //Fonction 
+var défense;
+var reset;
+var resetTime;
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -56,6 +59,20 @@ image2.height = 40;
 var pos2x, pos2y, flag2, life;
 var obj = [];
 
+//Variables power-up
+
+var time = Math.floor((Math.random() * 15000) + 10000);
+var image5 = new Image();
+image5.src = "capsulebase.png";
+image5.width = 40;
+image5.height = 80;
+var flag3 = true;
+var flag4 = false;
+var flag5 = true;
+var flag6 = true;
+var xcaps = 800;
+var ycaps = 400;
+
 //Variables contrôles
 var keyState = {};
 
@@ -92,7 +109,6 @@ var creaBriques = function () {
         }
     }
 };
-
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
@@ -174,7 +190,10 @@ function controls() {
     }
     
     //CHEAT Reset powerups (0/à)
-    if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
+    reset = function () {
+        if (!flag5) {
+            return;
+        }
         scene.clearRect(x, y, image.width, image.height);
         image.src = "Raquette.png";
         image3.src = "balle.png";
@@ -190,24 +209,52 @@ function controls() {
             scene.clearRect(x, y, image.width, image.height);
             scene.drawImage(image, x, y, image.width, image.height);
         }
+        flag5 = false;
+        time = Math.floor((Math.random() * 20000) + 15000);
+        setTimeout(défense, time);
     }
     
     //CHEAT Powerup ("1/&")
-    if (keyState[49] && !pupDef) {
-        scene.clearRect(x, y, image.width, image.height);
-        image.src = "RaquettePUPDef.png";
-        //test.play(); la ferme !
-        image.width = 288;
-        image.height = 50;
-        pupDef = true;
-        x -= 44;
-        scene.drawImage(image, x, y, image.width, image.height);
-        if (x >= 1272 - image.width) {
-            x = 1272 - image.width;
+    défense = function () {
+        if (!flag4) {
+            scene.drawImage(image5, xcaps, ycaps, image5.width, image5.height);
+        }
+        if (posx < xcaps + 40 && posx + 50 > xcaps && posy + 50 > ycaps && posy + 60 > ycaps && posy + 40 < ycaps) {  //collision sur le dessus
+            flag4 = true;
+        }
+        if (posy + 50 > ycaps && posy < ycaps + 80 && posx + 50 > xcaps && posx + 40 < xcaps && posx + 60 > xcaps) { //collision gauche
+            flag4 = true;
+        }
+        if (posy + 50 > ycaps && posy < ycaps + 80 && posx < xcaps + 40 && posx - 10 < xcaps + 40 && posx + 10 > xcaps + 40) {
+            flag4 = true;
+        }
+        if (posx < xcaps + 40 && posx + 50 > xcaps && posy < ycaps + 80 && posy + 10 > ycaps + 80 && posy - 10 < ycaps + 80) {
+            flag4 = true;
+        }
+        if (flag4) {
+            if (!flag3) {
+                return;
+            }
+            scene.clearRect(xcaps, ycaps, image5.width, image5.height);
             scene.clearRect(x, y, image.width, image.height);
+            image.src = "RaquettePUPDef.png";
+            //test.play(); la ferme !
+            image.width = 288;
+            image.height = 50;
+            pupDef = true;
+            x = x - 44;
             scene.drawImage(image, x, y, image.width, image.height);
+            if (x >= 1272 - image.width) {
+                x = 1272 - image.width;
+                scene.clearRect(x, y, image.width, image.height);
+                scene.drawImage(image, x, y, image.width, image.height);
+            }
+            flag3 = false;
+            flag5 = true;
+            setTimeout(reset, 10000);
         }
     }
+    setTimeout(défense, time);
     
     //CHEAT Unstoppable ("2/é")
     if (keyState[50] && !pupUnstop) {
@@ -265,7 +312,7 @@ animation = function () {
     } else if (posy + rayon > 800) {
         posy = 800 - rayon;
         revy = true;
-        alert("YOU LOSE!!!");
+        //alert("YOU LOSE!!!");
     }
 	if (!revy) {
         posy = posy + pas;
