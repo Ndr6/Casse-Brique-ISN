@@ -11,8 +11,9 @@ var canvas;
 var scene;
 var animation; //Fonction 
 var défense;
+var attaque;
 var reset;
-var resetTime;
+var resetFlag;
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -56,22 +57,21 @@ image2.src = "briqueProto.png";
 image2.width = 80;
 image2.height = 40;
 
-var pos2x, pos2y, flag2, life;
-var obj = [];
-
-//Variables power-up
-
-var time = Math.floor((Math.random() * 15000) + 10000);
-var image5 = new Image();
-image5.src = "capsulebase.png";
-image5.width = 40;
-image5.height = 80;
-var flag3 = true;
+//Variables powerup
+var time = Math.floor((Math.random() * 100) + 1);
+var powerup = Math.floor((Math.random() * 100) + 1);
+var imagecaps = new Image();
+imagecaps.src = "capsulebase.png";
+imagecaps.width = 40;
+imagecaps.height = 80;
+var xcaps, ycaps;
 var flag4 = false;
 var flag5 = true;
-var flag6 = true;
-var xcaps = 800;
-var ycaps = 400;
+var flag6 = false;
+var flag7 = true;
+
+var pos2x, pos2y, flag2, life;
+var obj = [];
 
 //Variables contrôles
 var keyState = {};
@@ -109,6 +109,7 @@ var creaBriques = function () {
         }
     }
 };
+
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
@@ -191,9 +192,8 @@ function controls() {
     
     //CHEAT Reset powerups (0/à)
     reset = function () {
-        if (!flag5) {
-            return;
-        }
+        xcaps = 0;
+        ycaps = 0;
         scene.clearRect(x, y, image.width, image.height);
         image.src = "Raquette.png";
         image3.src = "balle.png";
@@ -209,60 +209,45 @@ function controls() {
             scene.clearRect(x, y, image.width, image.height);
             scene.drawImage(image, x, y, image.width, image.height);
         }
-        flag5 = false;
-        time = Math.floor((Math.random() * 20000) + 15000);
-        setTimeout(défense, time);
+        setTimeout(resetFlag, 10000);
     }
     
     //CHEAT Powerup ("1/&")
     défense = function () {
-        if (!flag4) {
-            scene.drawImage(image5, xcaps, ycaps, image5.width, image5.height);
-        }
-        if (posx < xcaps + 40 && posx + 50 > xcaps && posy + 50 > ycaps && posy + 60 > ycaps && posy + 40 < ycaps) {  //collision sur le dessus
-            flag4 = true;
-        }
-        if (posy + 50 > ycaps && posy < ycaps + 80 && posx + 50 > xcaps && posx + 40 < xcaps && posx + 60 > xcaps) { //collision gauche
-            flag4 = true;
-        }
-        if (posy + 50 > ycaps && posy < ycaps + 80 && posx < xcaps + 40 && posx - 10 < xcaps + 40 && posx + 10 > xcaps + 40) {
-            flag4 = true;
-        }
-        if (posx < xcaps + 40 && posx + 50 > xcaps && posy < ycaps + 80 && posy + 10 > ycaps + 80 && posy - 10 < ycaps + 80) {
-            flag4 = true;
-        }
-        if (flag4) {
-            if (!flag3) {
-                return;
-            }
-            scene.clearRect(xcaps, ycaps, image5.width, image5.height);
+        if (!pupDef) {
+            scene.clearRect(xcaps, ycaps, imagecaps.width, imagecaps.height);
             scene.clearRect(x, y, image.width, image.height);
             image.src = "RaquettePUPDef.png";
             //test.play(); la ferme !
             image.width = 288;
             image.height = 50;
             pupDef = true;
-            x = x - 44;
+            x -= 44;
             scene.drawImage(image, x, y, image.width, image.height);
             if (x >= 1272 - image.width) {
                 x = 1272 - image.width;
                 scene.clearRect(x, y, image.width, image.height);
                 scene.drawImage(image, x, y, image.width, image.height);
             }
-            flag3 = false;
-            flag5 = true;
-            setTimeout(reset, 10000);
+            setTimeout(reset, 15000);
         }
     }
-    setTimeout(défense, time);
+    resetFlag = function () {
+        flag4 = false;
+        flag7 = true;
+        powerup = Math.floor((Math.random() * 100) + 1);
+    }
     
     //CHEAT Unstoppable ("2/é")
-    if (keyState[50] && !pupUnstop) {
-        scene.clearRect(x, y, image.width, image.height);
-        image3.src = "balleUnstop.png";
-        //X.play(); la ferme !
-        pupUnstop = true;
-        scene.drawImage(image, x, y, image.width, image.height);
+    attaque = function () {
+        if (!pupUnstop) {
+            scene.clearRect(x, y, image.width, image.height);
+            image3.src = "balleUnstop.png";
+            //X.play(); la ferme !
+            pupUnstop = true;
+            scene.drawImage(image, x, y, image.width, image.height);
+            setTimeout(reset, 15000);
+        }
     }
     //CHEAT Accéleration balle
     if (keyState[76] && cheatSpeed === 10) {
@@ -290,21 +275,25 @@ animation = function () {
         scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
     }
     scene.drawImage(image, x, y, image.width, image.height);
+    if (!flag4 && xcaps > 0 && ycaps > 0) {
+        scene.drawImage(imagecaps, xcaps, ycaps, imagecaps.width, imagecaps.height);
+        ycaps += 4;
+    }
     scene.closePath();
     scene.fill();
     
     //Trajectoire de la balle (à isoler)
     if (posx < rayon) {
-		posx = rayon;
-		revx = false;
+        posx = rayon;
+        revx = false;
     } else if (posx + rayon > 1280) {
         posx = 1280 - rayon;
         revx = true;
     }
-	if (!revx) {
-		posx = posx + pas;
+    if (!revx) {
+        posx = posx + pas;
     } else {
-		posx = posx - pas;
+        posx = posx - pas;
     }
     if (posy < rayon) {
         posy = rayon;
@@ -314,11 +303,60 @@ animation = function () {
         revy = true;
         //alert("YOU LOSE!!!");
     }
-	if (!revy) {
+    if (!revy) {
         posy = posy + pas;
     } else {
-		posy = posy - pas;
+        posy = posy - pas;
     }
+    if (!pupDef) {
+        if (xcaps < x + 200 && xcaps + 40 > x && ycaps + 80 > y && ycaps + 90 > y && ycaps + 70 < y) {  //collision sur le dessus
+            flag4 = true;
+            flag6 = true;
+        }
+        if (ycaps + 80 > y && ycaps < y + 50 && xcaps + 40 > x && xcaps + 30 < x && xcaps + 50 > x) { //collision gauche
+            flag4 = true;
+            flag6 = true;
+        }
+        if (ycaps + 80 > y && ycaps < y + 50 && xcaps < x + 200 && xcaps - 10 < x + 200 && xcaps + 10 > x + 200) {
+            flag4 = true;
+            flag6 = true;
+        }
+        if (xcaps < x + 200 && xcaps + 40 > x && ycaps < y + 50 && ycaps + 10 > y + 50 && ycaps - 10 < y + 50) {
+            flag4 = true;
+            flag6 = true;
+        }
+    } else {
+        if (xcaps < x + 288 && xcaps + 40 > x && ycaps + 80 > y && ycaps + 90 > y && ycaps + 70 < y) {  //collision sur le dessus
+            flag4 = true;
+            flag6 = true;
+        }
+        if (ycaps + 80 > y && ycaps < y + 50 && xcaps + 40 > x && xcaps + 30 < x && xcaps + 50 > x) { //collision gauche
+            flag4 = true;
+            flag6 = true;
+        }
+        if (ycaps + 80 > y && ycaps < y + 50 && xcaps < x + 288 && xcaps - 10 < x + 288 && xcaps + 10 > x + 288) {
+            flag4 = true;
+            flag6 = true;
+        }
+        if (xcaps < x + 288 && xcaps + 40 > x && ycaps < y + 50 && ycaps + 10 > y + 50 && ycaps - 10 < y + 50) {
+            flag4 = true;
+            flag6 = true;
+        }
+    }
+    if (ycaps > 800) {
+        setTimeout(resetFlag, 5000);
+        xcaps = 0;
+        ycaps = 0;
+    }
+    if (flag6) {
+        if (powerup <= 50) {
+            défense();
+        } else if (powerup >= 50) {
+            attaque();
+        }
+        flag6 = false;
+    }
+
     
     //Fonction collision avec la raquette :
     if (!pupDef) {
@@ -362,7 +400,7 @@ animation = function () {
             posx = posx + 1;
             posy = posy + 1;
         }
-        if (posy + 50 > y && posy < y + 50 && posx < x + 200 && posx - 10 < x + 288 && posx + 10 > x + 288) {
+        if (posy + 50 > y && posy < y + 50 && posx < x + 288 && posx - 10 < x + 288 && posx + 10 > x + 288) {
             if (!revx) {
                 cheatSpeed = 4;
             }
@@ -387,6 +425,12 @@ animation = function () {
                 obj[j].life -= 1;
                 if (obj[j].life <= 0) {
                     obj[j].flag2 = false;
+                    time = Math.floor((Math.random() * 100) + 1);
+                    if (time <= 100  && flag7) {
+                        xcaps = obj[j].x + 20;
+                        ycaps = obj[j].y + 40;
+                        flag7 = false;
+                    }
                 }
             }
             if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx - 10 < obj[j].x + 80 && posx + 10 > obj[j].x + 80) {
@@ -396,6 +440,12 @@ animation = function () {
                 obj[j].life -= 1;
                 if (obj[j].life <= 0) {
                     obj[j].flag2 = false;
+                    time = Math.floor((Math.random() * 100) + 1);
+                    if (time <= 100 && flag7) {
+                        xcaps = obj[j].x + 20;
+                        ycaps = obj[j].y + 40;
+                        flag7 = false;
+                    }
                 }
             }
             if (posy < obj[j].y + 40 && posy - 10 < obj[j].y + 40 && posy + 10 > obj[j].y + 40 && posx + 50 > obj[j].x && posx < obj[j].x + 80) {
@@ -405,6 +455,12 @@ animation = function () {
                 obj[j].life -= 1;
                 if (obj[j].life <= 0) {
                     obj[j].flag2 = false;
+                    time = Math.floor((Math.random() * 100) + 1);
+                    if (time <= 100 && flag7) {
+                        xcaps = obj[j].x + 20;
+                        ycaps = obj[j].y + 40;
+                        flag7 = false;
+                    }
                 }
             }
             if (posy + 50 > obj[j].y && posy + 40 < obj[j].y && posy + 60 > obj[j].y && posx + 50 > obj[j].x && posx < obj[j].x + 80) {
@@ -414,6 +470,12 @@ animation = function () {
                 obj[j].life -= 1;
                 if (obj[j].life <= 0) {
                     obj[j].flag2 = false;
+                    time = Math.floor((Math.random() * 100) + 1);
+                    if (time <= 20 && flag7) {
+                        xcaps = obj[j].x + 20;
+                        ycaps = obj[j].y + 40;
+                        flag7 = false;
+                    }
                 }
             }
         }
