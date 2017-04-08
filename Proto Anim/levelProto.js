@@ -24,8 +24,8 @@ anima.width = 290;
 anima.height = 292;
 var rows = 6;
 var etape = anima.height/rows;
-var srcX=0; 
-var srcY=0;
+var debutX = 0; // X du dessin
+var debutY = 0; // Y du dessin
 
 //départ
 var curFrame = 0; 
@@ -125,7 +125,7 @@ function updateFrame(){
  curFrame = ++curFrame % frameCount; 
  
  //change "d'étape"
- srcY = curFrame * 50; 
+ debutY = curFrame * 50; 
  scene.clearRect(x,y,anima.widht,anima.height);
 }
 
@@ -133,7 +133,7 @@ function draw(){
  //change de frame
  updateFrame();
  //DESSIN
- scene.drawImage(anima,srcX,srcY,anima.width,anima.height,x,y,anima.width,anima.height);
+ scene.drawImage(anima,debutX,debutY,anima.width,etape,x,y,anima.width,50);
 }
 
 setInterval(draw,1000);
