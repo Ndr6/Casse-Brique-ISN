@@ -26,7 +26,7 @@ var rows = 6;
 var etape = anima.height/rows;
 var debutX = 0; // X du dessin
 var debutY = 0; // Y du dessin
-
+var animaStop = 0;
 //départ
 var curFrame = 0; 
 //total d'étapes
@@ -123,7 +123,6 @@ window.addEventListener('keyup', function (e) {
 
 function updateFrame(){
  curFrame = ++curFrame % frameCount; 
- 
  //change "d'étape"
  debutY = curFrame * 50; 
  scene.clearRect(x,y,anima.widht,anima.height);
@@ -132,11 +131,18 @@ function updateFrame(){
 function draw(){
  //change de frame
  updateFrame();
+ animaStop = animaStop + 1;
  //DESSIN
  scene.drawImage(anima,debutX,debutY,anima.width,etape,x,y,anima.width,50);
 }
 
-setInterval(draw,1000);
+function timeToStop(){
+	if(animaStop==6){
+		
+	}else{
+		setInterval(draw,1000);
+	}
+}
 
 //Fonction de contrôles raquette next gen
 function controls() {
@@ -226,6 +232,7 @@ function controls() {
     
     //CHEAT Powerup ("1/&")
     if (keyState[49] && !pupDef) {
+		timeToStop();
         scene.clearRect(x, y, image.width, image.height);
         image.src = "RaquettePUPDef.png";
         test.play();
