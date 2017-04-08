@@ -17,6 +17,21 @@ pauseImg.src = "pausetest.png";
 pauseImg.width = 400;
 pauseImg.height = 400;
 
+//anim
+var anima = new Image();
+anima.src = "RaquettePUPDefAnim.png";
+anima.width = 290;
+anima.height = 292;
+var rows = 6;
+var etape = anima.height/rows;
+var srcX=0; 
+var srcY=0;
+
+//départ
+var curFrame = 0; 
+//total d'étapes
+var frameCount = 6; 
+
 //Variables raquette
 var x = 540, y = 700; //Position raquette 
 
@@ -49,7 +64,7 @@ image3.height = 50; //Dimensions balle
 //Variables briques
 
 var image2 = new Image(); //Asset graphique des briques
-image2.src = "briqueProto.png";
+image2.src = "brique.png";
 image2.width = 80;
 image2.height = 40;
 
@@ -105,6 +120,23 @@ window.addEventListener('keyup', function (e) {
     "use strict";
     keyState[e.keyCode || e.which] = false;
 }, true);
+
+function updateFrame(){
+ curFrame = ++curFrame % frameCount; 
+ 
+ //change "d'étape"
+ srcY = curFrame * 50; 
+ scene.clearRect(x,y,anima.widht,anima.height);
+}
+
+function draw(){
+ //change de frame
+ updateFrame();
+ //DESSIN
+ scene.drawImage(anima,srcX,srcY,anima.width,anima.height,x,y,anima.width,anima.height);
+}
+
+setInterval(draw,1000);
 
 //Fonction de contrôles raquette next gen
 function controls() {
@@ -196,7 +228,7 @@ function controls() {
     if (keyState[49] && !pupDef) {
         scene.clearRect(x, y, image.width, image.height);
         image.src = "RaquettePUPDef.png";
-        //test.play(); la ferme !
+        test.play();
         image.width = 288;
         image.height = 50;
         pupDef = true;
