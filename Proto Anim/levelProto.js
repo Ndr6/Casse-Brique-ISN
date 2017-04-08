@@ -55,6 +55,14 @@ image2.height = 40;
 
 var pos2x, pos2y, flag2, life;
 var obj = [];
+var pattern = 
+[1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+ 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+ 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+ 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+ 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+ 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,];
+ 
 
 //Variables contrôles
 var keyState = {};
@@ -76,18 +84,10 @@ var creaBriques = function () {
         this.life = life;
     };
     for (v = 0; v < 6; v += 1) {
-        for (i = 0; i < 15; i = i + 2) {
+        for (i = 0; i < 15; i += 1) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
-            life = 2;
-            obj.push(new Briques(pos2x, pos2y, flag2, life));
-        }
-        for (i = 1; i < 15; i = i + 2) {
-            pos2x = 83 * i + 19;
-            pos2y = 43 * v + 5;
-            flag2 = true;
-            life = 1;
             obj.push(new Briques(pos2x, pos2y, flag2, life));
         }
     }
@@ -337,8 +337,8 @@ animation = function () {
                 if (!pupUnstop) {revx = true; }
                 posx = posx + 1;
                 posy = posy + 1;
-                obj[j].life -= 1;
-                if (obj[j].life <= 0) {
+                pattern[j] -= 1;
+                if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                 }
             }
@@ -346,8 +346,8 @@ animation = function () {
                 if (!pupUnstop) {revx = false; }
                 posx = posx + 1;
                 posy = posy + 1;
-                obj[j].life -= 1;
-                if (obj[j].life <= 0) {
+                pattern[j] -= 1;
+                if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                 }
             }
@@ -355,8 +355,8 @@ animation = function () {
                 if (!pupUnstop) {revy = false; }
                 posx = posx + 1;
                 posy = posy + 1;
-                obj[j].life -= 1;
-                if (obj[j].life <= 0) {
+                pattern[j] -= 1;
+                if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                 }
             }
@@ -364,8 +364,8 @@ animation = function () {
                 if (!pupUnstop) {revy = true; }
                 posx = posx + 1;
                 posy = posy + 1;
-                obj[j].life -= 1;
-                if (obj[j].life <= 0) {
+                pattern[j] -= 1;
+                if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                 }
             }
