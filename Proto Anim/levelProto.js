@@ -247,11 +247,9 @@ animation = function () {
     scene.fill();
     
     //Trajectoire de la balle (à isoler)
-    if (posx < rayon) {
-		posx = rayon;
+    if (posx < 0) {
 		revx = false;
-    } else if (posx + rayon > 1280) {
-        posx = 1280 - rayon;
+    } else if (posx + 50 > 1280) {
         revx = true;
     }
 	if (!revx) {
@@ -259,13 +257,11 @@ animation = function () {
     } else {
 		posx = posx - pas;
     }
-    if (posy < rayon) {
-        posy = rayon;
+    if (posy < 0) {
         revy = false;
-    } else if (posy + rayon > 800) {
-        posy = 800 - rayon;
+    } else if (posy + 50 > 800) {
         revy = true;
-        alert("YOU LOSE!!!");
+        //alert("YOU LOSE!!!");
     }
 	if (!revy) {
         posy = posy + pas;
