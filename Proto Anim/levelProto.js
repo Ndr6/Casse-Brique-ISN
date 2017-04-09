@@ -36,6 +36,7 @@ var pas = 5; //Vitesse animation
 var posx = 615, posy = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var cheatSpeed = 10; //Vitesse balle
+var  flag8 = false;
 
 var pupUnstop = false;
 
@@ -272,30 +273,34 @@ animation = function () {
     //Fonction collision avec la raquette :
     if (!pupDef) {
         if (posx < x + 200 && posx + 50 > x && posy + 50 > y && posy + 60 > y && posy + 40 < y) {  //collision sur le dessus
+            flag8 = true;
             revy = true;
             posx = posx + 1;
             posy = posy + 1;
         }
-        if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 40 < x && posx + 60 > x) { //collision gauche
-            if (revx) {
-                cheatSpeed = 4;
-            }
-            revx = true;
-            posx = posx + 1;
-            posy = posy + 1;
-        }
-        if (posy + 50 > y && posy < y + 50 && posx < x + 200 && posx - 10 < x + 200 && posx + 10 > x + 200) {
-            if (!revx) {
-                cheatSpeed = 4;
-            }
-            revx = false;
-            posx = posx + 1;
-            posy = posy + 1;
-        }
         if (posx < x + 200 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
+            flag8 = true;
             revy = false;
             posx = posx + 1;
             posy = posy + 1;
+        }
+        if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 50 < x + 100) { //collision gauche
+            if (posx + 40 < x && posx + 60 > x) {
+                revx = true;
+                posx = posx + 1;
+                posy = posy + 1;
+            } else if (!flag8) {
+                posx = x - 50;
+            }
+        }
+        if (posy + 50 > y && posy < y + 50 && posx < x + 200 && posx > x + 100) {
+            if (posx - 10 < x + 200 && posx + 10 > x + 200) {
+                revx = false;
+                posx = posx + 1;
+                posy = posy + 1;
+            } else if (!flag8) {
+                posx = x + 200;
+            }
         }
     } else {
         if (posx < x + 288 && posx + 50 > x && posy + 50 > y && posy + 60 > y && posy + 40 < y) {  //collision sur le dessus
@@ -304,17 +309,11 @@ animation = function () {
             posy = posy + 1;
         }
         if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 40 < x && posx + 60 > x) { //collision gauche
-            if (revx) {
-                cheatSpeed = 4;
-            }
             revx = true;
             posx = posx + 1;
             posy = posy + 1;
         }
         if (posy + 50 > y && posy < y + 50 && posx < x + 200 && posx - 10 < x + 288 && posx + 10 > x + 288) {
-            if (!revx) {
-                cheatSpeed = 4;
-            }
             revx = false;
             posx = posx + 1;
             posy = posy + 1;
@@ -334,6 +333,7 @@ animation = function () {
                 posx = posx + 1;
                 posy = posy + 1;
                 pattern[j] -= 1;
+                flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                 }
@@ -343,6 +343,7 @@ animation = function () {
                 posx = posx + 1;
                 posy = posy + 1;
                 pattern[j] -= 1;
+                flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                 }
@@ -352,6 +353,7 @@ animation = function () {
                 posx = posx + 1;
                 posy = posy + 1;
                 pattern[j] -= 1;
+                flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                 }
@@ -361,6 +363,7 @@ animation = function () {
                 posx = posx + 1;
                 posy = posy + 1;
                 pattern[j] -= 1;
+                flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                 }
