@@ -61,13 +61,13 @@ image4.height = 40;
 
 var pos2x, pos2y, flag2;
 var obj = [];
-var pattern = 
+var pattern =
 [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
  1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
  1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
  1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
  1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,];
+ 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
  
 
 //Variables contrôles
@@ -378,7 +378,7 @@ animation = function () {
                 posy = posy + 1;
                 if (flag9) {
                     pattern[j] -= 1;
-                    flag9 = false
+                    flag9 = false;
                 }
                 flag8 = false;
                 if (pattern[j] <= 0) {
@@ -391,7 +391,7 @@ animation = function () {
                 posy = posy + 1;
                 if (flag9) {
                     pattern[j] -= 1;
-                    flag9 = false
+                    flag9 = false;
                 }
                 flag8 = false;
                 if (pattern[j] <= 0) {
