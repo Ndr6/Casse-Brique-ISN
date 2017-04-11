@@ -110,7 +110,7 @@ var creaBriques = function () {
         }
     }
 };
-  //Je sais pas trop à quoi ça sert Anthony :/
+  //Je sais pas trop à quoi ça sert Anthony :/ C'est la répétition après la fin d'un powerup
     resetFlag = function () {
         flag4 = false;
         flag7 = true;
@@ -159,6 +159,16 @@ var creaBriques = function () {
             setTimeout(reset, 15000);
         }
     }
+	attaque = function () {
+        if (!pupUnstop) {
+            scene.clearRect(x, y, image.width, image.height);
+            image3.src = "balleUnstop.png";
+            //X.play(); la ferme !
+            pupUnstop = true;
+            scene.drawImage(image, x, y, image.width, image.height);
+            setTimeout(reset, 15000);
+        }
+	}
 
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
@@ -257,6 +267,7 @@ function controls() {
             scene.clearRect(x, y, image.width, image.height);
             scene.drawImage(image, x, y, image.width, image.height);
         }
+	}
     
     
     //CHEAT Powerup ("1/&")
@@ -522,6 +533,7 @@ animation = function () {
         setTimeout(animation, cheatSpeed);
     }
 };
+
 
 //Lancement des fonctions principales après chargement de la page
 setTimeout(animation, 250);
