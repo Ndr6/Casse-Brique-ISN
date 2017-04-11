@@ -52,10 +52,19 @@ creditsImg.src = "briqueCredits.png";
 
 
 
-
 /****************************************
            Début du programme
 ****************************************/
+
+//Musique de fond
+var audioBG = new Audio("journey.mp3");
+var musicLoop = function () {
+    "use strict";
+    audioBG.play();
+    audioBG.volume = 0.3;
+    setTimeout(musicLoop, 201500);
+};
+musicLoop();
 
 //Fonction de définition du pattern de briques (plutôt basique pour l'instant)
 var creaBriques = function () {
