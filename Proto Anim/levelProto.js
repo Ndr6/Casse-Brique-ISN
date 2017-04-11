@@ -10,6 +10,10 @@
 var canvas;
 var scene;
 var animation; //Fonction 
+var defense;
+var unstoppable;
+var reset;
+var resetFlag;
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -59,16 +63,28 @@ image4.src = "briqueProto2.png";
 image4.width = 80;
 image4.height = 40;
 
-var pos2x, pos2y, flag2;
+//Variables powerup
+var time = Math.floor((Math.random() * 100) + 1);
+var powerup = Math.floor((Math.random() * 100) + 1);
+var imagecaps = new Image();
+imagecaps.src = "capsulebase.png";
+imagecaps.width = 40;
+imagecaps.height = 80;
+var xcaps, ycaps;
+var flag4 = false;
+var flag5 = true;
+var flag6 = false;
+var flag7 = true;
+
 var obj = [];
-var pattern =
-[1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
- 
+
+var pos2x, pos2y, flag2, life;
+var pattern = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
 
 //Variables contrôles
 var keyState = {};
@@ -97,7 +113,70 @@ var creaBriques = function () {
         }
     }
 };
+//Je sais pas trop à quoi ça sert Anthony :/
+resetFlag = function () {
+    "use strict";
+    flag4 = false;
+    flag7 = true;
+    powerup = Math.floor((Math.random() * 100) + 1);
+};
 
+//Fonction de reset des powerups
+reset = function () {
+    "use strict";
+    xcaps = 0;
+    ycaps = 0;
+    scene.clearRect(x, y, image.width, image.height);
+    image.src = "Raquette.png";
+    image3.src = "balle.png";
+    //Il manque un son pour perdre le PUP
+    image.width = 200;
+    image.height = 50;
+    if (pupDef) {x += 44; }
+    pupDef = false;
+    pupUnstop = false;
+    scene.drawImage(image, x, y, image.width, image.height);
+    if (x >= 1270 - image.width) {
+        x = 1270 - image.width;
+        scene.clearRect(x, y, image.width, image.height);
+        scene.drawImage(image, x, y, image.width, image.height);
+    }
+    setTimeout(resetFlag, 10000);
+};
+    
+//Fonction d'activation standard du powerup Défense
+defense = function () {
+    "use strict";
+    if (!pupDef) {
+        scene.clearRect(xcaps, ycaps, imagecaps.width, imagecaps.height);
+        scene.clearRect(x, y, image.width, image.height);
+        image.src = "RaquettePUPDef.png";
+        //test.play(); la ferme !
+        image.width = 288;
+        image.height = 50;
+        pupDef = true;
+        x -= 44;
+        scene.drawImage(image, x, y, image.width, image.height);
+        if (x >= 1272 - image.width) {
+            x = 1272 - image.width;
+            scene.clearRect(x, y, image.width, image.height);
+            scene.drawImage(image, x, y, image.width, image.height);
+        }
+        setTimeout(reset, 15000);
+    }
+};
+
+unstoppable = function () {
+    "use strict";
+    if (!pupUnstop) {
+        scene.clearRect(x, y, image.width, image.height);
+        image3.src = "balleUnstop.png";
+        //X.play(); la ferme !
+        pupUnstop = true;
+        scene.drawImage(image, x, y, image.width, image.height);
+        setTimeout(reset, 15000);
+    }
+};
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
@@ -195,9 +274,9 @@ function controls() {
             scene.clearRect(x, y, image.width, image.height);
             scene.drawImage(image, x, y, image.width, image.height);
         }
-    }
+	}
     
-    //CHEAT Powerup ("1/&")
+    //CHEAT Défense ("1/&")
     if (keyState[49] && !pupDef) {
         scene.clearRect(x, y, image.width, image.height);
         image.src = "RaquettePUPDef.png";
@@ -213,14 +292,17 @@ function controls() {
             scene.drawImage(image, x, y, image.width, image.height);
         }
     }
-    
+
     //CHEAT Unstoppable ("2/é")
     if (keyState[50] && !pupUnstop) {
-        scene.clearRect(x, y, image.width, image.height);
-        image3.src = "balleUnstop.png";
-        //X.play(); la ferme !
-        pupUnstop = true;
-        scene.drawImage(image, x, y, image.width, image.height);
+        if (!pupUnstop) {
+            scene.clearRect(x, y, image.width, image.height);
+            image3.src = "balleUnstop.png";
+            //X.play(); la ferme !
+            pupUnstop = true;
+            scene.drawImage(image, x, y, image.width, image.height);
+            setTimeout(reset, 15000);
+        }
     }
     //CHEAT Accéleration balle
     if (keyState[76] && cheatSpeed === 10) {
@@ -229,6 +311,7 @@ function controls() {
     if (keyState[77] && cheatSpeed === 4) {
         cheatSpeed = 10;
     }
+      
     setTimeout(controls, 15); //Bouclage de la fonction controls
 }
 
@@ -253,6 +336,10 @@ animation = function () {
         scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
     }
     scene.drawImage(image, x, y, image.width, image.height);
+    if (!flag4 && xcaps > 0 && ycaps > 0) {
+        scene.drawImage(imagecaps, xcaps, ycaps, imagecaps.width, imagecaps.height);
+        ycaps += 4;
+    }
     scene.closePath();
     scene.fill();
     
@@ -262,10 +349,10 @@ animation = function () {
     } else if (posx + 50 > 1280) {
         revx = true;
     }
-	if (!revx) {
-		posx = posx + pas;
+    if (!revx) {
+        posx = posx + pas;
     } else {
-		posx = posx - pas;
+        posx = posx - pas;
     }
     if (posy < 0) {
         revy = false;
@@ -273,11 +360,60 @@ animation = function () {
         revy = true;
         //alert("YOU LOSE!!!");
     }
-	if (!revy) {
+    if (!revy) {
         posy = posy + pas;
     } else {
-		posy = posy - pas;
+        posy = posy - pas;
     }
+    if (!pupDef) {
+        if (xcaps < x + 200 && xcaps + 40 > x && ycaps + 80 > y && ycaps + 90 > y && ycaps + 70 < y) {  //collision sur le dessus
+            flag4 = true;
+            flag6 = true;
+        }
+        if (ycaps + 80 > y && ycaps < y + 50 && xcaps + 40 > x && xcaps + 30 < x && xcaps + 50 > x) { //collision gauche
+            flag4 = true;
+            flag6 = true;
+        }
+        if (ycaps + 80 > y && ycaps < y + 50 && xcaps < x + 200 && xcaps - 10 < x + 200 && xcaps + 10 > x + 200) {
+            flag4 = true;
+            flag6 = true;
+        }
+        if (xcaps < x + 200 && xcaps + 40 > x && ycaps < y + 50 && ycaps + 10 > y + 50 && ycaps - 10 < y + 50) {
+            flag4 = true;
+            flag6 = true;
+        }
+    } else {
+        if (xcaps < x + 288 && xcaps + 40 > x && ycaps + 80 > y && ycaps + 90 > y && ycaps + 70 < y) {  //collision sur le dessus
+            flag4 = true;
+            flag6 = true;
+        }
+        if (ycaps + 80 > y && ycaps < y + 50 && xcaps + 40 > x && xcaps + 30 < x && xcaps + 50 > x) { //collision gauche
+            flag4 = true;
+            flag6 = true;
+        }
+        if (ycaps + 80 > y && ycaps < y + 50 && xcaps < x + 288 && xcaps - 10 < x + 288 && xcaps + 10 > x + 288) {
+            flag4 = true;
+            flag6 = true;
+        }
+        if (xcaps < x + 288 && xcaps + 40 > x && ycaps < y + 50 && ycaps + 10 > y + 50 && ycaps - 10 < y + 50) {
+            flag4 = true;
+            flag6 = true;
+        }
+    }
+    if (ycaps > 800) {
+        setTimeout(resetFlag, 5000);
+        xcaps = 0;
+        ycaps = 0;
+    }
+    if (flag6) {
+        if (powerup <= 50) {
+            defense();
+        } else if (powerup >= 50) {
+            unstoppable();
+        }
+        flag6 = false;
+    }
+
     
     //Fonction collision avec la raquette :
     if (!pupDef) {
@@ -357,6 +493,12 @@ animation = function () {
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
+                    time = Math.floor((Math.random() * 100) + 1);
+                    if (time <= 100  && flag7) {
+                        xcaps = obj[j].x + 20;
+                        ycaps = obj[j].y + 40;
+                        flag7 = false;
+                    }
                 }
             }
             if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx - 10 < obj[j].x + 80 && posx + 10 > obj[j].x + 80) { //collision droite
@@ -370,6 +512,12 @@ animation = function () {
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
+                    time = Math.floor((Math.random() * 100) + 1);
+                    if (time <= 100 && flag7) {
+                        xcaps = obj[j].x + 20;
+                        ycaps = obj[j].y + 40;
+                        flag7 = false;
+                    }
                 }
             }
             if (posy < obj[j].y + 40 && posy - 10 < obj[j].y + 40 && posy + 10 > obj[j].y + 40 && posx + 50 > obj[j].x && posx < obj[j].x + 80) { //collision bas
@@ -383,6 +531,12 @@ animation = function () {
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
+                    time = Math.floor((Math.random() * 100) + 1);
+                    if (time <= 100 && flag7) {
+                        xcaps = obj[j].x + 20;
+                        ycaps = obj[j].y + 40;
+                        flag7 = false;
+                    }
                 }
             }
             if (posy + 50 > obj[j].y && posy + 40 < obj[j].y && posy + 60 > obj[j].y && posx + 50 > obj[j].x && posx < obj[j].x + 80) { //collision haut
@@ -396,6 +550,12 @@ animation = function () {
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
+                    time = Math.floor((Math.random() * 100) + 1);
+                    if (time <= 20 && flag7) {
+                        xcaps = obj[j].x + 20;
+                        ycaps = obj[j].y + 40;
+                        flag7 = false;
+                    }
                 }
             }
             flag9 = true;
