@@ -40,7 +40,8 @@ var pas = 5; //Vitesse animation
 var posx = 615, posy = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var cheatSpeed = 10; //Vitesse balle
-var  flag8 = false;
+var flag8 = false;
+var flag9 = true;
 
 var pupUnstop = false;
 
@@ -57,6 +58,10 @@ var image2 = new Image(); //Asset graphique des briques
 image2.src = "briqueProto.png";
 image2.width = 80;
 image2.height = 40;
+var image4 = new Image();
+image4.src = "briqueProto2.png";
+image4.width = 80;
+image4.height = 40;
 
 //Variables powerup
 var time = Math.floor((Math.random() * 100) + 1);
@@ -74,13 +79,13 @@ var flag7 = true;
 var obj = [];
 
 var pos2x, pos2y, flag2, life;
-var pattern = 
+var pattern =
 [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
  1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
  1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
  1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
  1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,];
+ 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
 
 //Variables contrôles
 var keyState = {};
@@ -95,18 +100,17 @@ var creaBriques = function () {
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
 
-    var v, i, Briques = function (pos2x, pos2y, flag2, life) {
+    var v, i, Briques = function (pos2x, pos2y, flag2) {
         this.x = pos2x;
         this.y = pos2y;
         this.flag2 = flag2;
-        this.life = life;
     };
     for (v = 0; v < 6; v += 1) {
         for (i = 0; i < 15; i += 1) {
             pos2x = 83 * i + 19;
             pos2y = 43 * v + 5;
             flag2 = true;
-            obj.push(new Briques(pos2x, pos2y, flag2, life));
+            obj.push(new Briques(pos2x, pos2y, flag2));
         }
     }
 };
@@ -307,7 +311,12 @@ animation = function () {
     scene.drawImage(image3, posx, posy, 50, 50);
     for (k = 0; k < obj.length; k = k + 1) {
         if (obj[k].flag2) {
-            scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
+            if (pattern[k] === 1) {
+                scene.drawImage(image2, obj[k].x, obj[k].y, 80, 40);
+            }
+            if (pattern[k] === 2) {
+                scene.drawImage(image4, obj[k].x, obj[k].y, 80, 40);
+            }
         }
     }
     if (!move) {
@@ -427,35 +436,47 @@ animation = function () {
         }
     } else {
         if (posx < x + 288 && posx + 50 > x && posy + 50 > y && posy + 60 > y && posy + 40 < y) {  //collision sur le dessus
+            flag8 = true;
             revy = true;
             posx = posx + 1;
             posy = posy + 1;
         }
-        if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 40 < x && posx + 60 > x) { //collision gauche
-            revx = true;
-            posx = posx + 1;
-            posy = posy + 1;
-        }
-        if (posy + 50 > y && posy < y + 50 && posx < x + 200 && posx - 10 < x + 288 && posx + 10 > x + 288) {
-            revx = false;
-            posx = posx + 1;
-            posy = posy + 1;
-        }
         if (posx < x + 288 && posx + 50 > x && posy < y + 50 && posy + 10 > y + 50 && posy - 10 < y + 50) {
+            flag8 = true;
             revy = false;
             posx = posx + 1;
             posy = posy + 1;
+        }
+        if (posy + 50 > y && posy < y + 50 && posx + 50 > x && posx + 50 < x + 144) { //collision gauche
+            if (posx + 40 < x && posx + 60 > x) {
+                revx = true;
+                posx = posx + 1;
+                posy = posy + 1;
+            } else if (!flag8) {
+                posx = x - 50;
+            }
+        }
+        if (posy + 50 > y && posy < y + 50 && posx < x + 288 && posx > x + 144) {
+            if (posx - 10 < x + 288 && posx + 10 > x + 288) {
+                revx = false;
+                posx = posx + 1;
+                posy = posy + 1;
+            } else if (!flag8) {
+                posx = x + 288;
+            }
         }
     }
     
     //Collisions balle-briques
     for (j = 0; j < obj.length; j += 1) {
         if (obj[j].flag2) {
-            if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx + 50 > obj[j].x && posx + 40 < obj[j].x && posx + 60 > obj[j].x) {
+            if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx + 50 > obj[j].x && posx + 40 < obj[j].x && posx + 60 > obj[j].x) { //collision gauche
                 if (!pupUnstop) {revx = true; }
                 posx = posx + 1;
                 posy = posy + 1;
-                pattern[j] -= 1;
+                if (flag9) {
+                    pattern[j] -= 1;
+                }
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
@@ -467,11 +488,14 @@ animation = function () {
                     }
                 }
             }
-            if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx - 10 < obj[j].x + 80 && posx + 10 > obj[j].x + 80) {
+            if (posy + 50 > obj[j].y && posy < obj[j].y + 40 && posx < obj[j].x + 80 && posx - 10 < obj[j].x + 80 && posx + 10 > obj[j].x + 80) { //collision droite
                 if (!pupUnstop) {revx = false; }
                 posx = posx + 1;
                 posy = posy + 1;
-                pattern[j] -= 1;
+                if (flag9) {
+                    pattern[j] -= 1;
+                    flag9 = false;
+                }
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
@@ -483,11 +507,14 @@ animation = function () {
                     }
                 }
             }
-            if (posy < obj[j].y + 40 && posy - 10 < obj[j].y + 40 && posy + 10 > obj[j].y + 40 && posx + 50 > obj[j].x && posx < obj[j].x + 80) {
+            if (posy < obj[j].y + 40 && posy - 10 < obj[j].y + 40 && posy + 10 > obj[j].y + 40 && posx + 50 > obj[j].x && posx < obj[j].x + 80) { //collision bas
                 if (!pupUnstop) {revy = false; }
                 posx = posx + 1;
                 posy = posy + 1;
-                pattern[j] -= 1;
+                if (flag9) {
+                    pattern[j] -= 1;
+                    flag9 = false;
+                }
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
@@ -499,11 +526,14 @@ animation = function () {
                     }
                 }
             }
-            if (posy + 50 > obj[j].y && posy + 40 < obj[j].y && posy + 60 > obj[j].y && posx + 50 > obj[j].x && posx < obj[j].x + 80) {
+            if (posy + 50 > obj[j].y && posy + 40 < obj[j].y && posy + 60 > obj[j].y && posx + 50 > obj[j].x && posx < obj[j].x + 80) { //collision haut
                 if (!pupUnstop) {revy = true; }
                 posx = posx + 1;
                 posy = posy + 1;
-                pattern[j] -= 1;
+                if (flag9) {
+                    pattern[j] -= 1;
+                    flag9 = false;
+                }
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
@@ -515,6 +545,7 @@ animation = function () {
                     }
                 }
             }
+            flag9 = true;
         }
     }
     //Bouclage de la fonction animation
