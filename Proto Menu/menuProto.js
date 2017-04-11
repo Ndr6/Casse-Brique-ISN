@@ -35,10 +35,21 @@ var rayon = 25; //Rayon balle
 
 //Variables briques
 
-var briqueImg = new Image();
-briqueImg.src = "briqueProto.png";
-briqueImg.width = 80;
-briqueImg.height = 40;
+var spaceImg = new Image();
+spaceImg.src = "briqueSpace.png";
+
+var nordicImg = new Image();
+nordicImg.src = "briqueNordic.png";
+
+var troisImg = new Image();
+troisImg.src = "briquePH1.png";
+
+var quatreImg = new Image();
+quatreImg.src = "briquePH2.png";
+
+var creditsImg = new Image();
+creditsImg.src = "briqueCredits.png";
+
 
 
 
@@ -111,7 +122,11 @@ animation = function () {
     scene.clearRect(0, 0, 1280, 800);
     scene.beginPath();
     scene.drawImage(balleImg, posx, posy, 50, 50);
-    //Insérer un truc important ici ?
+    scene.drawImage(spaceImg, 45, 330, 190, 60);
+    scene.drawImage(nordicImg, 295, 330, 190, 60);
+    scene.drawImage(troisImg, 545, 330, 190, 60);
+    scene.drawImage(quatreImg, 795, 330, 190, 60);
+    scene.drawImage(creditsImg, 1045, 330, 190, 60);
     scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
     scene.closePath();
     scene.fill();
@@ -130,7 +145,6 @@ select = function () {
     "use strict";
     //Fonction de "collisions" aux "briques" de choix de niveau
     if (posy === 383 && flag) { //posy initial 649
-        alert("Collision détectée");
         if (posx === 115) {
             //1er choix
             flag = false;
