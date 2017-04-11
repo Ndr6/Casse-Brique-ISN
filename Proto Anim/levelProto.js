@@ -11,7 +11,7 @@ var canvas;
 var scene;
 var animation; //Fonction 
 var defense;
-var attaque;
+var unstoppable;
 var reset;
 var resetFlag;
 
@@ -158,6 +158,19 @@ defense = function () {
             scene.clearRect(x, y, image.width, image.height);
             scene.drawImage(image, x, y, image.width, image.height);
         }
+        setTimeout(reset, 15000);
+    }
+};
+
+//Activation standard powerup unstoppable
+unstoppable = function () {
+    "use strict";
+    if (!pupUnstop) {
+        scene.clearRect(x, y, image.width, image.height);
+        image3.src = "balleUnstop.png";
+        //X.play(); la ferme !
+        pupUnstop = true;
+        scene.drawImage(image, x, y, image.width, image.height);
         setTimeout(reset, 15000);
     }
 };
@@ -389,7 +402,7 @@ animation = function () {
         if (powerup <= 50) {
             defense();
         } else if (powerup >= 50) {
-            attaque();
+            unstoppable();
         }
         flag6 = false;
     }
