@@ -163,6 +163,16 @@ var creaBriques = function () {
             setTimeout(reset, 15000);
         }
     }
+	attaque = function () {
+        if (!pupUnstop) {
+            scene.clearRect(x, y, image.width, image.height);
+            image3.src = "balleUnstop.png";
+            //X.play(); la ferme !
+            pupUnstop = true;
+            scene.drawImage(image, x, y, image.width, image.height);
+            setTimeout(reset, 15000);
+        }
+    }
 
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
@@ -261,7 +271,7 @@ function controls() {
             scene.clearRect(x, y, image.width, image.height);
             scene.drawImage(image, x, y, image.width, image.height);
         }
-    
+	}
     
     //CHEAT Powerup ("1/&")
     if (keyState[49] && !pupDef) {
