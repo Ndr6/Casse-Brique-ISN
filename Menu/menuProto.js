@@ -10,6 +10,7 @@ var canvas; //Le canvas en lui-même
 var scene;
 var animation; //Fonction d'animation du canvas
 var select; //Fonction de "collisions" choix de niveau
+var reload = false;
 
 //Variables raquette
 var x = 540, y = 700; //Position raquette
@@ -157,28 +158,27 @@ select = function () {
         if (posx === 115) {
             //1er choix
             flag = false;
-            alert("Selectionné : 1");
+            alert("N'est pas encore prêt");
             location.reload();
         } else if (posx === 365) {
             //2e choix
             flag = false;
-            alert("Selectionné : 2");
+            alert("Encore moins prêt...");
             location.reload();
         } else if (posx === 615) {
             //3e choix
             flag = false;
-            alert("Selectionné : 3");
-            location.reload();
+            alert("Lancement niveau proto");
+            location.replace("../Proto Anim/levelProto.html");
         } else if (posx === 865) {
             //4e choix
             flag = false;
-            alert("Selectionné : 4");
+            alert("Meuuuurge !");
             location.reload();
         } else if (posx === 1115) {
             //5e choix
             flag = false;
-            alert("Selectionné : 5");
-            location.reload();
+            location.replace("credits.html");
         }
     }
     setTimeout(select, 10);
