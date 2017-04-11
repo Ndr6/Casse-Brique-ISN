@@ -10,8 +10,8 @@
 var canvas;
 var scene;
 var animation; //Fonction 
-var défense;
-var attaque;
+var defense;
+var unstoppable;
 var reset;
 var resetFlag;
 
@@ -79,13 +79,12 @@ var flag7 = true;
 var obj = [];
 
 var pos2x, pos2y, flag2, life;
-var pattern =
-[1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
- 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
+var pattern = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
+            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
 
 //Variables contrôles
 var keyState = {};
@@ -114,66 +113,70 @@ var creaBriques = function () {
         }
     }
 };
-  //Je sais pas trop à quoi ça sert Anthony :/
-    resetFlag = function () {
-        flag4 = false;
-        flag7 = true;
-        powerup = Math.floor((Math.random() * 100) + 1);
-    }
+//Je sais pas trop à quoi ça sert Anthony :/
+resetFlag = function () {
+    "use strict";
+    flag4 = false;
+    flag7 = true;
+    powerup = Math.floor((Math.random() * 100) + 1);
+};
 
 //Fonction de reset des powerups
-    reset = function () {
-        xcaps = 0;
-        ycaps = 0;
+reset = function () {
+    "use strict";
+    xcaps = 0;
+    ycaps = 0;
+    scene.clearRect(x, y, image.width, image.height);
+    image.src = "Raquette.png";
+    image3.src = "balle.png";
+    //Il manque un son pour perdre le PUP
+    image.width = 200;
+    image.height = 50;
+    if (pupDef) {x += 44; }
+    pupDef = false;
+    pupUnstop = false;
+    scene.drawImage(image, x, y, image.width, image.height);
+    if (x >= 1270 - image.width) {
+        x = 1270 - image.width;
         scene.clearRect(x, y, image.width, image.height);
-        image.src = "Raquette.png";
-        image3.src = "balle.png";
-        //Il manque un son pour perdre le PUP
-        image.width = 200;
-        image.height = 50;
-        if (pupDef) {x += 44; }
-        pupDef = false;
-        pupUnstop = false;
         scene.drawImage(image, x, y, image.width, image.height);
-        if (x >= 1270 - image.width) {
-            x = 1270 - image.width;
-            scene.clearRect(x, y, image.width, image.height);
-            scene.drawImage(image, x, y, image.width, image.height);
-        }
-        setTimeout(resetFlag, 10000);
     }
+    setTimeout(resetFlag, 10000);
+};
     
 //Fonction d'activation standard du powerup Défense
-    défense = function () {
-        if (!pupDef) {
-            scene.clearRect(xcaps, ycaps, imagecaps.width, imagecaps.height);
+defense = function () {
+    "use strict";
+    if (!pupDef) {
+        scene.clearRect(xcaps, ycaps, imagecaps.width, imagecaps.height);
+        scene.clearRect(x, y, image.width, image.height);
+        image.src = "RaquettePUPDef.png";
+        //test.play(); la ferme !
+        image.width = 288;
+        image.height = 50;
+        pupDef = true;
+        x -= 44;
+        scene.drawImage(image, x, y, image.width, image.height);
+        if (x >= 1272 - image.width) {
+            x = 1272 - image.width;
             scene.clearRect(x, y, image.width, image.height);
-            image.src = "RaquettePUPDef.png";
-            //test.play(); la ferme !
-            image.width = 288;
-            image.height = 50;
-            pupDef = true;
-            x -= 44;
             scene.drawImage(image, x, y, image.width, image.height);
-            if (x >= 1272 - image.width) {
-                x = 1272 - image.width;
-                scene.clearRect(x, y, image.width, image.height);
-                scene.drawImage(image, x, y, image.width, image.height);
-            }
-            setTimeout(reset, 15000);
         }
+        setTimeout(reset, 15000);
     }
-	attaque = function () {
-        if (!pupUnstop) {
-            scene.clearRect(x, y, image.width, image.height);
-            image3.src = "balleUnstop.png";
-            //X.play(); la ferme !
-            pupUnstop = true;
-            scene.drawImage(image, x, y, image.width, image.height);
-            setTimeout(reset, 15000);
-        }
-    }
+};
 
+unstoppable = function () {
+    "use strict";
+    if (!pupUnstop) {
+        scene.clearRect(x, y, image.width, image.height);
+        image3.src = "balleUnstop.png";
+        //X.play(); la ferme !
+        pupUnstop = true;
+        scene.drawImage(image, x, y, image.width, image.height);
+        setTimeout(reset, 15000);
+    }
+};
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
@@ -273,7 +276,7 @@ function controls() {
         }
 	}
     
-    //CHEAT Powerup ("1/&")
+    //CHEAT Défense ("1/&")
     if (keyState[49] && !pupDef) {
         scene.clearRect(x, y, image.width, image.height);
         image.src = "RaquettePUPDef.png";
@@ -404,9 +407,9 @@ animation = function () {
     }
     if (flag6) {
         if (powerup <= 50) {
-            défense();
+            defense();
         } else if (powerup >= 50) {
-            attaque();
+            unstoppable();
         }
         flag6 = false;
     }
