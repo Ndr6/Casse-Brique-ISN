@@ -125,30 +125,14 @@ resetFlag = function () {
 //Fonction de reset des powerups
 reset = function () {
     "use strict";
-    xcaps = 0;
-    ycaps = 0;
-    scene.clearRect(x, y, image.width, image.height);
-    image.src = "Raquette.png";
-    image3.src = "balle.png";
-    //Il manque un son pour perdre le PUP
-    image.width = 200;
-    image.height = 50;
-    if (pupDef) {x += 44; }
-    pupDef = false;
-    pupUnstop = false;
-    scene.drawImage(image, x, y, image.width, image.height);
-    if (x >= 1270 - image.width) {
-        x = 1270 - image.width;
-        scene.clearRect(x, y, image.width, image.height);
-        scene.drawImage(image, x, y, image.width, image.height);
-    }
-    setTimeout(resetFlag, 10000);
+	if (move) {
+	}
 };
     
 //Fonction d'activation standard du powerup Défense
 defense = function () {
     "use strict";
-    if (!pupDef) {
+    if (!pupDef && move) {
         scene.clearRect(xcaps, ycaps, imagecaps.width, imagecaps.height);
         scene.clearRect(x, y, image.width, image.height);
         image.src = "RaquettePUPDef.png";
@@ -169,7 +153,7 @@ defense = function () {
 
 unstoppable = function () {
     "use strict";
-    if (!pupUnstop) {
+    if (!pupUnstop && move) {
         scene.clearRect(x, y, image.width, image.height);
         image3.src = "balleUnstop.png";
         //X.play(); la ferme !
