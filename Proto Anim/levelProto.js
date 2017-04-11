@@ -67,7 +67,6 @@ image4.height = 40;
 var time = Math.floor((Math.random() * 100) + 1);
 var powerup = Math.floor((Math.random() * 100) + 1);
 var imagecaps = new Image();
-imagecaps.src = "capsulebase.png";
 imagecaps.width = 40;
 imagecaps.height = 80;
 var xcaps = 0;
@@ -340,8 +339,15 @@ animation = function () {
     }
     scene.drawImage(image, x, y, image.width, image.height);
     if (!flag4 && xcaps > 0 && ycaps > 0) {
-        scene.drawImage(imagecaps, xcaps, ycaps, imagecaps.width, imagecaps.height);
-        ycaps += 4;
+		if (powerup < 50) {
+			imagecaps.src = "capsuleDEF.png";
+			scene.drawImage(imagecaps, xcaps, ycaps, imagecaps.width, imagecaps.height);
+			ycaps += 4;
+		} else if (powerup >= 50) {
+			imagecaps.src = "capsuleATK.png";
+			scene.drawImage(imagecaps, xcaps, ycaps, imagecaps.width, imagecaps.height);
+			ycaps += 4;
+		}
     }
     scene.closePath();
     scene.fill();
@@ -409,7 +415,7 @@ animation = function () {
         ycaps = 0;
     }
     if (flag6) {
-        if (powerup <= 50) {
+        if (powerup < 50) {
             defense();
         } else if (powerup >= 50) {
             unstoppable();
@@ -554,7 +560,7 @@ animation = function () {
                 if (pattern[j] <= 0) {
                     obj[j].flag2 = false;
                     time = Math.floor((Math.random() * 100) + 1);
-                    if (time <= 20 && flag7) {
+                    if (time <= 100 && flag7) {
                         xcaps = obj[j].x + 20;
                         ycaps = obj[j].y + 40;
                         flag7 = false;
