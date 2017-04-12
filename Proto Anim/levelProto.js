@@ -1,4 +1,4 @@
-/*global Audio: false*/
+﻿/*global Audio: false*/
 /*global alert: false*/
 /*global console: false*/
 
@@ -136,11 +136,11 @@ function draw(){
  scene.drawImage(anima,debutX,debutY,anima.width,etape,x,y,anima.width,50);
 }
 
+setInterval(draw,1000);
+
 function timeToStop(){
-	if(animaStop==6){
-		
-	}else{
-		setInterval(draw,1000);
+	if(animaStop == 6){
+	}else{ setInterval(draw,1000);
 	}
 }
 
