@@ -14,6 +14,10 @@ var defense;    //Fonction d'activation du powerup Défense
 var unstoppable;    //Fonction d'activation du powerup Unstoppable
 var reset;      //Fonction de désactivation des powerups
 var resetFlag;  //Anthony, je vois pas à quoi ça sert ce truc :/
+var backgroundMusic; //Ce nom est assez explicite je pense
+
+//Variables son
+var pupLoseSfx = new Audio("PUP_Lose.wav");
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -79,12 +83,12 @@ var flag6 = false; //ANTHONY !!! ...
 var flag7 = true;  //ANTHONY !!! Et en plus quand je veux renommer "flag", j'ai 83 résultats, c'est beaucoup
 
 var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
-var pattern = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
-            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
-            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
-            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
-            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
-            1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
+var pattern = [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+            1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
+            1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1,
+            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
+            0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
 
 //Variables contrôles
 var keyState = {};
@@ -130,7 +134,7 @@ reset = function () {
 		scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
 		raquetteImg.src = "Raquette.png";
 		balleImg.src = "balle.png";
-		//Il manque un son pour perdre le PUP
+		pupLoseSfx.play();
 		raquetteImg.width = 200;
 		raquetteImg.height = 50;
 		if (pupDef) {x += 44; }
@@ -270,6 +274,7 @@ function controls() {
         if (pupDef) {x += 44; }
         pupDef = false;
         pupUnstop = false;
+        pupLoseSfx.play();
         scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
         if (x >= 1270 - raquetteImg.width) {
             x = 1270 - raquetteImg.width;
@@ -576,9 +581,18 @@ animation = function () {
     }
 };
 
+backgroundMusic = function () {
+    "use strict";
+    var audioBG = new Audio("space_corsair.mp3");
+    audioBG.play();
+    audioBG.volume = 0.3;
+    setTimeout(backgroundMusic, 202000);
+};
+
 //Lancement des fonctions principales après chargement de la page
 setTimeout(animation, 250);
 setTimeout(controls, 500);
+backgroundMusic();
 
 /******************************************************
                     Fin du programme
