@@ -12,19 +12,33 @@
                 setTimeout(musicLoop, 64000);
             }
             musicLoop();
+            
+            document.addEventListener("keydown", function (event) {     // commande barre    
+                switch (event.keyCode) {
+                case 32:
+                        location.replace("menuProto.html");
+                        break;
+                }
+            });
         </script>
     </head>
     <body>
         <div id="credits">
-            <a href="menuProto.html">[Retour]</a>
             <h1>Crédits</h1>
             <h2>Programmation :</h2>
-            <li>Nous</li>
+            <h5>Anthony, Gabin, Sébastien, Benjamin</h5>
             <h2>Graphismes :</h2>
-            <li>Gabeing</li>
+            <h5>Gabin</h5>
+            <h2>Effets sonores :</h2>
+            <h5>Sébastien, Gabin</h5>
+            <h2>Organisation :</h2>
+            <h5>Sébastien</h5>
             <h2>Musique (sous license <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons</a>) :</h2>
-            <li>Écran titre  : A different kind of journey - BitPower : <a href="http://www.newgrounds.com/audio/listen/734814" target="_blank">Lien</a></li>
-            <li>Crédits : Loading Screen - CHiLEDAWG : <a href="http://www.newgrounds.com/audio/listen/735287" target="_blank">Lien</a></li>
+            <h5>Écran titre  : A different kind of journey - BitPower : <a href="http://www.newgrounds.com/audio/listen/734814" target="_blank">Lien</a></h5>
+            <h5>Niveau "Space"  : Space Corsair - Zechnition : <a href="http://www.newgrounds.com/audio/listen/712963" target="_blank">Lien</a></h5>
+            <h5>Crédits : Loading Screen - CHiLEDAWG : <a href="http://www.newgrounds.com/audio/listen/735287" target="_blank">Lien</a></h5>
+            <br><p>Code source disponible sur <a href="https://github.com/Ndr6/Casse-Brique-ISN" target="_blank">Github</a></p>
+            <p id="retour">[Appuyez sur "SPAAAAACE" pour retourner au menu]</p>
         </div>     
     </body>
 </html>
