@@ -6,11 +6,11 @@
     font-size: 200%;
 }
 
-H1, Ul, li, p{
+H1, Ul, li{
     text-align: center;
 }
 h2{
-    font-size: 35px;
+    font-size: 25px;
     }
 
 ul{
@@ -23,4 +23,25 @@ body{
 
 a{
     color: lightcyan;
+}
+
+p{
+    font-size: 15px;
+    color: orange;
+    line-height: 2px
+}
+
+h5{
+    text-align: center;
+    color: red;
+    font-size: 20px;
+    line-height: 5px
+}
+
+h1{
+    font-size: 40px;
+}
+
+#retour{
+    text-align: center;
 }

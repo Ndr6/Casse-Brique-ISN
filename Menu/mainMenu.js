@@ -10,7 +10,6 @@ var canvas; //Le canvas en lui-même
 var scene;
 var animation; //Fonction d'animation du canvas
 var select; //Fonction de "collisions" choix de niveau
-var reload = false;
 
 //Variables raquette
 var x = 540, y = 700; //Position raquette
@@ -22,11 +21,15 @@ raquetteImg.src = "Raquette.png"; //Asset graphique barre
 raquetteImg.width = 200;
 raquetteImg.height = 50; //Dimensions asset barre
 
+var raquetteMoveSfx = new Audio("Select.wav");
+var raquetteLockedSfx = new Audio("OutSelect.wav");
+var raquetteLaunchSfx = new Audio("Launch.wav");
+
 //Variables balle
 var posx = 615, posy = 649; //Position initiale de la balle
 
 var flag = false; //Activation de la balle
-var pas = 5; //Vitesse animation
+var pas = 1; //Vitesse animation
 
 var balleImg = new Image();
 balleImg.src = "balle.png";
@@ -65,7 +68,7 @@ var musicLoop = function () {
     audioBG.volume = 0.3;
     setTimeout(musicLoop, 201500);
 };
-musicLoop();
+//musicLoop();
 
 //Fonction de définition du pattern de briques (plutôt basique pour l'instant)
 var creaBriques = function () {
@@ -88,6 +91,7 @@ document.addEventListener("keydown", function (event) {     // commande barre
             if (x >= 1040) {
                 scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
                 x += 0;
+                raquetteLockedSfx.play();
                 scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
             } else {
                 scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
@@ -95,6 +99,7 @@ document.addEventListener("keydown", function (event) {     // commande barre
                 posx = x + 75;
                 posy = y - 51;
                 scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+                raquetteMoveSfx.play();
                 animation();
             }
             break;
@@ -102,6 +107,7 @@ document.addEventListener("keydown", function (event) {     // commande barre
             if (x <= 40) {
                 scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
                 x -= 0;
+                raquetteLockedSfx.play();
                 scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
             } else {
                 scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
@@ -109,17 +115,15 @@ document.addEventListener("keydown", function (event) {     // commande barre
                 posx = x + 75;
                 posy = y - 51;
                 scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+                raquetteMoveSfx.play();
                 animation();
             }
             break;
         case 32:
             flag = true;
             move = false;
+            raquetteLaunchSfx.play();
             animation();
-            break;
-        case 49: //Donne la position en x de la balle en appuyant sur &/1
-            alert(posx);
-            alert(posy);
             break;
         }
     }
@@ -147,7 +151,7 @@ animation = function () {
     
     //Bouclage de la fonction animation
     if (flag) {
-        setTimeout(animation, 15);
+        setTimeout(animation, 20);
     }
 };
 
