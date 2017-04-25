@@ -14,6 +14,7 @@ var defense;    //Fonction d'activation du powerup Défense
 var unstoppable;    //Fonction d'activation du powerup Unstoppable
 var reset;      //Fonction de désactivation des powerups
 var resetFlag;  //Anthony, je vois pas à quoi ça sert ce truc :/
+var loseLife;
 var backgroundMusic; //Ce nom est assez explicite je pense
 
 //Variables son
@@ -183,6 +184,18 @@ unstoppable = function () {
         setTimeout(reset, 15000);
     }
 };
+loseLife = function () {
+    if (!flag9) {
+        return;
+    }
+    moveRaquette = false;
+    xBalle = 615;
+    yBalle = 649;
+    x = 540;
+    y = 700;
+    reset();
+    flag9 = false;
+}
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
