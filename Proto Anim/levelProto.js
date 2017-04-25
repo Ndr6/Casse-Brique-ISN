@@ -81,13 +81,13 @@ var flag4 = false; //Détection collisions barre avec capsule
 var flag6 = false; //ça permet le lancement du powerup après collisions
 var flag7 = true;  //ça évite la téléportation d'une capsule si il y a une collisions avec 2 briques l'une après l'autre
 
-var xbricks, ybricks, alive, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
-var pattern = [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-            1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]; // Sérieux ?
+var xbricks, ybricks, alive, life;
+var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+            1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 //Variables contrôles
 var keyState = {};
