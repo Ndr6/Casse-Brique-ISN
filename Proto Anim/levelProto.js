@@ -185,6 +185,7 @@ unstoppable = function () {
     }
 };
 loseLife = function () {
+    "use strict";
     if (!flag9) {
         return;
     }
@@ -195,7 +196,7 @@ loseLife = function () {
     y = 700;
     reset();
     flag9 = false;
-}
+};
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
