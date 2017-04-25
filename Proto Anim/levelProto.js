@@ -82,17 +82,19 @@ var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ?
 var flag5 = true;  //ANTHONY !!! ...
 var flag6 = false; //ANTHONY !!! ...
 var flag7 = true;  //ANTHONY !!! Et en plus quand je veux renommer "flag", j'ai 83 résultats, c'est beaucoup
+var flag9 = true;
 
 var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
-var pattern = [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-            1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
+var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 //Variables contrôles
 var keyState = {};
+var pause = false;
 
 /****************************************
            Début du programme
@@ -129,7 +131,7 @@ resetFlag = function () {
 //Fonction de reset des powerups
 reset = function () {
     "use strict";
-	if (moveRaquette) {
+	if (pause) {
 		xCapsule = 0;
 		yCapsule = 0;
 		scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
@@ -185,17 +187,23 @@ unstoppable = function () {
     }
 };
 loseLife = function () {
+	"use strict";
     if (!flag9) {
         return;
     }
+	scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
+	scene.clearRect(xBalle, yBalle, 50, 50);
     moveRaquette = false;
     xBalle = 615;
     yBalle = 649;
     x = 540;
     y = 700;
     reset();
+	scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
     flag9 = false;
-}
+	flag = false;
+};
 //Appel de la fonction de création des briques au chargement terminé de la page
 window.addEventListener("load", creaBriques);
 
@@ -267,12 +275,14 @@ function controls() {
     //Lancement de la balle (espace)
     if (keyState[32] && !flag) {
         flag = true;
+		pause = true;
         moveRaquette = true;
         animation();
     }
     //Pause (P)
     if (keyState[80] && flag) {
         flag = false;
+		pause = false;
         moveRaquette = false;
     }
     
@@ -352,7 +362,7 @@ animation = function () {
             }
         }
     }
-    if (!moveRaquette) {
+    if (!moveRaquette && !pause) {
         scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
     }
     scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
@@ -371,27 +381,30 @@ animation = function () {
     scene.fill();
     
     //Trajectoire de la balle (à isoler)
-    if (xBalle < 0) {
-		revx = false;
-    } else if (xBalle + 50 > 1280) {
-        revx = true;
-    }
-    if (!revx) {
-        xBalle = xBalle + pasAnim;
-    } else {
-        xBalle = xBalle - pasAnim;
-    }
-    if (yBalle < 0) {
-        revy = false;
-    } else if (yBalle + 50 > 800) {
-        revy = true;
-        //alert("YOU LOSE!!!");
-    }
-    if (!revy) {
-        yBalle = yBalle + pasAnim;
-    } else {
-        yBalle = yBalle - pasAnim;
-    }
+	if (moveRaquette) {
+		if (xBalle < 0) {
+			revx = false;
+		} else if (xBalle + 50 > 1280) {
+			revx = true;
+		}
+		if (yBalle < 0) {
+			revy = false;
+		} else if (yBalle + 50 > 800) {
+			revy = true;
+			loseLife();
+			//alert("YOU LOSE!!!");
+		}
+		if (!revy) {
+			yBalle = yBalle + pasAnim;
+		} else {
+			yBalle = yBalle - pasAnim;
+		}
+		if (!revx) {
+			xBalle = xBalle + pasAnim;
+		} else {
+			xBalle = xBalle - pasAnim;
+		}
+	}
     if (!pupDef) {
         if (xCapsule < x + 200 && xCapsule + 40 > x && yCapsule + 80 > y && yCapsule + 90 > y && yCapsule + 70 < y) {  //collision sur le dessus
             flag4 = true;
