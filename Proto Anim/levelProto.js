@@ -27,7 +27,7 @@ pauseImg.width = 400;
 pauseImg.height = 400;
 
 //Variables raquette
-var x = 540, y = 700; //Position raquette 
+var xRaquette = 540, yRaquette = 700; //Position raquette 
 
 var raquetteImg = new Image();
 raquetteImg.src = "Raquette.png"; //Asset graphique barre
@@ -132,20 +132,20 @@ reset = function () {
 	if (moveRaquette) {
 		xCapsule = 0;
 		yCapsule = 0;
-		scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
+		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		raquetteImg.src = "Raquette.png";
 		balleImg.src = "balle.png";
 		pupLoseSfx.play();
 		raquetteImg.width = 200;
 		raquetteImg.height = 50;
-		if (pupDef) {x += 44; }
+		if (pupDef) {xRaquette += 44; }
 		pupDef = false;
 		pupUnstop = false;
-		scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
-		if (x >= 1270 - raquetteImg.width) {
-			x = 1270 - raquetteImg.width;
-			scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+		if (xRaquette >= 1270 - raquetteImg.width) {
+			xRaquette = 1270 - raquetteImg.width;
+			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		}
 		setTimeout(resetFlag, 10000);
 	}
@@ -156,18 +156,18 @@ defense = function () {
     "use strict";
     if (!pupDef && moveRaquette) {
         scene.clearRect(xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
-        scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
+        scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         raquetteImg.src = "RaquettePUPDef.png";
         //DefSfx.play(); la ferme !
         raquetteImg.width = 288;
         raquetteImg.height = 50;
         pupDef = true;
-        x -= 44;
-        scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
-        if (x >= 1272 - raquetteImg.width) {
-            x = 1272 - raquetteImg.width;
-            scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
-            scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+        xRaquette -= 44;
+        scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        if (xRaquette >= 1272 - raquetteImg.width) {
+            xRaquette = 1272 - raquetteImg.width;
+            scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         }
         setTimeout(reset, 15000);
     }
@@ -176,11 +176,11 @@ defense = function () {
 unstoppable = function () {
     "use strict";
     if (!pupUnstop && moveRaquette) {
-        scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
+        scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         balleImg.src = "balleUnstop.png";
         //X.play(); la ferme !
         pupUnstop = true;
-        scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+        scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         setTimeout(reset, 15000);
     }
 };
@@ -192,8 +192,8 @@ loseLife = function () {
     moveRaquette = false;
     xBalle = 615;
     yBalle = 649;
-    x = 540;
-    y = 700;
+    xRaquette = 540;
+    yRaquette = 700;
     reset();
     flag9 = false;
 };
@@ -216,52 +216,52 @@ function controls() {
     //Contrôles flèche gauche et "q"
     if (keyState[37] || keyState[81]) {
         if (moveRaquette) {
-            if (x <= 0) {
-                scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
-                x -= 0;
-                scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+            if (xRaquette <= 0) {
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                xRaquette -= 0;
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             } else {
-                scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
-                x -= 15;
-                scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                xRaquette -= 15;
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             }
             if (!flag && xBalle >= 65) {
-                xBalle = x + 75;
+                xBalle = xRaquette + 75;
                 scene.clearRect(0, 0, 1280, 800);
                 scene.beginPath();
-                scene.drawImage(balleImg, xBalle, y - 51, 50, 50);
+                scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
                 for (k = 0; k < briquesObj.length; k = k + 1) {
                     if (briquesObj[k].flag2) {
                         scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
                     }
                 }
-                scene.drawImage(raquetteImg, x, y, 200, 50);
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
             }
         }
     }
     //Contrôles flèche droite et "d"
     if (keyState[39] || keyState[68]) {
         if (moveRaquette) {
-            if (x >= 1280 - raquetteImg.width) {
-                scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
-                x += 0;
-                scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+            if (xRaquette >= 1280 - raquetteImg.width) {
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                xRaquette += 0;
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             } else {
-                scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
-                x += 15;
-                scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                xRaquette += 15;
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             }
             if (!flag && xBalle <= 1205) {
-                xBalle = x + 75;
+                xBalle = xRaquette + 75;
                 scene.clearRect(0, 0, 1280, 800);
                 scene.beginPath();
-                scene.drawImage(balleImg, xBalle, y - 51, 50, 50);
+                scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
                 for (k = 0; k < briquesObj.length; k = k + 1) {
                     if (briquesObj[k].flag2) {
                         scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
                     }
                 }
-                scene.drawImage(raquetteImg, x, y, 200, 50);
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
             }
         }
     }
@@ -279,49 +279,49 @@ function controls() {
     
     //CHEAT Reset powerups (0/à)
     if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
-        scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
+        scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         raquetteImg.src = "Raquette.png";
         balleImg.src = "balle.png";
         //Il manque un son pour perdre le PUP
         raquetteImg.width = 200;
         raquetteImg.height = 50;
-        if (pupDef) {x += 44; }
+        if (pupDef) {xRaquette += 44; }
         pupDef = false;
         pupUnstop = false;
         pupLoseSfx.play();
-        scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
-        if (x >= 1270 - raquetteImg.width) {
-            x = 1270 - raquetteImg.width;
-            scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
-            scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+        scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        if (xRaquette >= 1270 - raquetteImg.width) {
+            xRaquette = 1270 - raquetteImg.width;
+            scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         }
 	}
     
     //CHEAT Défense ("1/&")
     if (keyState[49] && !pupDef) {
-        scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
+        scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         raquetteImg.src = "RaquettePUPDef.png";
         //DefSfx.play(); la ferme !
         raquetteImg.width = 288;
         raquetteImg.height = 50;
         pupDef = true;
-        x -= 44;
-        scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
-        if (x >= 1272 - raquetteImg.width) {
-            x = 1272 - raquetteImg.width;
-            scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
-            scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+        xRaquette -= 44;
+        scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        if (xRaquette >= 1272 - raquetteImg.width) {
+            xRaquette = 1272 - raquetteImg.width;
+            scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         }
     }
 
     //CHEAT Unstoppable ("2/é")
     if (keyState[50] && !pupUnstop) {
         if (!pupUnstop) {
-            scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
+            scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             balleImg.src = "balleUnstop.png";
             //X.play(); la ferme !
             pupUnstop = true;
-            scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+            scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             setTimeout(reset, 15000);
         }
     }
@@ -356,7 +356,7 @@ animation = function () {
     if (!moveRaquette) {
         scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
     }
-    scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
+    scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
     if (!flag4 && xCapsule > 0 && yCapsule > 0) {
 		if (powerup < 50) {
 			capsuleImg.src = "capsuleDEF.png";
@@ -394,36 +394,36 @@ animation = function () {
         yBalle = yBalle - pasAnim;
     }
     if (!pupDef) {
-        if (xCapsule < x + 200 && xCapsule + 40 > x && yCapsule + 80 > y && yCapsule + 90 > y && yCapsule + 70 < y) {  //collision sur le dessus
+        if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) {  //collision sur le dessus
             flag4 = true;
             flag6 = true;
         }
-        if (yCapsule + 80 > y && yCapsule < y + 50 && xCapsule + 40 > x && xCapsule + 30 < x && xCapsule + 50 > x) { //collision gauche
+        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
             flag4 = true;
             flag6 = true;
         }
-        if (yCapsule + 80 > y && yCapsule < y + 50 && xCapsule < x + 200 && xCapsule - 10 < x + 200 && xCapsule + 10 > x + 200) {
+        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 10 > xRaquette + 200) {
             flag4 = true;
             flag6 = true;
         }
-        if (xCapsule < x + 200 && xCapsule + 40 > x && yCapsule < y + 50 && yCapsule + 10 > y + 50 && yCapsule - 10 < y + 50) {
+        if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
             flag4 = true;
             flag6 = true;
         }
     } else {
-        if (xCapsule < x + 288 && xCapsule + 40 > x && yCapsule + 80 > y && yCapsule + 90 > y && yCapsule + 70 < y) {  //collision sur le dessus
+        if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) {  //collision sur le dessus
             flag4 = true;
             flag6 = true;
         }
-        if (yCapsule + 80 > y && yCapsule < y + 50 && xCapsule + 40 > x && xCapsule + 30 < x && xCapsule + 50 > x) { //collision gauche
+        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
             flag4 = true;
             flag6 = true;
         }
-        if (yCapsule + 80 > y && yCapsule < y + 50 && xCapsule < x + 288 && xCapsule - 10 < x + 288 && xCapsule + 10 > x + 288) {
+        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 288 && xCapsule - 10 < xRaquette + 288 && xCapsule + 10 > xRaquette + 288) {
             flag4 = true;
             flag6 = true;
         }
-        if (xCapsule < x + 288 && xCapsule + 40 > x && yCapsule < y + 50 && yCapsule + 10 > y + 50 && yCapsule - 10 < y + 50) {
+        if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
             flag4 = true;
             flag6 = true;
         }
@@ -445,65 +445,65 @@ animation = function () {
     
     //Fonction collision avec la raquette :
     if (!pupDef) {
-        if (xBalle < x + 200 && xBalle + 50 > x && yBalle + 50 > y && yBalle + 60 > y && yBalle + 40 < y) {  //collision sur le dessus
+        if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             flag8 = true;
             revy = true;
             xBalle = xBalle + 1;
             yBalle = yBalle + 1;
         }
-        if (xBalle < x + 200 && xBalle + 50 > x && yBalle < y + 50 && yBalle + 10 > y + 50 && yBalle - 10 < y + 50) {
+        if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
             flag8 = true;
             revy = false;
             xBalle = xBalle + 1;
             yBalle = yBalle + 1;
         }
-        if (yBalle + 50 > y && yBalle < y + 50 && xBalle + 50 > x && xBalle + 50 < x + 100) { //collision gauche
-            if (xBalle + 40 < x && xBalle + 60 > x) {
+        if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 100) { //collision gauche
+            if (xBalle + 40 < xRaquette && xBalle + 60 > xRaquette) {
                 revx = true;
                 xBalle = xBalle + 1;
                 yBalle = yBalle + 1;
             } else if (!flag8) {
-                xBalle = x - 50;
+                xBalle = xRaquette - 50;
             }
         }
-        if (yBalle + 50 > y && yBalle < y + 50 && xBalle < x + 200 && xBalle > x + 100) {
-            if (xBalle - 10 < x + 200 && xBalle + 10 > x + 200) {
+        if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
+            if (xBalle - 10 < xRaquette + 200 && xBalle + 10 > xRaquette + 200) {
                 revx = false;
                 xBalle = xBalle + 1;
                 yBalle = yBalle + 1;
             } else if (!flag8) {
-                xBalle = x + 200;
+                xBalle = xRaquette + 200;
             }
         }
     } else {
-        if (xBalle < x + 288 && xBalle + 50 > x && yBalle + 50 > y && yBalle + 60 > y && yBalle + 40 < y) {  //collision sur le dessus
+        if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             flag8 = true;
             revy = true;
             xBalle = xBalle + 1;
             yBalle = yBalle + 1;
         }
-        if (xBalle < x + 288 && xBalle + 50 > x && yBalle < y + 50 && yBalle + 10 > y + 50 && yBalle - 10 < y + 50) {
+        if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
             flag8 = true;
             revy = false;
             xBalle = xBalle + 1;
             yBalle = yBalle + 1;
         }
-        if (yBalle + 50 > y && yBalle < y + 50 && xBalle + 50 > x && xBalle + 50 < x + 144) { //collision gauche
-            if (xBalle + 40 < x && xBalle + 60 > x) {
+        if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 144) { //collision gauche
+            if (xBalle + 40 < xRaquette && xBalle + 60 > xRaquette) {
                 revx = true;
                 xBalle = xBalle + 1;
                 yBalle = yBalle + 1;
             } else if (!flag8) {
-                xBalle = x - 50;
+                xBalle = xRaquette - 50;
             }
         }
-        if (yBalle + 50 > y && yBalle < y + 50 && xBalle < x + 288 && xBalle > x + 144) {
-            if (xBalle - 10 < x + 288 && xBalle + 10 > x + 288) {
+        if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
+            if (xBalle - 10 < xRaquette + 288 && xBalle + 10 > xRaquette + 288) {
                 revx = false;
                 xBalle = xBalle + 1;
                 yBalle = yBalle + 1;
             } else if (!flag8) {
-                xBalle = x + 288;
+                xBalle = xRaquette + 288;
             }
         }
     }
