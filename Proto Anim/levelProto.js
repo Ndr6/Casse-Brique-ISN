@@ -83,12 +83,12 @@ var flag6 = false; //ANTHONY !!! ...
 var flag7 = true;  //ANTHONY !!! Et en plus quand je veux renommer "flag", j'ai 83 résultats, c'est beaucoup
 
 var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
-var pattern = [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-            1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
+var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+            1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 //Variables contrôles
 var keyState = {};
