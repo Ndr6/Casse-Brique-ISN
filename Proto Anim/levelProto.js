@@ -14,6 +14,7 @@ var defense;    //Fonction d'activation du powerup Défense
 var unstoppable;    //Fonction d'activation du powerup Unstoppable
 var reset;      //Fonction de désactivation des powerups
 var resetFlag;  //Anthony, je vois pas à quoi ça sert ce truc :/
+var loseLife;
 var backgroundMusic; //Ce nom est assez explicite je pense
 
 //Variables son
@@ -81,17 +82,19 @@ var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ?
 var flag5 = true;  //ANTHONY !!! ...
 var flag6 = false; //ANTHONY !!! ...
 var flag7 = true;  //ANTHONY !!! Et en plus quand je veux renommer "flag", j'ai 83 résultats, c'est beaucoup
+var flag9 = true;
 
 var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
-var pattern = [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-            1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
+var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,];
 
 //Variables contrôles
 var keyState = {};
+var pause;
 
 /****************************************
            Début du programme
@@ -128,7 +131,7 @@ resetFlag = function () {
 //Fonction de reset des powerups
 reset = function () {
     "use strict";
-	if (moveRaquette) {
+	if (!pause) {
 		xCapsule = 0;
 		yCapsule = 0;
 		scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
@@ -153,7 +156,7 @@ reset = function () {
 //Fonction d'activation standard du powerup Défense
 defense = function () {
     "use strict";
-    if (!pupDef && moveRaquette) {
+    if (!pupDef && !pause) {
         scene.clearRect(xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
         scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
         raquetteImg.src = "RaquettePUPDef.png";
@@ -171,10 +174,22 @@ defense = function () {
         setTimeout(reset, 15000);
     }
 };
+loseLife = function () {
+    if (!flag9) {
+        return;
+    }
+    moveRaquette = false;
+    xBalle = 615;
+    yBalle = 649;
+    x = 540;
+    y = 700;
+    reset();
+    flag9 = false;
+}
 
 unstoppable = function () {
     "use strict";
-    if (!pupUnstop && moveRaquette) {
+    if (!pupUnstop && !pause) {
         scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
         balleImg.src = "balleUnstop.png";
         //X.play(); la ferme !
@@ -259,6 +274,7 @@ function controls() {
     }
     //Pause (P)
     if (keyState[80] && flag) {
+        pause = true;
         flag = false;
         moveRaquette = false;
     }
@@ -339,7 +355,7 @@ animation = function () {
             }
         }
     }
-    if (!moveRaquette) {
+    if (!moveRaquette && pause) {
         scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
     }
     scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
@@ -358,8 +374,9 @@ animation = function () {
     scene.fill();
     
     //Trajectoire de la balle (à isoler)
+    if (moveRaquette){
     if (xBalle < 0) {
-		revx = false;
+        revx = false;
     } else if (xBalle + 50 > 1280) {
         revx = true;
     }
@@ -371,13 +388,14 @@ animation = function () {
     if (yBalle < 0) {
         revy = false;
     } else if (yBalle + 50 > 800) {
-        revy = true;
+        loseLife();
         //alert("YOU LOSE!!!");
     }
     if (!revy) {
         yBalle = yBalle + pasAnim;
     } else {
         yBalle = yBalle - pasAnim;
+    }
     }
     if (!pupDef) {
         if (xCapsule < x + 200 && xCapsule + 40 > x && yCapsule + 80 > y && yCapsule + 90 > y && yCapsule + 70 < y) {  //collision sur le dessus
