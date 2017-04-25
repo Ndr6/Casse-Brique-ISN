@@ -82,12 +82,12 @@ var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ? (lien à la 
 var flag6 = false; //ANTHONY !!! ... (idem ??)
 var flag7 = true;  //ANTHONY !!! Cela doit avoir un lien avec le timer du powerup, je crois ??
 var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
-var pattern = [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-            1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-            0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
+var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+               1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+               1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
+               1, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 1,
+               1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 //Variables contrôles
 var keyState = {};
