@@ -68,19 +68,16 @@ var musicLoop = function () {
     audioBG.volume = 0.3;
     setTimeout(musicLoop, 201500);
 };
-//musicLoop();
+musicLoop();
 
 //Fonction de définition du pattern de briques (plutôt basique pour l'instant)
 var creaBriques = function () {
     "use strict";
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
-
-    //Un jour ma brique viendra, ....
 };
 
 //Appel de la fonction de création des briques au chargement terminé de la page
-window.addEventListener("load", creaBriques);
 
 //Partie commande (touches)
 document.addEventListener("keydown", function (event) {     // commande barre    
@@ -189,8 +186,9 @@ select = function () {
 };
 
 //Lancement des fonctions principales après chargement de la page
-setTimeout(animation, 250);
-setTimeout(select, 500);
+setTimeout(creaBriques, 499);
+setTimeout(animation, 500);
+setTimeout(select, 501);
 
 
 /******************************************************
