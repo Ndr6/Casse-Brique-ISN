@@ -13,8 +13,8 @@ var animation; //Fonction d'animation de la balle et bien d'autres
 var defense;    //Fonction d'activation du powerup Défense
 var unstoppable;    //Fonction d'activation du powerup Unstoppable
 var reset;      //Fonction de désactivation des powerups
-var resetFlag;  //Anthony, je vois pas à quoi ça sert ce truc :/
-var loseLife;
+var resetFlag;  //Anthony, faut penser à un autre nom stp
+var loseLife;   //ça c'est un bon nom
 var backgroundMusic; //Ce nom est assez explicite je pense
 
 //Variables son
@@ -38,7 +38,7 @@ var pupDef = false; //Flag powerup défense
 var DefSfx = new Audio("PUPDef_sound.mp3");
 
 //Variables balle
-var flag = false; //Activation de la balle
+var moveBalle = false; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
 var rayon = 25; //Rayon balle
 var pasAnim = 5; //Vitesse animation
@@ -46,11 +46,11 @@ var xBalle = 615, yBalle = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var speedBalle = 10; //Vitesse balle
 var flag8 = false; //ANTHONY !!! C'est quoi ça ??
-var flag9 = true;  //ANTHONY !!! Sérieux, décris au moins ce que ça fait :'(
-
+var flag9 = true;  //ANTHONY !!! Sérieux, décris au moins ce que ça fait :'( Bon de ce que je comprends, ça a un lien avecle pattern des briques, je crois ?
+ 
 var pupUnstop = false;
 
-var k, distx, disty, distance, j; //ANTHONY !!! La j'en chie pour remplacer k et j parce que il y a 47 "k" sur tout le fichier et 101 "j"... Et je sais pas ce que distx/y font
+var k, distx, disty, distance, j; //ANTHONY !!! Juste trouve moi un autre nom pour k et j stp, n'importe quoi mais un mot
 
 var balleImg = new Image(); //Asset graphique de la balle
 balleImg.src = "balle.png";
@@ -78,11 +78,9 @@ capsuleImg.width = 40;
 capsuleImg.height = 80;
 var xCapsule = 0;
 var yCapsule = 0;
-var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ?
-var flag5 = true;  //ANTHONY !!! ...
-var flag6 = false; //ANTHONY !!! ...
-var flag7 = true;  //ANTHONY !!! Et en plus quand je veux renommer "flag", j'ai 83 résultats, c'est beaucoup
-
+var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ? (lien à la raquette et aux powerups ??)
+var flag6 = false; //ANTHONY !!! ... (idem ??)
+var flag7 = true;  //ANTHONY !!! Cela doit avoir un lien avec le timer du powerup, je crois ??
 var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
 var pattern = [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
             1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -118,7 +116,7 @@ var creaBriques = function () {
         }
     }
 };
-//ANTHONY !!! Je sais pas trop à quoi ça sert Anthony :/
+
 resetFlag = function () {
     "use strict";
     flag4 = false;
@@ -147,7 +145,7 @@ reset = function () {
 			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		}
-		setTimeout(resetFlag, 10000);
+		setTimeout(resetFlag, 10000); //ANTHONY !!! Je ne comprends pas pourquoi tu appelles cette fonction en différé
 	}
 };
     
@@ -158,7 +156,7 @@ defense = function () {
         scene.clearRect(xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
         scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         raquetteImg.src = "RaquettePUPDef.png";
-        //DefSfx.play(); la ferme !
+        DefSfx.play(); //la ferme !
         raquetteImg.width = 288;
         raquetteImg.height = 50;
         pupDef = true;
@@ -169,7 +167,7 @@ defense = function () {
             scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         }
-        setTimeout(reset, 15000);
+        setTimeout(reset, 15000); //Faudra régler le délai, pour un truc un peu plus juste
     }
 };
 
@@ -181,7 +179,7 @@ unstoppable = function () {
         //X.play(); la ferme !
         pupUnstop = true;
         scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-        setTimeout(reset, 15000);
+        setTimeout(reset, 15000); //Ici aussi, délai trop long
     }
 };
 loseLife = function () {
@@ -225,7 +223,7 @@ function controls() {
                 xRaquette -= 15;
                 scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             }
-            if (!flag && xBalle >= 65) {
+            if (!moveBalle && xBalle >= 65) {
                 xBalle = xRaquette + 75;
                 scene.clearRect(0, 0, 1280, 800);
                 scene.beginPath();
@@ -251,7 +249,7 @@ function controls() {
                 xRaquette += 15;
                 scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             }
-            if (!flag && xBalle <= 1205) {
+            if (!moveBalle && xBalle <= 1205) {
                 xBalle = xRaquette + 75;
                 scene.clearRect(0, 0, 1280, 800);
                 scene.beginPath();
@@ -266,14 +264,14 @@ function controls() {
         }
     }
     //Lancement de la balle (espace)
-    if (keyState[32] && !flag) {
-        flag = true;
+    if (keyState[32] && !moveBalle) {
+        moveBalle = true;
         moveRaquette = true;
         animation();
     }
     //Pause (P)
-    if (keyState[80] && flag) {
-        flag = false;
+    if (keyState[80] && moveBalle) {
+        moveBalle = false;
         moveRaquette = false;
     }
     
@@ -386,7 +384,6 @@ animation = function () {
         revy = false;
     } else if (yBalle + 50 > 800) {
         revy = true;
-        //alert("YOU LOSE!!!");
     }
     if (!revy) {
         yBalle = yBalle + pasAnim;
@@ -590,7 +587,7 @@ animation = function () {
         }
     }
     //Bouclage de la fonction animation
-    if (flag) {
+    if (moveBalle) {
         setTimeout(animation, speedBalle);
     }
 };
@@ -611,4 +608,3 @@ backgroundMusic();
 /******************************************************
                     Fin du programme
 ******************************************************/
-//ANTHONY !!! Merci du boulot que tu fais pour avancer le projet :)
