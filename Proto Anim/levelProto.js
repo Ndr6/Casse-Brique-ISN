@@ -1,4 +1,4 @@
-/*global Audio: false*/
+﻿/*global Audio: false*/
 /*global alert: false*/
 /*global console: false*/
 
@@ -24,6 +24,21 @@ var pauseImg = new Image();
 pauseImg.src = "pausetest.png";
 pauseImg.width = 400;
 pauseImg.height = 400;
+
+//anim
+var anima = new Image();
+anima.src = "RaquettePUPDefAnim.png";
+anima.width = 290;
+anima.height = 292;
+var rows = 6;
+var etape = anima.height/rows;
+var debutX = 0; // X du dessin
+var debutY = 0; // Y du dessin
+var animaStop = 0;
+//départ
+var curFrame = 0; 
+//total d'étapes
+var frameCount = 6; 
 
 //Variables raquette
 var x = 540, y = 700; //Position raquette 
@@ -81,6 +96,7 @@ var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ?
 var flag5 = true;  //ANTHONY !!! ...
 var flag6 = false; //ANTHONY !!! ...
 var flag7 = true;  //ANTHONY !!! Et en plus quand je veux renommer "flag", j'ai 83 résultats, c'est beaucoup
+
 
 var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
 var pattern = [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
@@ -196,6 +212,29 @@ window.addEventListener('keyup', function (e) {
     keyState[e.keyCode || e.which] = false;
 }, true);
 
+function updateFrame(){
+ curFrame = ++curFrame % frameCount; 
+ //change "d'étape"
+ debutY = curFrame * 50; 
+ scene.clearRect(x,y,anima.widht,anima.height);
+}
+
+function draw(){
+ //change de frame
+ updateFrame();
+ animaStop = animaStop + 1;
+ //DESSIN
+ scene.drawImage(anima,debutX,debutY,anima.width,etape,x,y,anima.width,50);
+}
+
+setInterval(draw,1000);
+
+function timeToStop(){
+	if(animaStop == 6){
+	}else{ setInterval(draw,1000);
+	}
+}
+
 //Fonction de contrôles raquette next gen
 function controls() {
     "use strict";
@@ -290,6 +329,12 @@ function controls() {
         //DefSfx.play(); la ferme !
         raquetteImg.width = 288;
         raquetteImg.height = 50;
+        timeToStop();
+        scene.clearRect(x, y, image.width, image.height);
+        image.src = "RaquettePUPDef.png";
+        test.play();
+        image.width = 288;
+        image.height = 50;
         pupDef = true;
         x -= 44;
         scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
