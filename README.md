@@ -1,4 +1,4 @@
-# Casse-Brique-ISN
+# Casse-Brique-ISN - http://isn.ender.ovh/
 
 Projet ISN de Casse Brique
 
@@ -11,5 +11,3 @@ Dufduf
 Niveaux prévus :
   - Niveau 1 : Space
   - Niveau 2 : Nordic
-
-Prototype accessible à : http://isn.ender.ovh/
