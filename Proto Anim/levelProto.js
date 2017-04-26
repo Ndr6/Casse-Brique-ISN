@@ -46,7 +46,6 @@ var xBalle = 615, yBalle = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var speedBalle = 10; //Vitesse balle
 var flag8 = false; //ANTHONY !!! C'est quoi ça ??
-var flag9 = true;  //ANTHONY !!! Sérieux, décris au moins ce que ça fait :'(
 
 var pupUnstop = false;
 
@@ -79,7 +78,6 @@ capsuleImg.height = 80;
 var xCapsule = 0;
 var yCapsule = 0;
 var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ?
-var flag5 = true;  //ANTHONY !!! ...
 var flag6 = false; //ANTHONY !!! ...
 var flag7 = true;  //ANTHONY !!! Et en plus quand je veux renommer "flag", j'ai 83 résultats, c'est beaucoup
 var flag9 = true;
@@ -123,9 +121,7 @@ var creaBriques = function () {
 //ANTHONY !!! Je sais pas trop à quoi ça sert Anthony :/
 resetFlag = function () {
     "use strict";
-    flag4 = false;
     flag7 = true;
-    powerup = Math.floor((Math.random() * 100) + 1);
 };
 
 //Fonction de reset des powerups
@@ -149,7 +145,9 @@ reset = function () {
 			scene.clearRect(x, y, raquetteImg.width, raquetteImg.height);
 			scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
 		}
+		powerup = Math.floor((Math.random() * 100) + 1);
 		setTimeout(resetFlag, 10000);
+		flag4 = false;
 	}
 };
     
@@ -196,7 +194,11 @@ loseLife = function () {
     moveRaquette = false;
     xBalle = 615;
     yBalle = 649;
-    x = 540;
+	if (pupDef) {
+		x = 496;
+	} else {
+		x = 540;
+	}
     y = 700;
     reset();
 	scene.drawImage(raquetteImg, x, y, raquetteImg.width, raquetteImg.height);
@@ -275,6 +277,7 @@ function controls() {
     //Lancement de la balle (espace)
     if (keyState[32] && !flag) {
         flag = true;
+		flag9 = true;
 		pause = true;
         moveRaquette = true;
         animation();
@@ -460,20 +463,14 @@ animation = function () {
         if (xBalle < x + 200 && xBalle + 50 > x && yBalle + 50 > y && yBalle + 60 > y && yBalle + 40 < y) {  //collision sur le dessus
             flag8 = true;
             revy = true;
-            xBalle = xBalle + 1;
-            yBalle = yBalle + 1;
         }
         if (xBalle < x + 200 && xBalle + 50 > x && yBalle < y + 50 && yBalle + 10 > y + 50 && yBalle - 10 < y + 50) {
             flag8 = true;
             revy = false;
-            xBalle = xBalle + 1;
-            yBalle = yBalle + 1;
         }
         if (yBalle + 50 > y && yBalle < y + 50 && xBalle + 50 > x && xBalle + 50 < x + 100) { //collision gauche
             if (xBalle + 40 < x && xBalle + 60 > x) {
                 revx = true;
-                xBalle = xBalle + 1;
-                yBalle = yBalle + 1;
             } else if (!flag8) {
                 xBalle = x - 50;
             }
@@ -481,8 +478,6 @@ animation = function () {
         if (yBalle + 50 > y && yBalle < y + 50 && xBalle < x + 200 && xBalle > x + 100) {
             if (xBalle - 10 < x + 200 && xBalle + 10 > x + 200) {
                 revx = false;
-                xBalle = xBalle + 1;
-                yBalle = yBalle + 1;
             } else if (!flag8) {
                 xBalle = x + 200;
             }
@@ -497,14 +492,10 @@ animation = function () {
         if (xBalle < x + 288 && xBalle + 50 > x && yBalle < y + 50 && yBalle + 10 > y + 50 && yBalle - 10 < y + 50) {
             flag8 = true;
             revy = false;
-            xBalle = xBalle + 1;
-            yBalle = yBalle + 1;
         }
         if (yBalle + 50 > y && yBalle < y + 50 && xBalle + 50 > x && xBalle + 50 < x + 144) { //collision gauche
             if (xBalle + 40 < x && xBalle + 60 > x) {
                 revx = true;
-                xBalle = xBalle + 1;
-                yBalle = yBalle + 1;
             } else if (!flag8) {
                 xBalle = x - 50;
             }
@@ -512,8 +503,6 @@ animation = function () {
         if (yBalle + 50 > y && yBalle < y + 50 && xBalle < x + 288 && xBalle > x + 144) {
             if (xBalle - 10 < x + 288 && xBalle + 10 > x + 288) {
                 revx = false;
-                xBalle = xBalle + 1;
-                yBalle = yBalle + 1;
             } else if (!flag8) {
                 xBalle = x + 288;
             }
@@ -525,11 +514,7 @@ animation = function () {
         if (briquesObj[j].flag2) {
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle + 40 < briquesObj[j].x && xBalle + 60 > briquesObj[j].x) { //collision gauche
                 if (!pupUnstop) {revx = true; }
-                xBalle = xBalle + 1;
-                yBalle = yBalle + 1;
-                if (flag9) {
-                    pattern[j] -= 1;
-                }
+                pattern[j] -= 1;
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].flag2 = false;
@@ -543,12 +528,7 @@ animation = function () {
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle < briquesObj[j].x + 80 && xBalle - 10 < briquesObj[j].x + 80 && xBalle + 10 > briquesObj[j].x + 80) { //collision droite
                 if (!pupUnstop) {revx = false; }
-                xBalle = xBalle + 1;
-                yBalle = yBalle + 1;
-                if (flag9) {
-                    pattern[j] -= 1;
-                    flag9 = false;
-                }
+                pattern[j] -= 1;
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].flag2 = false;
@@ -562,12 +542,7 @@ animation = function () {
             }
             if (yBalle < briquesObj[j].y + 40 && yBalle - 10 < briquesObj[j].y + 40 && yBalle + 10 > briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision bas
                 if (!pupUnstop) {revy = false; }
-                xBalle = xBalle + 1;
-                yBalle = yBalle + 1;
-                if (flag9) {
-                    pattern[j] -= 1;
-                    flag9 = false;
-                }
+                pattern[j] -= 1;
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].flag2 = false;
@@ -581,12 +556,7 @@ animation = function () {
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle + 40 < briquesObj[j].y && yBalle + 60 > briquesObj[j].y && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision haut
                 if (!pupUnstop) {revy = true; }
-                xBalle = xBalle + 1;
-                yBalle = yBalle + 1;
-                if (flag9) {
-                    pattern[j] -= 1;
-                    flag9 = false;
-                }
+                pattern[j] -= 1;
                 flag8 = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].flag2 = false;
@@ -598,7 +568,6 @@ animation = function () {
                     }
                 }
             }
-            flag9 = true;
         }
     }
     //Bouclage de la fonction animation
