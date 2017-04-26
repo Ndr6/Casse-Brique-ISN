@@ -79,14 +79,14 @@ var yCapsule = 0;
 var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ? (lien à la raquette et aux powerups ??)
 var flag6 = false; //ANTHONY !!! ... (idem ??)
 var flag7 = true;  //ANTHONY !!! Cela doit avoir un lien avec le timer du powerup, je crois ??
-var flag9 = true;
+var flag9 = true;  //ANTHONY !!! En plus t'en rajoutes ???
 var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-            1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
-            1, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 1,
-            1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+               1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+               1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
+               1, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 1,
+               1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 //Variables contrôles
 var keyState = {};
@@ -276,15 +276,15 @@ function controls() {
     //Lancement de la balle (espace)
     if (keyState[32] && !moveBalle) {
         moveBalle = true;
-		    flag9 = true;
-		    pause = true;
+        flag9 = true;
+        pause = true;
         moveRaquette = true;
         animation();
     }
     //Pause (P)
     if (keyState[80] && moveBalle) {
         moveBalle = false;
-		    pause = false;
+        pause = false;
         moveRaquette = false;
     }
     
