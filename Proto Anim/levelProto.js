@@ -13,7 +13,7 @@ var animation; //Fonction d'animation de la balle et bien d'autres
 var defense;    //Fonction d'activation du powerup Défense
 var unstoppable;    //Fonction d'activation du powerup Unstoppable
 var reset;      //Fonction de désactivation des powerups
-var resetFlag;  //Anthony, faut penser à un autre nom stp
+var resetPowerup;  //Anthony, faut penser à un autre nom stp
 var loseLife;   //ça c'est un bon nom
 var backgroundMusic; //Ce nom est assez explicite je pense
 
@@ -45,10 +45,10 @@ var pasAnim = 5; //Vitesse animation
 var xBalle = 615, yBalle = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var speedBalle = 10; //Vitesse balle
-var flag8 = false; //ANTHONY !!! C'est quoi ça ??
+var flag8 = false; //Permet d'éviter les bugs de collisions balle / raquette
 var pupUnstop = false;
 
-var k, distx, disty, distance, j; //ANTHONY !!! Juste trouve moi un autre nom pour k et j stp, n'importe quoi mais un mot
+var k, j; //Ce sont juste des compteurs pour les boucles for
 
 var balleImg = new Image(); //Asset graphique de la balle
 balleImg.src = "balle.png";
@@ -70,17 +70,17 @@ var briquesObj = [];
 
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1);
-var powerup = Math.floor((Math.random() * 100) + 1);    //ANTHONY !!! ça manque de clarté, qu'est ce que ça fait exactement ?
+var powerup = Math.floor((Math.random() * 100) + 1);    //Génère un powerup aléatoire
 var capsuleImg = new Image();
 capsuleImg.width = 40;
 capsuleImg.height = 80;
 var xCapsule = 0;
 var yCapsule = 0;
-var flag4 = false; //ANTHONY !!! J'ai vraiment besoin d'expliquer ? (lien à la raquette et aux powerups ??)
-var flag6 = false; //ANTHONY !!! ... (idem ??)
-var flag7 = true;  //ANTHONY !!! Cela doit avoir un lien avec le timer du powerup, je crois ??
-var flag9 = true;  //ANTHONY !!! En plus t'en rajoutes ???
-var pos2x, pos2y, flag2, life; //ANTHONY !!! Les pos2x/y sont pas clairs, et puis "flag2", sérieusement ?
+var flag4 = false; //détection collisions powerups / raquette + lance la disparition de la capsule
+var flag6 = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
+var flag7 = true;  //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
+var flag9 = true;  //Encore une fois juste de la structure ça permet à la fonction loseLife de s'exécuter une seul fois 
+var xBriques, yBriques, life;
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
                1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
@@ -102,23 +102,23 @@ var creaBriques = function () {
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
 
-    var v, i, Briques = function (pos2x, pos2y, flag2) { //ANTHONY !!! Même ici ? v et i, c'est problématique
-        this.x = pos2x;
-        this.y = pos2y;
-        this.flag2 = flag2;
+    var v, i, Briques = function (xBriques, yBriques, life) { //C'est juste des variables pour les boucles for
+        this.x = xBriques;
+        this.y = yBriques;
+        this.life = life;
     };
     for (v = 0; v < 6; v += 1) {
         for (i = 0; i < 15; i += 1) {
-            pos2x = 83 * i + 19;
-            pos2y = 43 * v + 5;
-            flag2 = true;
-            briquesObj.push(new Briques(pos2x, pos2y, flag2));
+            xBriques = 83 * i + 19;
+            yBriques = 43 * v + 5;
+            life = true;
+            briquesObj.push(new Briques(xBriques, yBriques, life));
         }
     }
 };
 
 //Permet la réapparition d'un powerup
-resetFlag = function () {
+resetPowerup = function () {
     "use strict";
     flag7 = true;
 };
@@ -126,7 +126,7 @@ resetFlag = function () {
 //Fonction de reset des powerups
 reset = function () {
     "use strict";
-	if (pause) {
+	if (!pause) {
 		xCapsule = 0;
 		yCapsule = 0;
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -145,7 +145,7 @@ reset = function () {
 			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		}
 		powerup = Math.floor((Math.random() * 100) + 1);
-		setTimeout(resetFlag, 10000);
+		setTimeout(resetPowerup, 10000);
 		flag4 = false;
 	}
 };
@@ -223,7 +223,7 @@ function controls() {
     "use strict";
     //Contrôles flèche gauche et "q"
     if (keyState[37] || keyState[81]) {
-        if (moveRaquette) {
+        if (!pause) {
             if (xRaquette <= 0) {
                 scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
                 xRaquette -= 0;
@@ -239,17 +239,22 @@ function controls() {
                 scene.beginPath();
                 scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
                 for (k = 0; k < briquesObj.length; k = k + 1) {
-                    if (briquesObj[k].flag2) {
-                        scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
-                    }
-                }
-                scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
+					if (briquesObj[k].life) {
+						if (pattern[k] === 1) {
+							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 2) {
+							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+					}
+				}
+				scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
             }
         }
     }
     //Contrôles flèche droite et "d"
     if (keyState[39] || keyState[68]) {
-        if (moveRaquette) {
+        if (!pause) {
             if (xRaquette >= 1280 - raquetteImg.width) {
                 scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
                 xRaquette += 0;
@@ -265,10 +270,15 @@ function controls() {
                 scene.beginPath();
                 scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
                 for (k = 0; k < briquesObj.length; k = k + 1) {
-                    if (briquesObj[k].flag2) {
-                        scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
-                    }
-                }
+					if (briquesObj[k].life) {
+						if (pattern[k] === 1) {
+							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 2) {
+							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+					}
+				}
                 scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
             }
         }
@@ -277,14 +287,14 @@ function controls() {
     if (keyState[32] && !moveBalle) {
         moveBalle = true;
         flag9 = true;
-        pause = true;
+        pause = false;
         moveRaquette = true;
         animation();
     }
     //Pause (P)
     if (keyState[80] && moveBalle) {
         moveBalle = false;
-        pause = false;
+        pause = true;
         moveRaquette = false;
     }
     
@@ -355,7 +365,7 @@ animation = function () {
     scene.beginPath();
     scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
     for (k = 0; k < briquesObj.length; k = k + 1) {
-        if (briquesObj[k].flag2) {
+        if (briquesObj[k].life) {
             if (pattern[k] === 1) {
                 scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
             }
@@ -443,7 +453,7 @@ animation = function () {
         }
     }
     if (yCapsule > 800) {
-        setTimeout(resetFlag, 5000);
+        setTimeout(resetPowerup, 5000);
         xCapsule = 0;
         yCapsule = 0;
     }
@@ -508,13 +518,13 @@ animation = function () {
     
     //Collisions balle-briques
     for (j = 0; j < briquesObj.length; j += 1) {
-        if (briquesObj[j].flag2) {
+        if (briquesObj[j].life) {
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle + 40 < briquesObj[j].x && xBalle + 60 > briquesObj[j].x) { //collision gauche
                 if (!pupUnstop) {revx = true; }
                 pattern[j] -= 1;
                 flag8 = false;
                 if (pattern[j] <= 0) {
-                    briquesObj[j].flag2 = false;
+                    briquesObj[j].life = false;
                     powerupTime = Math.floor((Math.random() * 100) + 1);
                     if (powerupTime <= 20  && flag7) {
                         xCapsule = briquesObj[j].x + 20;
@@ -528,7 +538,7 @@ animation = function () {
                 pattern[j] -= 1;
                 flag8 = false;
                 if (pattern[j] <= 0) {
-                    briquesObj[j].flag2 = false;
+                    briquesObj[j].life = false;
                     powerupTime = Math.floor((Math.random() * 100) + 1);
                     if (powerupTime <= 20 && flag7) {
                         xCapsule = briquesObj[j].x + 20;
@@ -542,7 +552,7 @@ animation = function () {
                 pattern[j] -= 1;
                 flag8 = false;
                 if (pattern[j] <= 0) {
-                    briquesObj[j].flag2 = false;
+                    briquesObj[j].life = false;
                     powerupTime = Math.floor((Math.random() * 100) + 1);
                     if (powerupTime <= 20 && flag7) {
                         xCapsule = briquesObj[j].x + 20;
@@ -556,7 +566,7 @@ animation = function () {
                 pattern[j] -= 1;
                 flag8 = false;
                 if (pattern[j] <= 0) {
-                    briquesObj[j].flag2 = false;
+                    briquesObj[j].life = false;
                     powerupTime = Math.floor((Math.random() * 100) + 1);
                     if (powerupTime <= 100 && flag7) {
                         xCapsule = briquesObj[j].x + 20;
