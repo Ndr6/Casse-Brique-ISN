@@ -69,7 +69,6 @@ brique2Img.width = 80;
 brique2Img.height = 40;
 
 var briquesObj = [];
-var brickCount = 87;
 
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1);
@@ -200,12 +199,12 @@ loseLife = function () {
 
 function win() {
     "use strict";
-    //for (brickCheck = 0; brickCheck >= 90; brickCheck += 1) {
-    //    lifeSum += pattern[brickCheck];
-    //}
-    brickCount -= 1;
-    console.log(brickCount);
-    if (brickCount === 0) {
+    var lifeSum = 0, brickCheck;
+    for (brickCheck = 0; brickCheck >= 90; brickCheck += 1) {
+        lifeSum += briquesObj[brickCheck].life;
+    }
+    console.log(lifeSum);
+    if (lifeSum === 0) {
         alert("YOU WIN !!!!!");
     }
 }
