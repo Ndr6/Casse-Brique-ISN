@@ -57,6 +57,16 @@ balleImg.src = "balle.png";
 balleImg.width = 50;
 balleImg.height = 50; //Dimensions balle
 
+//Variables gain
+var hasWon = false;
+var winImg = new Image();
+winImg.src = "win.png";
+winImg.width = 313;
+winImg.height = 232;
+var xWinImg = 484, yWinImg = 284;
+
+var winSfx = new Audio("yay.mp3");
+
 //Variables briques
 
 var briqueImg = new Image(); //Asset graphique des briques
@@ -69,7 +79,8 @@ brique2Img.width = 80;
 brique2Img.height = 40;
 
 var briquesObj = [];
-var brickCount = 87;
+
+var cheatBrick = 0;
 
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1);
@@ -200,13 +211,20 @@ loseLife = function () {
 
 function win() {
     "use strict";
-    //for (brickCheck = 0; brickCheck >= 90; brickCheck += 1) {
-    //    lifeSum += pattern[brickCheck];
-    //}
-    brickCount -= 1;
-    console.log(brickCount);
-    if (brickCount === 0) {
-        alert("YOU WIN !!!!!");
+    var addLife, sumLife;
+    addLife = function (a, b) {
+        return a + b;
+    };
+    sumLife = pattern.reduce(addLife, 0);
+    console.log(sumLife);
+    console.log(pattern);
+    if (sumLife === 0) {
+        moveBalle = false;
+        moveRaquette = false;
+        scene.clearRect(0, 0, 1280, 800);
+        scene.drawImage(winImg, xWinImg, yWinImg, winImg.width, winImg.height);
+        hasWon = true;
+        winSfx.play();
     }
 }
 
@@ -286,11 +304,15 @@ function controls() {
         }
     }
     //Lancement de la balle (espace)
-    if (keyState[32] && !moveBalle) {
+    if (keyState[32] && !moveBalle && !hasWon) {
         moveBalle = true;
         pause = false;
         moveRaquette = true;
         animation();
+    }
+    
+    if (keyState[32] && hasWon) {
+        location.replace("../Menu/mainMenu.html");
     }
     //Pause (P)
     if (keyState[80] && moveBalle) {
@@ -353,6 +375,22 @@ function controls() {
     }
     if (keyState[77] && speedBalle === 4) {
         speedBalle = 10;
+    }
+    
+    //CHEAT Casser toutes les briques
+    var cheatBrickFunc = function () {
+            moveBalle = false;
+            moveRaquette = false;
+            if (cheatBrick < 90) {
+                pattern[cheatBrick] = 0;
+                cheatBrick += 1;
+                setTimeout(cheatBrickFunc, 60);
+            }
+            animation();
+            win();
+        };
+    if (keyState[51] && cheatBrick === 0) {
+        cheatBrickFunc();
     }
       
     setTimeout(controls, 15); //Bouclage de la fonction controls
@@ -521,7 +559,7 @@ animation = function () {
         if (pattern[j] > 0) {
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle + 40 < briquesObj[j].x && xBalle + 60 > briquesObj[j].x) { //collision gauche
                 if (!pupUnstop) {revx = true; }
-                pattern[j] -= 1;
+                if (pattern[j] > 0) {pattern[j] -= 1; }
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -536,7 +574,7 @@ animation = function () {
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle < briquesObj[j].x + 80 && xBalle - 10 < briquesObj[j].x + 80 && xBalle + 10 > briquesObj[j].x + 80) { //collision droite
                 if (!pupUnstop) {revx = false; }
-                pattern[j] -= 1;
+                if (pattern[j] > 0) {pattern[j] -= 1; }
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -551,7 +589,7 @@ animation = function () {
             }
             if (yBalle < briquesObj[j].y + 40 && yBalle - 10 < briquesObj[j].y + 40 && yBalle + 10 > briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision bas
                 if (!pupUnstop) {revy = false; }
-                pattern[j] -= 1;
+                if (pattern[j] > 0) {pattern[j] -= 1; }
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -566,7 +604,7 @@ animation = function () {
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle + 40 < briquesObj[j].y && yBalle + 60 > briquesObj[j].y && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision haut
                 if (!pupUnstop) {revy = true; }
-                pattern[j] -= 1;
+                if (pattern[j] > 0) {pattern[j] -= 1; }
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
