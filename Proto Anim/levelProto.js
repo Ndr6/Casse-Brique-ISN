@@ -34,7 +34,7 @@ raquetteImg.src = "Raquette.png"; //Asset graphique barre
 raquetteImg.width = 200;
 raquetteImg.height = 50; //Dimensions asset barre
 
-var pupDef = false; //Flag powerup défense
+var pupDef = false; //Drapeau powerup défense
 var DefSfx = new Audio("PUPDef_sound.mp3");
 
 //Variables balle
@@ -45,7 +45,7 @@ var pasAnim = 5; //Vitesse animation
 var xBalle = 615, yBalle = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var speedBalle = 10; //Vitesse balle
-var flag8 = false; //Permet d'éviter les bugs de collisions balle / raquette
+var collisionsMemeSens = false; //Permet d'éviter les bugs de collisions balle / raquette
 var pupUnstop = false;
 
 var k, j; //Ce sont juste des compteurs pour les boucles for
@@ -76,10 +76,9 @@ capsuleImg.width = 40;
 capsuleImg.height = 80;
 var xCapsule = 0;
 var yCapsule = 0;
-var flag4 = false; //détection collisions powerups / raquette + lance la disparition de la capsule
-var flag6 = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
-var flag7 = true;  //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
-var flag9 = true;  //Encore une fois juste de la structure ça permet à la fonction loseLife de s'exécuter une seul fois 
+var masquagePup = false; //détection collisions powerups / raquette + lance la disparition de la capsule
+var collisionPupRaquette = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
+var allowPowerup = true;  //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
 var xBriques, yBriques, life;
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
@@ -117,12 +116,6 @@ var creaBriques = function () {
     }
 };
 
-//Permet la réapparition d'un powerup
-resetPowerup = function () {
-    "use strict";
-    flag7 = true;
-};
-
 //Fonction de reset des powerups
 reset = function () {
     "use strict";
@@ -145,8 +138,8 @@ reset = function () {
 			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		}
 		powerup = Math.floor((Math.random() * 100) + 1);
-		setTimeout(resetPowerup, 10000);
-		flag4 = false;
+		masquagePup = false;
+        allowPowerup = true;
 	}
 };
     
@@ -168,7 +161,7 @@ defense = function () {
             scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         }
-        setTimeout(reset, 15000); //Faudra régler le délai, pour un truc un peu plus juste
+        setTimeout(reset, 20000); //Faudra régler le délai, pour un truc un peu plus juste
     }
 };
 
@@ -180,19 +173,16 @@ unstoppable = function () {
         //X.play(); la ferme !
         pupUnstop = true;
         scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-        setTimeout(reset, 15000);
+        setTimeout(reset, 5000);
     }
 };
 loseLife = function () {
 	"use strict";
-    if (!flag9) {
-        return;
-    }
+    xBalle = 615;
+    yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
     moveRaquette = false;
-    xBalle = 615;
-    yBalle = 649;
 	if (pupDef) {
 		xRaquette = 496;
 	} else {
@@ -202,7 +192,6 @@ loseLife = function () {
     reset();
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
-    flag9 = false;
 	moveBalle = false;
 };
 //Appel de la fonction de création des briques au chargement terminé de la page
@@ -286,7 +275,6 @@ function controls() {
     //Lancement de la balle (espace)
     if (keyState[32] && !moveBalle) {
         moveBalle = true;
-        flag9 = true;
         pause = false;
         moveRaquette = true;
         animation();
@@ -374,11 +362,11 @@ animation = function () {
             }
         }
     }
-    if (!moveRaquette && !pause) {
+    if (!moveRaquette && pause) {
         scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
     }
     scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-    if (!flag4 && xCapsule > 0 && yCapsule > 0) {
+    if (!masquagePup && xCapsule > 0 && yCapsule > 0) {
 		if (powerup < 50) {
 			capsuleImg.src = "capsuleDEF.png";
 			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
@@ -401,10 +389,8 @@ animation = function () {
 		}
 		if (yBalle < 0) {
 			revy = false;
-		} else if (yBalle + 50 > 800) {
-			revy = true;
+		} else if (yBalle + 50 > 1000) {
 			loseLife();
-			//alert("YOU LOSE!!!");
 		}
 		if (!revy) {
 			yBalle = yBalle + pasAnim;
@@ -417,39 +403,40 @@ animation = function () {
 			xBalle = xBalle - pasAnim;
 		}
 	}
+    //collisions pup raquette
     if (!pupDef) {
         if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) {  //collision sur le dessus
-            flag4 = true;
-            flag6 = true;
+            masquagePup = true;
+            collisionPupRaquette = true;
         }
         if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
-            flag4 = true;
-            flag6 = true;
+            masquagePup = true;
+            collisionPupRaquette = true;
         }
         if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 10 > xRaquette + 200) {
-            flag4 = true;
-            flag6 = true;
+            masquagePup = true;
+            collisionPupRaquette = true;
         }
         if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
-            flag4 = true;
-            flag6 = true;
+            masquagePup = true;
+            collisionPupRaquette = true;
         }
     } else {
         if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) {  //collision sur le dessus
-            flag4 = true;
-            flag6 = true;
+            masquagePup = true;
+            collisionPupRaquette = true;
         }
         if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
-            flag4 = true;
-            flag6 = true;
+            masquagePup = true;
+            collisionPupRaquette = true;
         }
         if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 288 && xCapsule - 10 < xRaquette + 288 && xCapsule + 10 > xRaquette + 288) {
-            flag4 = true;
-            flag6 = true;
+            masquagePup = true;
+            collisionPupRaquette = true;
         }
         if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
-            flag4 = true;
-            flag6 = true;
+            masquagePup = true;
+            collisionPupRaquette = true;
         }
     }
     if (yCapsule > 800) {
@@ -457,60 +444,60 @@ animation = function () {
         xCapsule = 0;
         yCapsule = 0;
     }
-    if (flag6) {
+    if (collisionPupRaquette) {
         if (powerup < 50) {
             defense();
         } else if (powerup >= 50) {
             unstoppable();
         }
-        flag6 = false;
+        collisionPupRaquette = false;
     }
 
     
     //Fonction collision avec la raquette :
     if (!pupDef) {
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
-            flag8 = true;
+            collisionsMemeSens = true;
             revy = true;
         }
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
-            flag8 = true;
+            collisionsMemeSens = true;
             revy = false;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 100) { //collision gauche
             if (xBalle + 40 < xRaquette && xBalle + 60 > xRaquette) {
                 revx = true;
-            } else if (!flag8) {
+            } else if (!collisionsMemeSens) {
                 xBalle = xRaquette - 50;
             }
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
             if (xBalle - 10 < xRaquette + 200 && xBalle + 10 > xRaquette + 200) {
                 revx = false;
-            } else if (!flag8) {
+            } else if (!collisionsMemeSens) {
                 xBalle = xRaquette + 200;
             }
         }
     } else {
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
-            flag8 = true;
+            collisionsMemeSens = true;
             revy = true;
         }
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
-            flag8 = true;
+            collisionsMemeSens = true;
             revy = false;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 144) { //collision gauche
             if (xBalle + 40 < xRaquette && xBalle + 60 > xRaquette) {
                 revx = true;
-            } else if (!flag8) {
+            } else if (!collisionsMemeSens) {
                 xBalle = xRaquette - 50;
             }
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
             if (xBalle - 10 < xRaquette + 288 && xBalle + 10 > xRaquette + 288) {
                 revx = false;
-            } else if (!flag8) {
+            } else if (!collisionsMemeSens) {
                 xBalle = xRaquette + 288;
             }
         }
@@ -522,56 +509,56 @@ animation = function () {
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle + 40 < briquesObj[j].x && xBalle + 60 > briquesObj[j].x) { //collision gauche
                 if (!pupUnstop) {revx = true; }
                 pattern[j] -= 1;
-                flag8 = false;
+                collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     powerupTime = Math.floor((Math.random() * 100) + 1);
-                    if (powerupTime <= 20  && flag7) {
+                    if (powerupTime <= 20  && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
                         yCapsule = briquesObj[j].y + 40;
-                        flag7 = false;
+                        allowPowerup = false;
                     }
                 }
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle < briquesObj[j].x + 80 && xBalle - 10 < briquesObj[j].x + 80 && xBalle + 10 > briquesObj[j].x + 80) { //collision droite
                 if (!pupUnstop) {revx = false; }
                 pattern[j] -= 1;
-                flag8 = false;
+                collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     powerupTime = Math.floor((Math.random() * 100) + 1);
-                    if (powerupTime <= 20 && flag7) {
+                    if (powerupTime <= 20 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
                         yCapsule = briquesObj[j].y + 40;
-                        flag7 = false;
+                        allowPowerup = false;
                     }
                 }
             }
             if (yBalle < briquesObj[j].y + 40 && yBalle - 10 < briquesObj[j].y + 40 && yBalle + 10 > briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision bas
                 if (!pupUnstop) {revy = false; }
                 pattern[j] -= 1;
-                flag8 = false;
+                collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     powerupTime = Math.floor((Math.random() * 100) + 1);
-                    if (powerupTime <= 20 && flag7) {
+                    if (powerupTime <= 20 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
                         yCapsule = briquesObj[j].y + 40;
-                        flag7 = false;
+                        allowPowerup = false;
                     }
                 }
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle + 40 < briquesObj[j].y && yBalle + 60 > briquesObj[j].y && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision haut
                 if (!pupUnstop) {revy = true; }
                 pattern[j] -= 1;
-                flag8 = false;
+                collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     powerupTime = Math.floor((Math.random() * 100) + 1);
-                    if (powerupTime <= 100 && flag7) {
+                    if (powerupTime <= 100 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
                         yCapsule = briquesObj[j].y + 40;
-                        flag7 = false;
+                        allowPowerup = false;
                     }
                 }
             }
