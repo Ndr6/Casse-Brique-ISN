@@ -1,6 +1,7 @@
 /*global Audio: false*/
 /*global alert: false*/
 /*global console: false*/
+/*jslint plusplus: true */
 
 /***************************************
         Déclaration des variables
@@ -16,6 +17,7 @@ var reset;      //Fonction de désactivation des powerups
 var resetPowerup;  //Anthony, faut penser à un autre nom stp
 var loseLife;   //ça c'est un bon nom
 var backgroundMusic; //Ce nom est assez explicite je pense
+var win; //Bah quand on gagne, quoi
 
 //Variables son
 var pupLoseSfx = new Audio("PUP_Lose.wav");
@@ -67,6 +69,7 @@ brique2Img.width = 80;
 brique2Img.height = 40;
 
 var briquesObj = [];
+var brickCount = 87;
 
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1);
@@ -194,8 +197,18 @@ loseLife = function () {
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 	moveBalle = false;
 };
-//Appel de la fonction de création des briques au chargement terminé de la page
-window.addEventListener("load", creaBriques);
+
+function win() {
+    "use strict";
+    //for (brickCheck = 0; brickCheck >= 90; brickCheck += 1) {
+    //    lifeSum += pattern[brickCheck];
+    //}
+    brickCount -= 1;
+    console.log(brickCount);
+    if (brickCount === 0) {
+        alert("YOU WIN !!!!!");
+    }
+}
 
 //Écoute des touches pour contrôles
 window.addEventListener('keydown', function (e) {
@@ -505,13 +518,14 @@ animation = function () {
     
     //Collisions balle-briques
     for (j = 0; j < briquesObj.length; j += 1) {
-        if (briquesObj[j].life) {
+        if (pattern[j] > 0) {
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle + 40 < briquesObj[j].x && xBalle + 60 > briquesObj[j].x) { //collision gauche
                 if (!pupUnstop) {revx = true; }
                 pattern[j] -= 1;
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
+                    win();
                     powerupTime = Math.floor((Math.random() * 100) + 1);
                     if (powerupTime <= 20  && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
@@ -526,6 +540,7 @@ animation = function () {
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
+                    win();
                     powerupTime = Math.floor((Math.random() * 100) + 1);
                     if (powerupTime <= 20 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
@@ -540,6 +555,7 @@ animation = function () {
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
+                    win();
                     powerupTime = Math.floor((Math.random() * 100) + 1);
                     if (powerupTime <= 20 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
@@ -554,6 +570,7 @@ animation = function () {
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
+                    win();
                     powerupTime = Math.floor((Math.random() * 100) + 1);
                     if (powerupTime <= 100 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
@@ -579,8 +596,9 @@ backgroundMusic = function () {
 };
 
 //Lancement des fonctions principales après chargement de la page
-setTimeout(animation, 250);
-setTimeout(controls, 500);
+setTimeout(creaBriques, 499);
+setTimeout(animation, 500);
+setTimeout(controls, 501);
 backgroundMusic();
 
 /******************************************************
