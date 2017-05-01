@@ -93,7 +93,7 @@ var yCapsule = 0;
 var masquagePup = false; //détection collisions powerups / raquette + lance la disparition de la capsule
 var collisionPupRaquette = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
 var allowPowerup = true;  //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
-var xBriques, yBriques, life;
+var xBriques, yBriques, life, hit;
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
                1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
@@ -115,17 +115,19 @@ var creaBriques = function () {
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
 
-    var v, i, Briques = function (xBriques, yBriques, life) { //C'est juste des variables pour les boucles for
+    var v, i, Briques = function (xBriques, yBriques, life, hit) { //C'est juste des variables pour les boucles for
         this.x = xBriques;
         this.y = yBriques;
         this.life = life;
+		this.hit = hit;
     };
     for (v = 0; v < 6; v += 1) {
         for (i = 0; i < 15; i += 1) {
             xBriques = 83 * i + 19;
             yBriques = 43 * v + 5;
             life = true;
-            briquesObj.push(new Briques(xBriques, yBriques, life));
+			hit = false;
+            briquesObj.push(new Briques(xBriques, yBriques, life, hit));
         }
     }
 };
@@ -559,7 +561,10 @@ animation = function () {
         if (pattern[j] > 0) {
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle + 40 < briquesObj[j].x && xBalle + 60 > briquesObj[j].x) { //collision gauche
                 if (!pupUnstop) {revx = true; }
-                if (pattern[j] > 0) {pattern[j] -= 1; }
+                if (pattern[j] > 0 && !briquesObj[j].hit) {
+					pattern[j] -= 1;
+					briquesObj[j].hit = true;
+				}
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -574,7 +579,10 @@ animation = function () {
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle < briquesObj[j].x + 80 && xBalle - 10 < briquesObj[j].x + 80 && xBalle + 10 > briquesObj[j].x + 80) { //collision droite
                 if (!pupUnstop) {revx = false; }
-                if (pattern[j] > 0) {pattern[j] -= 1; }
+                if (pattern[j] > 0 && !briquesObj[j].hit) {
+					pattern[j] -= 1;
+					briquesObj[j].hit = true;
+				}
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -589,7 +597,10 @@ animation = function () {
             }
             if (yBalle < briquesObj[j].y + 40 && yBalle - 10 < briquesObj[j].y + 40 && yBalle + 10 > briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision bas
                 if (!pupUnstop) {revy = false; }
-                if (pattern[j] > 0) {pattern[j] -= 1; }
+                if (pattern[j] > 0 && !briquesObj[j].hit) {
+					pattern[j] -= 1;
+					briquesObj[j].hit = true;
+				}
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -604,7 +615,10 @@ animation = function () {
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle + 40 < briquesObj[j].y && yBalle + 60 > briquesObj[j].y && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision haut
                 if (!pupUnstop) {revy = true; }
-                if (pattern[j] > 0) {pattern[j] -= 1; }
+                if (pattern[j] > 0 && !briquesObj[j].hit) {
+					pattern[j] -= 1;
+					briquesObj[j].hit = true;
+				}
                 collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -617,6 +631,7 @@ animation = function () {
                     }
                 }
             }
+			briquesObj[j].hit = false;
         }
     }
     //Bouclage de la fonction animation
