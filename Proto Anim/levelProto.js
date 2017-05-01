@@ -47,6 +47,7 @@ var pasAnim = 5; //Vitesse animation
 var xBalle = 615, yBalle = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var speedBalle = 10; //Vitesse balle
+var collisionMemeSens = false;
 var pupUnstop = false;
 
 var k, j; //Ce sont juste des compteurs pour les boucles for
@@ -510,41 +511,55 @@ animation = function () {
     if (!pupDef) {
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             revy = true;
+			collisionMemeSens = true;
         }
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
             revy = false;
+			collisionMemeSens = true;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 100) { //collision gauche
-			if (revx) {
-				xBalle = xRaquette - 50;
+			if (!collisionMemeSens) {
+				if (revx) {
+					xBalle = xRaquette - 50;
+				}
+				revx = true;
 			}
-			revx = true;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
-			if (!revx) {
-				xBalle = xRaquette + 200;
+			if (!collisionMemeSens) {
+				if (!revx) {
+					xBalle = xRaquette + 200;
+				}
+				revx = false;
 			}
-			revx = false;
         }
+		collisionMemeSens = false;
     } else {
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             revy = true;
+			collisionMemeSens = true;
         }
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
             revy = false;
+			collisionMemeSens = true;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 144) { //collision gauche
-			if (revx) {
-				xBalle = xRaquette - 50;
+			if (!collisionMemeSens) {
+				if (revx) {
+					xBalle = xRaquette - 50;
+				}
+				revx = true;
 			}
-			revx = true;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
-			if (!revx) {
-				xBalle = xRaquette + 288;
+			if (!collisionMemeSens) {
+				if (!revx) {
+					xBalle = xRaquette + 288;
+				}
+				revx = false;
 			}
-			revx = false;
 		}
+		collisionMemeSens = false;
     }
     
     //Collisions balle-briques
