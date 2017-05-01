@@ -47,7 +47,6 @@ var pasAnim = 5; //Vitesse animation
 var xBalle = 615, yBalle = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var speedBalle = 10; //Vitesse balle
-var collisionsMemeSens = false; //Permet d'éviter les bugs de collisions balle / raquette
 var pupUnstop = false;
 
 var k, j; //Ce sont juste des compteurs pour les boucles for
@@ -510,50 +509,42 @@ animation = function () {
     //Fonction collision avec la raquette :
     if (!pupDef) {
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
-            collisionsMemeSens = true;
             revy = true;
         }
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
-            collisionsMemeSens = true;
             revy = false;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 100) { //collision gauche
-            if (xBalle + 40 < xRaquette && xBalle + 60 > xRaquette) {
-                revx = true;
-            } else if (!collisionsMemeSens) {
-                xBalle = xRaquette - 50;
-            }
+			if (revx) {
+				xBalle = xRaquette - 50;
+			}
+			revx = true;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
-            if (xBalle - 10 < xRaquette + 200 && xBalle + 10 > xRaquette + 200) {
-                revx = false;
-            } else if (!collisionsMemeSens) {
-                xBalle = xRaquette + 200;
-            }
+			if (!revx) {
+				xBalle = xRaquette + 200;
+			}
+			revx = false;
         }
     } else {
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
-            collisionsMemeSens = true;
             revy = true;
         }
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
-            collisionsMemeSens = true;
             revy = false;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 144) { //collision gauche
-            if (xBalle + 40 < xRaquette && xBalle + 60 > xRaquette) {
-                revx = true;
-            } else if (!collisionsMemeSens) {
-                xBalle = xRaquette - 50;
-            }
+			if (revx) {
+				xBalle = xRaquette - 50;
+			}
+			revx = true;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
-            if (xBalle - 10 < xRaquette + 288 && xBalle + 10 > xRaquette + 288) {
-                revx = false;
-            } else if (!collisionsMemeSens) {
-                xBalle = xRaquette + 288;
-            }
-        }
+			if (!revx) {
+				xBalle = xRaquette + 288;
+			}
+			revx = false;
+		}
     }
     
     //Collisions balle-briques
@@ -565,7 +556,6 @@ animation = function () {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
 				}
-                collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     win();
@@ -583,7 +573,6 @@ animation = function () {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
 				}
-                collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     win();
@@ -601,7 +590,6 @@ animation = function () {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
 				}
-                collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     win();
@@ -619,7 +607,6 @@ animation = function () {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
 				}
-                collisionsMemeSens = false;
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     win();
