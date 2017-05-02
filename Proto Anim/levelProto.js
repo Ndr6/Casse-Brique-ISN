@@ -146,6 +146,7 @@ timer1 = function () {
 		compte = setTimeout(timer1, 1000);
 		if (secon === 0) {
 			reset();
+            powerup = Math.floor((Math.random() * 100) + 1);
 			clock = false;
 		}
 	}
@@ -171,7 +172,6 @@ reset = function () {
 			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		}
-		powerup = Math.floor((Math.random() * 100) + 1);
         allowPowerup = true;
 	}
 };
