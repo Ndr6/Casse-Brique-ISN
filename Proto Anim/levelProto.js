@@ -334,7 +334,7 @@ function controls() {
                 scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
             }
         }
-        drawLife();
+        setTimeout(drawLife, 20);
     }
     //Contrôles flèche droite et "d"
     if (keyState[39] || keyState[68]) {
@@ -366,7 +366,7 @@ function controls() {
                 scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
             }
         }
-        drawLife();
+        setTimeout(drawLife, 20);
     }
     //Lancement de la balle (espace)
     if (keyState[32] && !moveBalle && !hasWon && !hasLost) {
@@ -734,7 +734,7 @@ animation = function () {
 			briquesObj[j].hit = false;
         }
     }
-    drawLife();
+    setTimeout(drawLife, 20);
     //Bouclage de la fonction animation
     if (moveBalle) {
         setTimeout(animation, speedBalle);
