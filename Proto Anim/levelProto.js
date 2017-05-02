@@ -14,10 +14,10 @@ var animation; //Fonction d'animation de la balle et bien d'autres
 var defense;    //Fonction d'activation du powerup Défense
 var unstoppable;    //Fonction d'activation du powerup Unstoppable
 var reset;      //Fonction de désactivation des powerups
-var resetPowerup;  //Anthony, faut penser à un autre nom stp
 var loseLife;   //ça c'est un bon nom
 var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
+var timer1;
 
 //Variables son
 var pupLoseSfx = new Audio("PUP_Lose.wav");
@@ -101,6 +101,10 @@ var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
+//Variables Timer
+var secon;
+var compte;
+var clock;
 //Variables contrôles
 var keyState = {};
 var pause = false;
@@ -132,6 +136,20 @@ var creaBriques = function () {
     }
 };
 
+timer1 = function () {
+	"use strict";
+	if (clock) {
+		if (!pause) {
+			secon -= 1;
+		}
+		document.forsec.sec.value = " " + secon;
+		compte = setTimeout(timer1, 1000);
+		if (secon === 0) {
+			reset();
+			clock = false;
+		}
+	}
+};
 //Fonction de reset des powerups
 reset = function () {
     "use strict";
@@ -154,7 +172,6 @@ reset = function () {
 			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		}
 		powerup = Math.floor((Math.random() * 100) + 1);
-		masquagePup = false;
         allowPowerup = true;
 	}
 };
@@ -177,7 +194,9 @@ defense = function () {
             scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
             scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         }
-        setTimeout(reset, 20000); //Faudra régler le délai, pour un truc un peu plus juste
+		clock = true;
+        secon = 20;
+		timer1();
     }
 };
 
@@ -189,23 +208,27 @@ unstoppable = function () {
         //X.play(); la ferme !
         pupUnstop = true;
         scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-        setTimeout(reset, 5000);
+		clock = true;
+		secon = 5;
+		timer1();
     }
 };
 loseLife = function () {
 	"use strict";
-    xBalle = 615;
     yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
-    moveRaquette = false;
+	moveRaquette = false;
 	if (pupDef) {
 		xRaquette = 496;
+		xBalle = xRaquette + 119;
 	} else {
 		xRaquette = 540;
+		xBalle = xRaquette + 75;
 	}
     yRaquette = 700;
-    reset();
+	secon = 1;
+	timer1();
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 	moveBalle = false;
@@ -419,7 +442,7 @@ animation = function () {
         scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
     }
     scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-    if (!masquagePup && xCapsule > 0 && yCapsule > 0) {
+    if (masquagePup) {
 		if (powerup < 50) {
 			capsuleImg.src = "capsuleDEF.png";
 			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
@@ -459,43 +482,42 @@ animation = function () {
     //collisions pup raquette
     if (!pupDef) {
         if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) {  //collision sur le dessus
-            masquagePup = true;
+            masquagePup = false;
             collisionPupRaquette = true;
         }
         if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
-            masquagePup = true;
+            masquagePup = false;
             collisionPupRaquette = true;
         }
         if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 10 > xRaquette + 200) {
-            masquagePup = true;
+            masquagePup = false;
             collisionPupRaquette = true;
         }
         if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
-            masquagePup = true;
+            masquagePup = false;
             collisionPupRaquette = true;
         }
     } else {
         if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) {  //collision sur le dessus
-            masquagePup = true;
+            masquagePup = false;
             collisionPupRaquette = true;
         }
         if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
-            masquagePup = true;
+            masquagePup = false;
             collisionPupRaquette = true;
         }
         if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 288 && xCapsule - 10 < xRaquette + 288 && xCapsule + 10 > xRaquette + 288) {
-            masquagePup = true;
+            masquagePup = false;
             collisionPupRaquette = true;
         }
         if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
-            masquagePup = true;
+            masquagePup = false;
             collisionPupRaquette = true;
         }
     }
     if (yCapsule > 800) {
-        setTimeout(resetPowerup, 5000);
-        xCapsule = 0;
-        yCapsule = 0;
+        allowPowerup = true;
+        masquagePup = false;
     }
     if (collisionPupRaquette) {
         if (powerup < 50) {
@@ -578,6 +600,7 @@ animation = function () {
                     if (powerupTime <= 20  && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
                         yCapsule = briquesObj[j].y + 40;
+						masquagePup = true;
                         allowPowerup = false;
                     }
                 }
@@ -595,6 +618,7 @@ animation = function () {
                     if (powerupTime <= 20 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
                         yCapsule = briquesObj[j].y + 40;
+						masquagePup = true;
                         allowPowerup = false;
                     }
                 }
@@ -612,6 +636,7 @@ animation = function () {
                     if (powerupTime <= 20 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
                         yCapsule = briquesObj[j].y + 40;
+						masquagePup = true;
                         allowPowerup = false;
                     }
                 }
@@ -629,6 +654,7 @@ animation = function () {
                     if (powerupTime <= 100 && allowPowerup) {
                         xCapsule = briquesObj[j].x + 20;
                         yCapsule = briquesObj[j].y + 40;
+						masquagePup = true;
                         allowPowerup = false;
                     }
                 }
