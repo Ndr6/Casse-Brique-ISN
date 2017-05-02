@@ -156,6 +156,7 @@ timer1 = function () {
 			clock = false;
 		}
 	}
+};
 
   //Fonction de reset des powerups
 reset = function () {
