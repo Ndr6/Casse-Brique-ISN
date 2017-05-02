@@ -127,7 +127,7 @@ vieCheatImg.src = "vieCheat.png";
 
 //image "Game over"
 var goImg = new Image();
-goImg.src = "Game_Over.jpg";
+goImg.src = "gameover.jpg";
 goImg.width = 421;
 goImg.height = 105;
 var hasLost = false;
