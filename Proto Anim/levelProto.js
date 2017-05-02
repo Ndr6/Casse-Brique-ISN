@@ -120,7 +120,7 @@ var drawLife;
 var nblife = 3;
 
 var vieImg = new Image();
-vieImg.src = "vie.png";
+vieImg.src = "vieImg.png";
 
 var vieCheatImg = new Image();
 vieCheatImg.src = "vieCheat.png";
