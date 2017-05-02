@@ -18,6 +18,7 @@ var loseLife;   //ça c'est un bon nom
 var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
 var timer1;
+var go; //Game over
 
 //Variables son
 var pupLoseSfx = new Audio("PUP_Lose.wav");
@@ -108,6 +109,15 @@ var clock;
 //Variables contrôles
 var keyState = {};
 var pause = false;
+
+//Compteur de vie
+var nblife = 3; //half life 3 confirmed
+
+//image "Game over"
+var goImg = new Image();
+goImg.src = "Game_Over.jpg";
+goImg.width = 421;
+goImg.height = 66;
 
 /****************************************
            Début du programme
@@ -231,6 +241,18 @@ loseLife = function () {
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 	moveBalle = false;
 };
+
+go = function () { //Perte des vies
+    "use strict";
+    nblife -= 1;
+    console.log(nblife);
+    if (nblife === 0) {
+        scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
+        moveBalle = false;
+        moveRaquette = false;
+    }
+};
+
 
 function win() {
     "use strict";
@@ -423,6 +445,7 @@ function controls() {
 animation = function () {
     "use strict";
     //(Re)construction de la scène
+    document.vies.vie.value = " " + nblife;
     scene.clearRect(0, 0, 1280, 800);
     scene.beginPath();
     scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
@@ -465,6 +488,7 @@ animation = function () {
 			revy = false;
 		} else if (yBalle + 50 > 1000) {
 			loseLife();
+            go();
 		}
 		if (!revy) {
 			yBalle = yBalle + pasAnim;
