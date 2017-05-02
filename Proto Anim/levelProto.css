@@ -19,8 +19,14 @@ td, th
 
 h1
 {
-    font-size: 25px;
+    font-size: 23px;
     color: white;
+    text-align: center;
+}
+
+h2{
+    font-size: 25px;
+    color: red;
     text-align: center;
 }
 
