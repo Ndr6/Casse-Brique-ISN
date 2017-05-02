@@ -51,7 +51,7 @@ var xBalle = 615,
 var revx = false,
     revy = false; //Sens animation balle
 var speedBalle = 10; //Vitesse balle
-var collisionsMemeSens = false; //Permet d'éviter les bugs de collisions balle / raquette
+var collisionMemeSens = false;
 var pupUnstop = false;
 
 var k, j; //Ce sont juste des compteurs pour les boucles for
@@ -97,8 +97,9 @@ var xCapsule = 0;
 var yCapsule = 0;
 var masquagePup = false; //détection collisions powerups / raquette + lance la disparition de la capsule
 var collisionPupRaquette = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
-var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
-var xBriques, yBriques, life;
+var allowPowerup = true;  //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
+var xBriques, yBriques, life, hit;
+
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
                1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
@@ -141,59 +142,61 @@ var creaBriques = function () {
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
 
-    var v, i, Briques = function (xBriques, yBriques, life) { //C'est juste des variables pour les boucles for
+    var v, i, Briques = function (xBriques, yBriques, life, hit) { //C'est juste des variables pour les boucles for
         this.x = xBriques;
         this.y = yBriques;
         this.life = life;
+		this.hit = hit;
     };
     for (v = 0; v < 6; v += 1) {
         for (i = 0; i < 15; i += 1) {
             xBriques = 83 * i + 19;
             yBriques = 43 * v + 5;
             life = true;
-            briquesObj.push(new Briques(xBriques, yBriques, life));
+			hit = false;
+            briquesObj.push(new Briques(xBriques, yBriques, life, hit));
         }
     }
 };
 
 timer1 = function () {
-    "use strict";
-    if (clock) {
-        if (!pause) {
-            secon -= 1;
-        }
-        document.forsec.sec.value = " " + secon;
-        compte = setTimeout(timer1, 1000);
-        if (secon === 0) {
-            reset();
-            clock = false;
-        }
-    }
+
+	"use strict";
+	if (clock) {
+		if (!pause) {
+			secon -= 1;
+		}
+		document.forsec.sec.value = " " + secon;
+		compte = setTimeout(timer1, 1000);
+		if (secon === 0) {
+			reset();
+            powerup = Math.floor((Math.random() * 100) + 1);
+			clock = false;
+		}
+	}
 };
-//Fonction de reset des powerups
+
+  //Fonction de reset des powerups
 reset = function () {
     "use strict";
-    if (!pause) {
-        xCapsule = 0;
-        yCapsule = 0;
-        scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-        raquetteImg.src = "Raquette.png";
-        balleImg.src = "balle.png";
-        pupLoseSfx.play();
-        raquetteImg.width = 200;
-        raquetteImg.height = 50;
-        if (pupDef) {
-            xRaquette += 44;
-        }
-        pupDef = false;
-        pupUnstop = false;
-        scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-        if (xRaquette >= 1270 - raquetteImg.width) {
-            xRaquette = 1270 - raquetteImg.width;
-            scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-            scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-        }
-        powerup = Math.floor((Math.random() * 100) + 1);
+	if (!pause) {
+		xCapsule = 0;
+		yCapsule = 0;
+		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+		raquetteImg.src = "Raquette.png";
+		balleImg.src = "balle.png";
+		pupLoseSfx.play();
+		raquetteImg.width = 200;
+		raquetteImg.height = 50;
+		if (pupDef) {xRaquette += 44; }
+		pupDef = false;
+		pupUnstop = false;
+		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+		if (xRaquette >= 1270 - raquetteImg.width) {
+			xRaquette = 1270 - raquetteImg.width;
+			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+		}
         allowPowerup = true;
     }
 };
@@ -599,64 +602,68 @@ animation = function () {
 
     //Fonction collision avec la raquette :
     if (!pupDef) {
-        if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collision sur le dessus
-            collisionsMemeSens = true;
+        if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             revy = true;
+			collisionMemeSens = true;
         }
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
-            collisionsMemeSens = true;
             revy = false;
+			collisionMemeSens = true;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 100) { //collision gauche
-            if (xBalle + 40 < xRaquette && xBalle + 60 > xRaquette) {
-                revx = true;
-            } else if (!collisionsMemeSens) {
-                xBalle = xRaquette - 50;
-            }
+			if (!collisionMemeSens) {
+				if (revx) {
+					xBalle = xRaquette - 50;
+				}
+				revx = true;
+			}
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
-            if (xBalle - 10 < xRaquette + 200 && xBalle + 10 > xRaquette + 200) {
-                revx = false;
-            } else if (!collisionsMemeSens) {
-                xBalle = xRaquette + 200;
-            }
+			if (!collisionMemeSens) {
+				if (!revx) {
+					xBalle = xRaquette + 200;
+				}
+				revx = false;
+			}
         }
+		collisionMemeSens = false;
     } else {
-        if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collision sur le dessus
-            collisionsMemeSens = true;
+        if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             revy = true;
+			collisionMemeSens = true;
         }
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
-            collisionsMemeSens = true;
             revy = false;
+			collisionMemeSens = true;
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 144) { //collision gauche
-            if (xBalle + 40 < xRaquette && xBalle + 60 > xRaquette) {
-                revx = true;
-            } else if (!collisionsMemeSens) {
-                xBalle = xRaquette - 50;
-            }
+			if (!collisionMemeSens) {
+				if (revx) {
+					xBalle = xRaquette - 50;
+				}
+				revx = true;
+			}
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
-            if (xBalle - 10 < xRaquette + 288 && xBalle + 10 > xRaquette + 288) {
-                revx = false;
-            } else if (!collisionsMemeSens) {
-                xBalle = xRaquette + 288;
-            }
-        }
+			if (!collisionMemeSens) {
+				if (!revx) {
+					xBalle = xRaquette + 288;
+				}
+				revx = false;
+			}
+		}
+		collisionMemeSens = false;
     }
 
     //Collisions balle-briques
     for (j = 0; j < briquesObj.length; j += 1) {
         if (pattern[j] > 0) {
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle + 40 < briquesObj[j].x && xBalle + 60 > briquesObj[j].x) { //collision gauche
-                if (!pupUnstop) {
-                    revx = true;
-                }
-                if (pattern[j] > 0) {
-                    pattern[j] -= 1;
-                }
-                collisionsMemeSens = false;
+                if (!pupUnstop) {revx = true; }
+                if (pattern[j] > 0 && !briquesObj[j].hit) {
+					pattern[j] -= 1;
+					briquesObj[j].hit = true;
+				}
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     win();
@@ -670,13 +677,11 @@ animation = function () {
                 }
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle < briquesObj[j].x + 80 && xBalle - 10 < briquesObj[j].x + 80 && xBalle + 10 > briquesObj[j].x + 80) { //collision droite
-                if (!pupUnstop) {
-                    revx = false;
-                }
-                if (pattern[j] > 0) {
-                    pattern[j] -= 1;
-                }
-                collisionsMemeSens = false;
+                if (!pupUnstop) {revx = false; }
+                if (pattern[j] > 0 && !briquesObj[j].hit) {
+					pattern[j] -= 1;
+					briquesObj[j].hit = true;
+				}
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     win();
@@ -690,13 +695,12 @@ animation = function () {
                 }
             }
             if (yBalle < briquesObj[j].y + 40 && yBalle - 10 < briquesObj[j].y + 40 && yBalle + 10 > briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision bas
-                if (!pupUnstop) {
-                    revy = false;
-                }
-                if (pattern[j] > 0) {
-                    pattern[j] -= 1;
-                }
-                collisionsMemeSens = false;
+
+                if (!pupUnstop) {revy = false; }
+                if (pattern[j] > 0 && !briquesObj[j].hit) {
+					pattern[j] -= 1;
+					briquesObj[j].hit = true;
+				}
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     win();
@@ -710,13 +714,11 @@ animation = function () {
                 }
             }
             if (yBalle + 50 > briquesObj[j].y && yBalle + 40 < briquesObj[j].y && yBalle + 60 > briquesObj[j].y && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision haut
-                if (!pupUnstop) {
-                    revy = true;
-                }
-                if (pattern[j] > 0) {
-                    pattern[j] -= 1;
-                }
-                collisionsMemeSens = false;
+                if (!pupUnstop) {revy = true; }
+                if (pattern[j] > 0 && !briquesObj[j].hit) {
+					pattern[j] -= 1;
+					briquesObj[j].hit = true;
+				}
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
                     win();
@@ -729,6 +731,7 @@ animation = function () {
                     }
                 }
             }
+			briquesObj[j].hit = false;
         }
     }
     drawLife();
