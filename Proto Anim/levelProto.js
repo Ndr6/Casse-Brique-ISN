@@ -242,12 +242,13 @@ function win() {
     console.log(sumLife);
     console.log(pattern);
     if (sumLife === 0) {
+        hasWon = true;
         moveBalle = false;
         moveRaquette = false;
         scene.clearRect(0, 0, 1280, 800);
         scene.drawImage(winImg, xWinImg, yWinImg, winImg.width, winImg.height);
-        hasWon = true;
         winSfx.play();
+        setTimeout(win, 30);
     }
 }
 
@@ -266,7 +267,7 @@ function controls() {
     "use strict";
     //Contrôles flèche gauche et "q"
     if (keyState[37] || keyState[81]) {
-        if (!pause) {
+        if (!pause && !hasWon) {
             if (xRaquette <= 0) {
                 scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
                 xRaquette -= 0;
@@ -297,7 +298,7 @@ function controls() {
     }
     //Contrôles flèche droite et "d"
     if (keyState[39] || keyState[68]) {
-        if (!pause) {
+        if (!pause && !hasWon) {
             if (xRaquette >= 1280 - raquetteImg.width) {
                 scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
                 xRaquette += 0;
@@ -338,7 +339,7 @@ function controls() {
         location.replace("../Menu/mainMenu.html");
     }
     //Pause (P)
-    if (keyState[80] && moveBalle) {
+    if (keyState[80] && moveBalle && !hasWon) {
         moveBalle = false;
         pause = true;
         moveRaquette = false;
