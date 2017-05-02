@@ -43,7 +43,8 @@ var DefSfx = new Audio("PUPDef_sound.mp3");
 var moveBalle = false; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
 var rayon = 25; //Rayon balle
-var pasAnim = 5; //Vitesse animation
+var xPasAnim = 5; //Vitesse animation en x
+var yPasAnim = 5; //Vitesse animation en y
 var xBalle = 615, yBalle = 649; //Position initiale de la balle
 var revx = false, revy = false; //Sens animation balle
 var speedBalle = 10; //Vitesse balle
@@ -217,6 +218,8 @@ loseLife = function () {
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
 	moveRaquette = false;
+    xPasAnim = 5;
+    yPasAnim = 5;
 	if (pupDef) {
 		xRaquette = 496;
 		xBalle = xRaquette + 119;
@@ -328,6 +331,11 @@ function controls() {
     }
     //Lancement de la balle (espace)
     if (keyState[32] && !moveBalle && !hasWon) {
+        if (keyState[87] && !pause) {
+            revx = true;
+        } else if (keyState[88] && !pause) {
+            revx = false;
+        }
         moveBalle = true;
         pause = false;
         moveRaquette = true;
@@ -467,14 +475,14 @@ animation = function () {
 			loseLife();
 		}
 		if (!revy) {
-			yBalle = yBalle + pasAnim;
+			yBalle = yBalle + yPasAnim;
 		} else {
-			yBalle = yBalle - pasAnim;
+			yBalle = yBalle - yPasAnim;
 		}
 		if (!revx) {
-			xBalle = xBalle + pasAnim;
+			xBalle = xBalle + xPasAnim;
 		} else {
-			xBalle = xBalle - pasAnim;
+			xBalle = xBalle - xPasAnim;
 		}
 	}
     //collisions pup raquette
@@ -532,6 +540,20 @@ animation = function () {
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             collisionsMemeSens = true;
             revy = true;
+            if (keyState[39] && revx) {
+                xPasAnim += 1;
+                yPasAnim -= 1;
+            } else if (keyState[39] && !revx) {
+                xPasAnim -= 1;
+                yPasAnim += 1;
+            }
+            if (keyState[37] && revx) {
+                xPasAnim -= 1;
+                yPasAnim += 1;
+            } else if (keyState[37] && !revx) {
+                xPasAnim += 1;
+                yPasAnim -= 1;
+            }
         }
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
             collisionsMemeSens = true;
