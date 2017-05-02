@@ -18,6 +18,7 @@ var loseLife; //ça c'est un bon nom
 var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
 var timer1;
+var go; //Game over
 
 //Variables son
 var pupLoseSfx = new Audio("PUP_Lose.wav");
@@ -112,6 +113,23 @@ var clock;
 //Variables contrôles
 var keyState = {};
 var pause = false;
+
+//Compteur de vie
+var drawLife;
+var nblife = 3;
+
+var vieImg = new Image();
+vieImg.src = "vie.png";
+
+var vieCheatImg = new Image();
+vieCheatImg.src = "vieCheat.png";
+
+//image "Game over"
+var goImg = new Image();
+goImg.src = "Game_Over.jpg";
+goImg.width = 421;
+goImg.height = 105;
+var hasLost = false;
 
 /****************************************
            Début du programme
@@ -238,6 +256,18 @@ loseLife = function () {
     moveBalle = false;
 };
 
+go = function () { //Perte des vies
+    "use strict";
+    nblife -= 1;
+    console.log(nblife);
+    if (nblife <= 0) {
+        scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
+        moveBalle = false;
+        moveRaquette = false;
+    }
+};
+
+
 function win() {
     "use strict";
     var addLife, sumLife;
@@ -273,7 +303,7 @@ function controls() {
     "use strict";
     //Contrôles flèche gauche et "q"
     if (keyState[37] || keyState[81]) {
-        if (!pause && !hasWon) {
+        if (!pause && !hasWon && !hasLost) {
             if (xRaquette <= 0) {
                 scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
                 xRaquette -= 0;
@@ -301,10 +331,11 @@ function controls() {
                 scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
             }
         }
+        drawLife();
     }
     //Contrôles flèche droite et "d"
     if (keyState[39] || keyState[68]) {
-        if (!pause && !hasWon) {
+        if (!pause && !hasWon && !hasLost) {
             if (xRaquette >= 1280 - raquetteImg.width) {
                 scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
                 xRaquette += 0;
@@ -332,18 +363,22 @@ function controls() {
                 scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
             }
         }
+        drawLife();
     }
     //Lancement de la balle (espace)
-    if (keyState[32] && !moveBalle && !hasWon) {
+    if (keyState[32] && !moveBalle && !hasWon && !hasLost) {
         moveBalle = true;
         pause = false;
         moveRaquette = true;
         animation();
     }
-
     if (keyState[32] && hasWon) {
         location.replace("../Menu/mainMenu.html");
     }
+    if (keyState[32] && hasLost) {
+        location.reload();
+    }
+    
     //Pause (P)
     if (keyState[80] && moveBalle && !hasWon) {
         moveBalle = false;
@@ -424,9 +459,34 @@ function controls() {
     if (keyState[51] && cheatBrick === 0) {
         cheatBrickFunc();
     }
+    
+     //CHEAT vies illimitées
+    if (keyState[53]) {
+        nblife = 999;
+    }
 
     setTimeout(controls, 15); //Bouclage de la fonction controls
 }
+
+drawLife = function () {
+    "use strict";
+    scene.clearRect(0, 750, 225, 50);
+    if (nblife <= 0) {
+        hasLost = true;
+    }
+    if (nblife >= 1) {
+        scene.drawImage(vieImg, 0, 750, 75, 50);
+    }
+    if (nblife >= 2) {
+        scene.drawImage(vieImg, 75, 750, 75, 50);
+    }
+    if (nblife >= 3) {
+        scene.drawImage(vieImg, 150, 750, 75, 50);
+    }
+    if (nblife > 3) {
+        scene.drawImage(vieCheatImg, 0, 750, 225, 50);
+    }
+};
 
 //Fonction principale : Animation du canvas et contrôle trajectoire de la balle
 animation = function () {
@@ -474,6 +534,7 @@ animation = function () {
             revy = false;
         } else if (yBalle + 50 > 1000) {
             loseLife();
+            go();
         }
         if (!revy) {
             yBalle = yBalle + pasAnim;
@@ -670,6 +731,7 @@ animation = function () {
             }
         }
     }
+    drawLife();
     //Bouclage de la fonction animation
     if (moveBalle) {
         setTimeout(animation, speedBalle);
