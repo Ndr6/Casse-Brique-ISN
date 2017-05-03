@@ -592,6 +592,27 @@ animation = function () {
 		if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collision sur le dessus
 			collisionsMemeSens = true;
 			revy = true;
+			if (keyState[39] && revx) {
+				xPasAnim += 0.8;
+				yPasAnim -= 0.8;
+			} else if (keyState[39] && !revx) {
+				xPasAnim -= 0.8;
+				yPasAnim += 0.8;
+			}
+			if (keyState[37] && revx) {
+				xPasAnim -= 0.8;
+				yPasAnim += 0.8;
+			} else if (keyState[37] && !revx) {
+				xPasAnim += 0.8;
+				yPasAnim -= 0.8;
+			}
+			if (xPasAnim <= 0) {
+				revx = !revx;
+				xPasAnim = -xPasAnim;
+			}
+			if (yPasAnim <= 0) {
+				yPasAnim = 0;
+			}
 		}
 		if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
 			collisionsMemeSens = true;
