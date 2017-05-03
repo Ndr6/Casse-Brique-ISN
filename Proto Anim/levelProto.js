@@ -272,7 +272,6 @@ go = function () { //Perte des vies
     }
 };
 
-
 function win() {
     "use strict";
     var addLife, sumLife;
