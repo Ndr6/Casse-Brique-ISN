@@ -253,6 +253,8 @@ unstoppable = function () {
 pupDirection = function () {
 	"use strict";
 	if (directDone) {
+		reset();
+		animation();
 		return;
 	}
 	pupDirect = true;
@@ -321,8 +323,6 @@ pupDirection = function () {
 				yPasAnim = -yPasAnim;
 				revy = !revy;
 			}
-			reset();
-			animation();
 			directDone = true;
 		}
 	}
