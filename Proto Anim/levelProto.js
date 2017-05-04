@@ -105,7 +105,7 @@ var pupDirect = false; //Drapeux détection capsule Direction
 var pupDirectActi = false; //Drapeux d'activation powerup Direction
 var angleLine = -Math.PI / 2; //Angle de la trajectoire de la balle
 var directDone = false;
-var revAngle = false; //Inversion changement d'angle
+var revAngle = true; //Inversion changement d'angle
 
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //Pattern briques
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
@@ -252,43 +252,10 @@ unstoppable = function () {
 //Fonction powerup Direction
 pupDirection = function () {
 	"use strict";
-	if (directDone) {
-		return;
-	}
 	pupDirect = true;
-	console.log("a");
 	if (pupDirectActi) {
-		yBalle = yRaquette - 50;
-		moveBalle = false;
+		yBalle = yRaquette - 55;
 		moveRaquette = false;
-		scene.clearRect(0, 0, 1280, 800);
-		scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
-		for (k = 0; k < briquesObj.length; k = k + 1) {
-			if (briquesObj[k].life) {
-				if (pattern[k] === 1) {
-					scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
-				}
-				if (pattern[k] === 2) {
-					scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
-				}
-			}
-		}
-		if (!moveRaquette && pause) {
-			scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
-		}
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (masquagePup) {
-			if (powerup < 50) {
-				capsuleImg.src = "capsuleDEF.png";
-				scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
-				yCapsule += 4;
-			} else if (powerup >= 50) {
-				capsuleImg.src = "capsuleATK.png";
-				scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
-				yCapsule += 4;
-			}
-		}
-		drawLife();
 		scene.beginPath();
 		scene.moveTo(xBalle + 25, yBalle + 25);
 		scene.lineTo(xBalle + 25 + 110 * Math.cos(angleLine), yBalle + 25 + 110 * Math.sin(angleLine)); //Dessin ligne
@@ -296,9 +263,9 @@ pupDirection = function () {
 		scene.strokeStyle = "#ffffff"; //couleur ligne en hexadécimal
 		scene.closePath();
 		if (revAngle) {
-			angleLine += 0.004;
+			angleLine += 0.008;
 		} else {
-			angleLine -= 0.004;
+			angleLine -= 0.008;
 		}
 		if (angleLine > 0) {
 			angleLine = 0;
@@ -308,11 +275,8 @@ pupDirection = function () {
 			revAngle = true;
 		}
 		if (keyState[32]) {
-			moveBalle = true;
-			moveRaquette = true;
-			xPasAnim = Math.sin(angleLine) * 7.0711;
-			yPasAnim = Math.cos(angleLine) * 7.0711;
-			revy = !revy;
+			xPasAnim = Math.cos(angleLine) * 5;
+			yPasAnim = Math.sin(angleLine) * 5;
 			if (xPasAnim < 0) {
 				xPasAnim = -xPasAnim;
 				revx = !revx;
@@ -321,12 +285,10 @@ pupDirection = function () {
 				yPasAnim = -yPasAnim;
 				revy = !revy;
 			}
+			moveRaquette = true;
             reset();
-            animation();
-			directDone = true;
 		}
 	}
-	setTimeout(pupDirection, 100); //Créé une boucle qui relance la fonction tous les 100ms
 };
 //Fonction quand on perd une vie
 loseLife = function () {
@@ -612,6 +574,9 @@ animation = function () {
 			yCapsule += 4;
 		}
 	}
+	if (pupDirect) {
+		pupDirection();
+	}
 
 	//Trajectoire de la balle (à isoler)
 	if (moveRaquette) {
@@ -693,6 +658,7 @@ animation = function () {
 			revy = true;
 			collisionMemeSens = true;
 			if (pupDirect) {
+				angleLine = -Math.PI / 2;
 				pupDirectActi = true;
 			}
 		}
