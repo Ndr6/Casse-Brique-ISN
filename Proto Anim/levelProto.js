@@ -537,6 +537,7 @@ animation = function () {
 		if (yBalle < 0) {
 			revy = false;
 		} else if (yBalle + 50 > 1000) {
+			go();
 			loseLife();
 		}
 		if (!revy) {
@@ -624,6 +625,7 @@ animation = function () {
 				xPasAnim = -xPasAnim;
 			}
 			if (yPasAnim <= 0) {
+				revy = !revy;
 				yPasAnim = 0;
 			}
         }
