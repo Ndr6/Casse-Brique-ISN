@@ -253,8 +253,6 @@ unstoppable = function () {
 pupDirection = function () {
 	"use strict";
 	if (directDone) {
-		reset();
-		animation();
 		return;
 	}
 	pupDirect = true;
@@ -312,8 +310,8 @@ pupDirection = function () {
 		if (keyState[32]) {
 			moveBalle = true;
 			moveRaquette = true;
-			xPasAnim = Math.cos(angleLine) * 7.0711;
-			yPasAnim = Math.sin(angleLine) * 7.0711;
+			xPasAnim = Math.sin(angleLine) * 7.0711;
+			yPasAnim = Math.cos(angleLine) * 7.0711;
 			revy = !revy;
 			if (xPasAnim < 0) {
 				xPasAnim = -xPasAnim;
@@ -323,6 +321,8 @@ pupDirection = function () {
 				yPasAnim = -yPasAnim;
 				revy = !revy;
 			}
+            reset();
+            animation();
 			directDone = true;
 		}
 	}
