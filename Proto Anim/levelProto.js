@@ -43,6 +43,9 @@ raquetteImg.height = 50; //Dimensions asset barre
 var pupDef = false; //Drapeau powerup défense
 var DefSfx = new Audio("PUPDef_sound.mp3");
 
+var raquetteSfx = new Audio("raquetteSfx.wav");
+raquetteSfx.volume = 0.5;
+
 //Variables balle
 var moveBalle = false; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
@@ -615,10 +618,12 @@ animation = function () {
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             revy = true;
 			collisionMemeSens = true;
+            raquetteSfx.play();
         }
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
             revy = false;
 			collisionMemeSens = true;
+            raquetteSfx.play();
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 100) { //collision gauche
 			if (!collisionMemeSens) {
@@ -627,6 +632,7 @@ animation = function () {
 				}
 				revx = true;
 			}
+            raquetteSfx.play();
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
 			if (!collisionMemeSens) {
@@ -635,16 +641,19 @@ animation = function () {
 				}
 				revx = false;
 			}
+            raquetteSfx.play();
         }
 		collisionMemeSens = false;
     } else {
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) {  //collision sur le dessus
             revy = true;
 			collisionMemeSens = true;
+            raquetteSfx.play();
         }
         if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
             revy = false;
 			collisionMemeSens = true;
+            raquetteSfx.play();
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 144) { //collision gauche
 			if (!collisionMemeSens) {
@@ -653,6 +662,7 @@ animation = function () {
 				}
 				revx = true;
 			}
+            raquetteSfx.play();
         }
         if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
 			if (!collisionMemeSens) {
@@ -661,6 +671,7 @@ animation = function () {
 				}
 				revx = false;
 			}
+            raquetteSfx.play();
 		}
 		collisionMemeSens = false;
     }
