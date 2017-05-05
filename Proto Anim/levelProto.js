@@ -132,6 +132,8 @@ goImg.width = 421;
 goImg.height = 105;
 var hasLost = false;
 
+var loseLifeSfx = new Audio("SfxLoseLife.wav");
+loseLifeSfx.volume = 0.5;
 /****************************************
            Début du programme
 ****************************************/
@@ -262,6 +264,7 @@ loseLife = function () {
 go = function () { //Perte des vies
     "use strict";
     nblife -= 1;
+    loseLifeSfx.play();
     console.log(nblife);
     if (nblife <= 0) {
         scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
