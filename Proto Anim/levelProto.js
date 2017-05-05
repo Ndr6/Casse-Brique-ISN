@@ -24,6 +24,8 @@ var go; //Game over
 var pupLoseSfx = new Audio("PUP_Lose.wav");
 var pauseSfx = new Audio("pauseSfx.wav");
 var unpauseSfx = new Audio("unpauseSfx.wav");
+var audioBG = new Audio("space_corsair.mp3");
+var bgLoop;
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -142,6 +144,8 @@ var hasLost = false;
 
 var loseLifeSfx = new Audio("SfxLoseLife.wav");
 loseLifeSfx.volume = 0.5;
+
+var gameoverSfx = new Audio("gameoverSfx.wav");
 /****************************************
            Début du programme
 ****************************************/
@@ -269,6 +273,13 @@ loseLife = function () {
     moveBalle = false;
 };
 
+var gameoverSound = function () {
+    "use strict";
+    audioBG.pause();
+    clearInterval(bgLoop);
+    gameoverSfx.play();
+};
+
 go = function () { //Perte des vies
     "use strict";
     nblife -= 1;
@@ -278,9 +289,10 @@ go = function () { //Perte des vies
         scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
         moveBalle = false;
         moveRaquette = false;
+        //gameoverSfx.play();
+        setTimeout(gameoverSound, 2000);
     }
 };
-
 
 function win() {
     "use strict";
@@ -768,10 +780,9 @@ animation = function () {
 
 backgroundMusic = function () {
     "use strict";
-    var audioBG = new Audio("space_corsair.mp3");
     audioBG.play();
     audioBG.volume = 0.3;
-    setTimeout(backgroundMusic, 202000);
+    bgLoop = setTimeout(backgroundMusic, 202000);
 };
 
 //Lancement des fonctions principales après chargement de la page
