@@ -89,6 +89,9 @@ var briquesObj = [];
 
 var cheatBrick = 0;
 
+var briqueSfx = new Audio("brickSfx.wav");
+briqueSfx.volume = 0.5;
+
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1);
 var powerup = Math.floor((Math.random() * 100) + 1); //Génère un powerup aléatoire
@@ -670,6 +673,7 @@ animation = function () {
                 if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
+                    briqueSfx.play();
 				}
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -688,6 +692,7 @@ animation = function () {
                 if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
+                    briqueSfx.play();
 				}
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -707,6 +712,7 @@ animation = function () {
                 if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
+                    briqueSfx.play();
 				}
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
@@ -725,6 +731,7 @@ animation = function () {
                 if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
+                    briqueSfx.play();
 				}
                 if (pattern[j] <= 0) {
                     briquesObj[j].life = false;
