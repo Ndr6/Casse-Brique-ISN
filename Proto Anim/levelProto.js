@@ -22,6 +22,8 @@ var go; //Game over
 
 //Variables son
 var pupLoseSfx = new Audio("PUP_Lose.wav");
+var pauseSfx = new Audio("pauseSfx.wav");
+var unpauseSfx = new Audio("unpauseSfx.wav");
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -373,6 +375,7 @@ function controls() {
     }
     //Lancement de la balle (espace)
     if (keyState[32] && !moveBalle && !hasWon && !hasLost) {
+        if (pause) {unpauseSfx.play(); }
         moveBalle = true;
         pause = false;
         moveRaquette = true;
@@ -390,6 +393,7 @@ function controls() {
         moveBalle = false;
         pause = true;
         moveRaquette = false;
+        pauseSfx.play();
     }
 
     //CHEAT Reset powerups (0/à)
