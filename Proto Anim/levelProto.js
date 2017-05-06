@@ -254,6 +254,8 @@ loseLife = function () {
         xBalle = xRaquette + 75;
     }
     yRaquette = 700;
+	xPasAnim = 5;
+	yPasAnim = 5;
     secon = 1;
     timer1();
     scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
