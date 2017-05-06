@@ -26,6 +26,7 @@ var pauseSfx = new Audio("pauseSfx.wav");
 var unpauseSfx = new Audio("unpauseSfx.wav");
 var audioBG = new Audio("space_corsair.mp3");
 var bgLoop;
+var wallSfx = new Audio("murSfx.wav");
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -77,7 +78,9 @@ winImg.height = 232;
 var xWinImg = 484,
     yWinImg = 284;
 
-var winSfx = new Audio("yay.mp3");
+var winSfx = new Audio("victory.wav");
+winSfx.volume = 0.7;
+var winSfxPlayed = false;
 
 //Variables briques
 
@@ -309,7 +312,11 @@ function win() {
         moveRaquette = false;
         scene.clearRect(0, 0, 1280, 800);
         scene.drawImage(winImg, xWinImg, yWinImg, winImg.width, winImg.height);
-        winSfx.play();
+        if (!winSfxPlayed) {
+            audioBG.pause();
+            winSfx.play();
+            winSfxPlayed = true;
+        }
         setTimeout(win, 30);
     }
 }
@@ -555,11 +562,14 @@ animation = function () {
     if (moveRaquette) {
         if (xBalle < 0) {
             revx = false;
+            wallSfx.play();
         } else if (xBalle + 50 > 1280) {
             revx = true;
+            wallSfx.play();
         }
         if (yBalle < 0) {
             revy = false;
+            wallSfx.play();
         } else if (yBalle + 50 > 1000) {
             loseLife();
             go();
