@@ -613,25 +613,6 @@ animation = function () {
 	}
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	if (masquagePup) {
-		if (powerup < 34) {
-			capsuleImg.src = "capsuleDEF.png";
-			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
-			yCapsule += 4;
-		} else if (powerup >= 34 && powerup < 67) {
-			capsuleImg.src = "capsuleATK.png";
-			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
-			yCapsule += 4;
-		} else if (powerup >= 67) {
-			capsuleImg.src = "capsuleDIRECT.png";
-			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
-			yCapsule += 4;
-		}
-	}
-	if (pupDirect) {
-		pupDirection();
-	}
-	//Trajectoire de la balle (à isoler)
-	if (moveRaquette) {
 		xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
 		yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
 		if (xBalle < 0) {
@@ -870,7 +851,6 @@ animation = function () {
 				if (!pupUnstop) {
 					revy = false;
 				}
-
 				if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
