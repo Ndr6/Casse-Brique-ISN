@@ -281,48 +281,48 @@ loseLife = function () {
 };
 
 var gameoverSound = function () {
-	"use strict";
-	audioBG.pause();
-	clearInterval(bgLoop);
-	gameoverSfx.play();
+    "use strict";
+    audioBG.pause();
+    clearInterval(bgLoop);
+    gameoverSfx.play();
 };
 
 go = function () { //Perte des vies
-	"use strict";
-	nblife -= 1;
-	loseLifeSfx.play();
-	console.log(nblife);
-	if (nblife <= 0) {
-		scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
-		moveBalle = false;
-		moveRaquette = false;
-		//gameoverSfx.play();
-		setTimeout(gameoverSound, 2000);
-	}
+    "use strict";
+    nblife -= 1;
+    loseLifeSfx.play();
+    console.log(nblife);
+    if (nblife <= 0) {
+        scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
+        moveBalle = false;
+        moveRaquette = false;
+        //gameoverSfx.play();
+        setTimeout(gameoverSound, 2000);
+    }
 };
 
 function win() {
-	"use strict";
-	var addLife, sumLife;
-	addLife = function (a, b) {
-		return a + b;
-	};
-	sumLife = pattern.reduce(addLife, 0);
-	console.log(sumLife);
-	console.log(pattern);
-	if (sumLife === 0) {
-		hasWon = true;
-		moveBalle = false;
-		moveRaquette = false;
-		scene.clearRect(0, 0, 1280, 800);
-		scene.drawImage(winImg, xWinImg, yWinImg, winImg.width, winImg.height);
-		if (!winSfxPlayed) {
-			audioBG.pause();
-			winSfx.play();
-			winSfxPlayed = true;
-		}
-		setTimeout(win, 30);
-	}
+    "use strict";
+    var addLife, sumLife;
+    addLife = function (a, b) {
+        return a + b;
+    };
+    sumLife = pattern.reduce(addLife, 0);
+    console.log(sumLife);
+    console.log(pattern);
+    if (sumLife === 0) {
+        hasWon = true;
+        moveBalle = false;
+        moveRaquette = false;
+        scene.clearRect(0, 0, 1280, 800);
+        scene.drawImage(winImg, xWinImg, yWinImg, winImg.width, winImg.height);
+        if (!winSfxPlayed) {
+            audioBG.pause();
+            winSfx.play();
+            winSfxPlayed = true;
+        }
+        setTimeout(win, 30);
+    }
 }
 
 //Écoute des touches pour contrôles
@@ -337,176 +337,174 @@ window.addEventListener('keyup', function (e) {
 
 //Fonction de contrôles raquette next gen
 function controls() {
-	"use strict";
-	//Contrôles flèche gauche et "q"
-	if (keyState[37] || keyState[81]) {
-		if (!pause && !hasWon && !hasLost) {
-			if (xRaquette <= 0) {
-				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette -= 0;
-				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			} else {
-				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette -= 20;
-				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			}
-			if (!moveBalle && xBalle >= 65) {
-				xBalle = xRaquette + 75;
-				scene.clearRect(0, 0, 1280, 800);
-				scene.beginPath();
-				scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
-				for (k = 0; k < briquesObj.length; k = k + 1) {
-					if (briquesObj[k].life) {
-						if (pattern[k] === 1) {
-							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
-						}
-						if (pattern[k] === 2) {
-							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
-						}
-					}
-				}
-				scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
-			}
-		}
-		drawLife();
-	}
-	//Contrôles flèche droite et "d"
-	if (keyState[39] || keyState[68]) {
-		if (!pause && !hasWon && !hasLost) {
-			if (xRaquette >= 1280 - raquetteImg.width) {
-				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette += 0;
-				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			} else {
-				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette += 20;
-				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			}
-			if (!moveBalle && xBalle <= 1205) {
-				xBalle = xRaquette + 75;
-				scene.clearRect(0, 0, 1280, 800);
-				scene.beginPath();
-				scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
-				for (k = 0; k < briquesObj.length; k = k + 1) {
-					if (briquesObj[k].life) {
-						if (pattern[k] === 1) {
-							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
-						}
-						if (pattern[k] === 2) {
-							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
-						}
-					}
-				}
-				scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
-			}
-		}
-		drawLife();
-	}
-	//Lancement de la balle (espace)
-	if (keyState[32] && !moveBalle && !hasWon && !hasLost) {
-		if (pause) {
-			unpauseSfx.play();
-		}
-		moveBalle = true;
-		pause = false;
-		moveRaquette = true;
-		animation();
-	}
-	if (keyState[32] && hasWon) {
-		location.replace("../Menu/mainMenu.html");
-	}
-	if (keyState[32] && hasLost) {
-		location.reload();
-	}
+    "use strict";
+    //Contrôles flèche gauche et "q"
+    if (keyState[37] || keyState[81]) {
+        if (!pause && !hasWon && !hasLost) {
+            if (xRaquette <= 0) {
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                xRaquette -= 0;
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            } else {
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                xRaquette -= 20;
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            }
+            if (!moveBalle && xBalle >= 65) {
+                xBalle = xRaquette + 75;
+                scene.clearRect(0, 0, 1280, 800);
+                scene.beginPath();
+                scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
+                for (k = 0; k < briquesObj.length; k = k + 1) {
+                    if (briquesObj[k].life) {
+                        if (pattern[k] === 1) {
+                            scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+                        }
+                        if (pattern[k] === 2) {
+                            scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+                        }
+                    }
+                }
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
+            }
+        }
+        drawLife();
+    }
+    //Contrôles flèche droite et "d"
+    if (keyState[39] || keyState[68]) {
+        if (!pause && !hasWon && !hasLost) {
+            if (xRaquette >= 1280 - raquetteImg.width) {
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                xRaquette += 0;
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            } else {
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                xRaquette += 20;
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            }
+            if (!moveBalle && xBalle <= 1205) {
+                xBalle = xRaquette + 75;
+                scene.clearRect(0, 0, 1280, 800);
+                scene.beginPath();
+                scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
+                for (k = 0; k < briquesObj.length; k = k + 1) {
+                    if (briquesObj[k].life) {
+                        if (pattern[k] === 1) {
+                            scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+                        }
+                        if (pattern[k] === 2) {
+                            scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+                        }
+                    }
+                }
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, 200, 50);
+            }
+        }
+        drawLife();
+    }
+    //Lancement de la balle (espace)
+    if (keyState[32] && !moveBalle && !hasWon && !hasLost) {
+        if (pause) {unpauseSfx.play(); }
+        moveBalle = true;
+        pause = false;
+        moveRaquette = true;
+        animation();
+    }
+    if (keyState[32] && hasWon) {
+        location.replace("../Menu/mainMenu.html");
+    }
+    if (keyState[32] && hasLost) {
+        location.reload();
+    }
+    
+    //Pause (P)
+    if (keyState[80] && moveBalle && !hasWon) {
+        moveBalle = false;
+        pause = true;
+        moveRaquette = false;
+        pauseSfx.play();
+    }
 
-	//Pause (P)
-	if (keyState[80] && moveBalle && !hasWon) {
-		moveBalle = false;
-		pause = true;
-		moveRaquette = false;
-		pauseSfx.play();
-	}
+    //CHEAT Reset powerups (0/à)
+    if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
+        scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        raquetteImg.src = "Raquette.png";
+        balleImg.src = "balle.png";
+        //Il manque un son pour perdre le PUP
+        raquetteImg.width = 200;
+        raquetteImg.height = 50;
+        if (pupDef) {
+            xRaquette += 44;
+        }
+        pupDef = false;
+        pupUnstop = false;
+        pupLoseSfx.play();
+        scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        if (xRaquette >= 1270 - raquetteImg.width) {
+            xRaquette = 1270 - raquetteImg.width;
+            scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        }
+    }
 
-	//CHEAT Reset powerups (0/à)
-	if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "Raquette.png";
-		balleImg.src = "balle.png";
-		//Il manque un son pour perdre le PUP
-		raquetteImg.width = 200;
-		raquetteImg.height = 50;
-		if (pupDef) {
-			xRaquette += 44;
-		}
-		pupDef = false;
-		pupUnstop = false;
-		pupLoseSfx.play();
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1270 - raquetteImg.width) {
-			xRaquette = 1270 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
+    //CHEAT Défense ("1/&")
+    if (keyState[49] && !pupDef) {
+        scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        raquetteImg.src = "RaquettePUPDef.png";
+        //DefSfx.play(); la ferme !
+        raquetteImg.width = 288;
+        raquetteImg.height = 50;
+        pupDef = true;
+        xRaquette -= 44;
+        scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        if (xRaquette >= 1272 - raquetteImg.width) {
+            xRaquette = 1272 - raquetteImg.width;
+            scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+        }
+    }
 
-	//CHEAT Défense ("1/&")
-	if (keyState[49] && !pupDef) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "RaquettePUPDef.png";
-		//DefSfx.play(); la ferme !
-		raquetteImg.width = 288;
-		raquetteImg.height = 50;
-		pupDef = true;
-		xRaquette -= 44;
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1272 - raquetteImg.width) {
-			xRaquette = 1272 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
+    //CHEAT Unstoppable ("2/é")
+    if (keyState[50] && !pupUnstop) {
+        if (!pupUnstop) {
+            scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            balleImg.src = "balleUnstop.png";
+            //X.play(); la ferme !
+            pupUnstop = true;
+            scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            setTimeout(reset, 15000);
+        }
+    }
+    //CHEAT Accéleration balle
+    if (keyState[76] && speedBalle === 10) {
+        speedBalle = 4;
+    }
+    if (keyState[77] && speedBalle === 4) {
+        speedBalle = 10;
+    }
 
-	//CHEAT Unstoppable ("2/é")
-	if (keyState[50] && !pupUnstop) {
-		if (!pupUnstop) {
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			balleImg.src = "balleUnstop.png";
-			//X.play(); la ferme !
-			pupUnstop = true;
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			setTimeout(reset, 15000);
-		}
-	}
-	//CHEAT Accéleration balle
-	if (keyState[76] && speedBalle === 10) {
-		speedBalle = 4;
-	}
-	if (keyState[77] && speedBalle === 4) {
-		speedBalle = 10;
-	}
+    //CHEAT Casser toutes les briques
+    var cheatBrickFunc = function () {
+        moveBalle = false;
+        moveRaquette = false;
+        if (cheatBrick < 90) {
+            pattern[cheatBrick] = 0;
+            cheatBrick += 1;
+            setTimeout(cheatBrickFunc, 60);
+        }
+        animation();
+        win();
+    };
+    if (keyState[51] && cheatBrick === 0) {
+        cheatBrickFunc();
+    }
+    
+     //CHEAT vies illimitées
+    if (keyState[53]) {
+        nblife = 999;
+    }
 
-	//CHEAT Casser toutes les briques
-	var cheatBrickFunc = function () {
-		moveBalle = false;
-		moveRaquette = false;
-		if (cheatBrick < 90) {
-			pattern[cheatBrick] = 0;
-			cheatBrick += 1;
-			setTimeout(cheatBrickFunc, 60);
-		}
-		animation();
-		win();
-	};
-	if (keyState[51] && cheatBrick === 0) {
-		cheatBrickFunc();
-	}
-
-	//CHEAT vies illimitées
-	if (keyState[53]) {
-		nblife = 999;
-	}
-
-	setTimeout(controls, 15); //Bouclage de la fonction controls
+    setTimeout(controls, 15); //Bouclage de la fonction controls
 }
 
 drawLife = function () {
@@ -682,17 +680,16 @@ animation = function () {
 				}
 				revx = true;
 			}
-			raquetteSfx.play();
-		}
-		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
+            raquetteSfx.play();
+        }
+        if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
 			if (!collisionMemeSens) {
 				if (!revx) {
 					xBalle = xRaquette + 200;
 				}
 				revx = false;
-			}
-			raquetteSfx.play();
-		}
+            raquetteSfx.play();
+        }
 		collisionMemeSens = false;
 	} else {
 		if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collision sur le dessus
@@ -735,16 +732,16 @@ animation = function () {
 				}
 				revx = true;
 			}
-			raquetteSfx.play();
-		}
-		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
+            raquetteSfx.play();
+        }
+        if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
 			if (!collisionMemeSens) {
 				if (!revx) {
 					xBalle = xRaquette + 288;
 				}
 				revx = false;
 			}
-			raquetteSfx.play();
+            raquetteSfx.play();
 		}
 		collisionMemeSens = false;
 	}
@@ -795,7 +792,6 @@ animation = function () {
 				}
 			}
 			if (yBalle < briquesObj[j].y + 40 && yBalle - 10 < briquesObj[j].y + 40 && yBalle + 10 > briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision bas
-
 				if (!pupUnstop) {
 					revy = false;
 				}
@@ -838,21 +834,20 @@ animation = function () {
 				}
 			}
 			briquesObj[j].hit = false;
-		}
-	}
-	drawLife();
-	//Bouclage de la fonction animation
-	if (moveBalle) {
-		setTimeout(animation, speedBalle);
-	}
+        }
+    }
+    drawLife();
+    //Bouclage de la fonction animation
+    if (moveBalle) {
+        setTimeout(animation, speedBalle);
+    }
 };
 
 backgroundMusic = function () {
-
-	"use strict";
-	audioBG.play();
-	audioBG.volume = 0.3;
-	bgLoop = setTimeout(backgroundMusic, 202000);
+    "use strict";
+    audioBG.play();
+    audioBG.volume = 0.3;
+    bgLoop = setTimeout(backgroundMusic, 202000);
 };
 
 //Lancement des fonctions principales après chargement de la page
