@@ -77,7 +77,9 @@ winImg.height = 232;
 var xWinImg = 484,
     yWinImg = 284;
 
-var winSfx = new Audio("yay.mp3");
+var winSfx = new Audio("victory.wav");
+winSfx.volume = 0.7;
+var winSfxPlayed = false;
 
 //Variables briques
 
@@ -309,7 +311,11 @@ function win() {
         moveRaquette = false;
         scene.clearRect(0, 0, 1280, 800);
         scene.drawImage(winImg, xWinImg, yWinImg, winImg.width, winImg.height);
-        winSfx.play();
+        if (!winSfxPlayed) {
+            audioBG.pause();
+            winSfx.play();
+            winSfxPlayed = true;
+        }
         setTimeout(win, 30);
     }
 }
