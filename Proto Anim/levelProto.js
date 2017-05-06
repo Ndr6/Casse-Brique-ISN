@@ -23,6 +23,11 @@ var go; //Game over
 
 //Variables son
 var pupLoseSfx = new Audio("PUP_Lose.wav");
+var pauseSfx = new Audio("pauseSfx.wav");
+var unpauseSfx = new Audio("unpauseSfx.wav");
+var audioBG = new Audio("space_corsair.mp3");
+var bgLoop;
+var wallSfx = new Audio("murSfx.wav");
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -41,6 +46,9 @@ raquetteImg.height = 50; //Dimensions asset barre
 
 var pupDef = false; //Drapeau powerup défense
 var DefSfx = new Audio("PUPDef_sound.mp3");
+
+var raquetteSfx = new Audio("raquetteSfx.wav");
+raquetteSfx.volume = 0.5;
 
 //Variables balle
 var moveBalle = false; //Activation de la balle
@@ -72,7 +80,9 @@ winImg.height = 232;
 var xWinImg = 484,
 	yWinImg = 284;
 
-var winSfx = new Audio("yay.mp3");
+var winSfx = new Audio("victory.wav");
+winSfx.volume = 0.7;
+var winSfxPlayed = false;
 
 //Variables briques
 
@@ -88,6 +98,9 @@ brique2Img.height = 40;
 var briquesObj = [];
 
 var cheatBrick = 0;
+
+var briqueSfx = new Audio("brickSfx.wav");
+briqueSfx.volume = 0.5;
 
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1); //Aléatoire activation powerup ou pas
@@ -139,6 +152,10 @@ goImg.width = 421;
 goImg.height = 105;
 var hasLost = false;
 
+var loseLifeSfx = new Audio("SfxLoseLife.wav");
+loseLifeSfx.volume = 0.5;
+
+var gameoverSfx = new Audio("gameoverSfx.wav");
 /****************************************
            Début du programme
 ****************************************/
@@ -293,7 +310,7 @@ pupDirection = function () {
 				revy = false;
 			}
 			moveRaquette = true;
-            reset();
+			reset();
 		}
 	}
 };
@@ -312,24 +329,36 @@ loseLife = function () {
 		xBalle = xRaquette + 75;
 	}
 	yRaquette = 700;
+	xPasAnim = 5;
+	yPasAnim = 5;
 	secon = 1;
 	timer1();
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 	moveBalle = false;
 };
-//Fonction game over
-go = function () {
+
+var gameoverSound = function () {
+	"use strict";
+	audioBG.pause();
+	clearInterval(bgLoop);
+	gameoverSfx.play();
+};
+
+go = function () { //Perte des vies
 	"use strict";
 	nblife -= 1;
+	loseLifeSfx.play();
 	console.log(nblife);
 	if (nblife <= 0) {
 		scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
 		moveBalle = false;
 		moveRaquette = false;
+		//gameoverSfx.play();
+		setTimeout(gameoverSound, 2000);
 	}
 };
-//Fonction win
+
 function win() {
 	"use strict";
 	var addLife, sumLife;
@@ -345,7 +374,11 @@ function win() {
 		moveRaquette = false;
 		scene.clearRect(0, 0, 1280, 800);
 		scene.drawImage(winImg, xWinImg, yWinImg, winImg.width, winImg.height);
-		winSfx.play();
+		if (!winSfxPlayed) {
+			audioBG.pause();
+			winSfx.play();
+			winSfxPlayed = true;
+		}
 		setTimeout(win, 30);
 	}
 }
@@ -429,6 +462,9 @@ function controls() {
 	}
 	//Lancement de la balle (espace)
 	if (keyState[32] && !moveBalle && !hasWon && !hasLost) {
+		if (pause) {
+			unpauseSfx.play();
+		}
 		moveBalle = true;
 		pause = false;
 		moveRaquette = true;
@@ -446,6 +482,7 @@ function controls() {
 		moveBalle = false;
 		pause = true;
 		moveRaquette = false;
+		pauseSfx.play();
 	}
 
 	//CHEAT Reset powerups (0/à)
@@ -529,6 +566,7 @@ function controls() {
 
 	setTimeout(controls, 15); //Bouclage de la fonction controls
 }
+
 //Fonction qui montre le nombre de vies restantes
 drawLife = function () {
 	"use strict";
@@ -589,14 +627,17 @@ animation = function () {
 	if (moveRaquette) {
 		if (xBalle < 0) {
 			revx = false;
+			wallSfx.play();
 		} else if (xBalle + 50 > 1280) {
 			revx = true;
+			wallSfx.play();
 		}
 		if (yBalle < 0) {
 			revy = false;
+			wallSfx.play();
 		} else if (yBalle + 50 > 1000) {
-			loseLife();
 			go();
+			loseLife();
 		}
 		if (!revy) {
 			yBalle = yBalle + yPasAnim;
@@ -664,56 +705,113 @@ animation = function () {
 		if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collision sur le dessus
 			revy = true;
 			collisionMemeSens = true;
+			if (keyState[39] && revx) {
+				xPasAnim += 0.8;
+				yPasAnim -= 0.8;
+			} else if (keyState[39] && !revx) {
+				xPasAnim -= 0.8;
+				yPasAnim += 0.8;
+			}
+			if (keyState[37] && revx) {
+				xPasAnim -= 0.8;
+				yPasAnim += 0.8;
+			} else if (keyState[37] && !revx) {
+				xPasAnim += 0.8;
+				yPasAnim -= 0.8;
+			}
+			if (xPasAnim <= 0) {
+				revx = !revx;
+				xPasAnim = -xPasAnim;
+			}
+			if (yPasAnim <= 0) {
+				revy = !revy;
+				yPasAnim = 0;
+			}
 			if (pupDirect) {
 				angleLine = -Math.PI / 2;
 				pupDirectActi = true;
 			}
+			raquetteSfx.play();
 		}
-		if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) { //collisions sur le dessous
+		if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
 			revy = false;
 			collisionMemeSens = true;
+			raquetteSfx.play();
 		}
-		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 100) { //collisions gauche
+		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 100) { //collision gauche
 			if (!collisionMemeSens) {
 				if (revx) {
 					xBalle = xRaquette - 50;
 				}
 				revx = true;
 			}
+			raquetteSfx.play();
 		}
-		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) { //collisions droite
+		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
 			if (!collisionMemeSens) {
 				if (!revx) {
 					xBalle = xRaquette + 200;
 				}
 				revx = false;
+				raquetteSfx.play();
 			}
+			collisionMemeSens = false;
 		}
-		collisionMemeSens = false;
 	} else {
-		if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collisions sur le dessus
+		if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collision sur le dessus
 			revy = true;
 			collisionMemeSens = true;
+			if (keyState[39] && revx) {
+				xPasAnim += 0.8;
+				yPasAnim -= 0.8;
+			} else if (keyState[39] && !revx) {
+				xPasAnim -= 0.8;
+				yPasAnim += 0.8;
+			}
+			if (keyState[37] && revx) {
+				xPasAnim -= 0.8;
+				yPasAnim += 0.8;
+			} else if (keyState[37] && !revx) {
+				xPasAnim += 0.8;
+				yPasAnim -= 0.8;
+			}
+			if (xPasAnim <= 0) {
+				revx = !revx;
+				xPasAnim = -xPasAnim;
+			}
+			if (yPasAnim <= 0) {
+				yPasAnim = 0;
+				revy = !revy;
+			}
+			if (pupDirect) {
+				angleLine = -Math.PI;
+				pupDirectActi = true;
+			}
+			raquetteSfx.play();
+
 		}
-		if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) { //collisions sur le dessous
+		if (xBalle < xRaquette + 288 && xBalle + 50 > xRaquette && yBalle < yRaquette + 50 && yBalle + 10 > yRaquette + 50 && yBalle - 10 < yRaquette + 50) {
 			revy = false;
 			collisionMemeSens = true;
+			raquetteSfx.play();
 		}
-		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 144) { //collisions gauche
+		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle + 50 > xRaquette && xBalle + 50 < xRaquette + 144) { //collision gauche
 			if (!collisionMemeSens) {
 				if (revx) {
 					xBalle = xRaquette - 50;
 				}
 				revx = true;
 			}
+			raquetteSfx.play();
 		}
-		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) { //collisions sur la droite
+		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 288 && xBalle > xRaquette + 144) {
 			if (!collisionMemeSens) {
 				if (!revx) {
 					xBalle = xRaquette + 288;
 				}
 				revx = false;
 			}
+			raquetteSfx.play();
 		}
 		collisionMemeSens = false;
 	}
@@ -728,6 +826,7 @@ animation = function () {
 				if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
+					briqueSfx.play();
 				}
 				if (pattern[j] <= 0) {
 					briquesObj[j].life = false;
@@ -748,6 +847,7 @@ animation = function () {
 				if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
+					briqueSfx.play();
 				}
 				if (pattern[j] <= 0) {
 					briquesObj[j].life = false;
@@ -765,9 +865,11 @@ animation = function () {
 				if (!pupUnstop) {
 					revy = false;
 				}
+
 				if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
+					briqueSfx.play();
 				}
 				if (pattern[j] <= 0) {
 					briquesObj[j].life = false;
@@ -788,6 +890,7 @@ animation = function () {
 				if (pattern[j] > 0 && !briquesObj[j].hit) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
+					briqueSfx.play();
 				}
 				if (pattern[j] <= 0) {
 					briquesObj[j].life = false;
@@ -813,10 +916,9 @@ animation = function () {
 //Fonction qui gère la musique
 backgroundMusic = function () {
 	"use strict";
-	var audioBG = new Audio("space_corsair.mp3");
 	audioBG.play();
 	audioBG.volume = 0.3;
-	setTimeout(backgroundMusic, 202000);
+	bgLoop = setTimeout(backgroundMusic, 202000);
 };
 
 //Lancement des fonctions principales après chargement de la page
