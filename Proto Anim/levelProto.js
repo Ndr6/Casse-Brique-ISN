@@ -54,8 +54,9 @@ raquetteSfx.volume = 0.5;
 var moveBalle = false; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
 var rayon = 25; //Rayon balle
-var xPasAnim = 5; //Vitesse animation en x
-var yPasAnim = 5; //Vitesse animation en y
+var angleLine = -Math.PI / 4; //Angle de la trajectoire de la balle
+var xPasAnim = 7.07 * Math.cos(-Math.PI / 4); //Vitesse animation en x
+var yPasAnim = 7.07 * Math.sin(-Math.PI / 4); //Vitesse animation en y
 var xBalle = 615,
 	yBalle = 649; //Position initiale de la balle
 var revx = false,
@@ -116,7 +117,6 @@ var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs poweru
 var xBriques, yBriques, life, hit; //Variables briques
 var pupDirect = false; //Drapeux détection capsule Direction
 var pupDirectActi = false; //Drapeux d'activation powerup Direction
-var angleLine = -Math.PI / 2; //Angle de la trajectoire de la balle
 var directDone = false;
 var revAngle = true; //Inversion changement d'angle
 
@@ -311,6 +311,7 @@ pupDirection = function () {
 			}
 			moveRaquette = true;
 			reset();
+			powerup = powerup = Math.floor((Math.random() * 100) + 1);
 		}
 	}
 };
@@ -321,6 +322,8 @@ loseLife = function () {
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
 	moveRaquette = false;
+	pupDirect = false;
+	pupDirectActi = false;
 	if (pupDef) {
 		xRaquette = 496;
 		xBalle = xRaquette + 119;
@@ -329,8 +332,7 @@ loseLife = function () {
 		xBalle = xRaquette + 75;
 	}
 	yRaquette = 700;
-	xPasAnim = 5;
-	yPasAnim = 5;
+	angleLine = -Math.PI / 4;
 	secon = 1;
 	timer1();
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -609,12 +611,16 @@ animation = function () {
 	}
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	if (masquagePup) {
-		if (powerup < 50) {
+		if (powerup < 34) {
 			capsuleImg.src = "capsuleDEF.png";
 			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
 			yCapsule += 4;
-		} else if (powerup >= 50) {
+		} else if (powerup >= 34 && powerup < 67) {
 			capsuleImg.src = "capsuleATK.png";
+			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
+			yCapsule += 4;
+		} else if (powerup >= 67) {
+			capsuleImg.src = "capsuleDIRECT.png";
 			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
 			yCapsule += 4;
 		}
@@ -622,9 +628,10 @@ animation = function () {
 	if (pupDirect) {
 		pupDirection();
 	}
-
 	//Trajectoire de la balle (à isoler)
 	if (moveRaquette) {
+		xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
+		yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
 		if (xBalle < 0) {
 			revx = false;
 			wallSfx.play();
@@ -691,9 +698,11 @@ animation = function () {
 		masquagePup = false;
 	}
 	if (collisionPupRaquette) {
-		if (powerup < 50) {
-			pupDirection();
-		} else if (powerup >= 50) {
+		if (powerup < 34) {
+			defense();
+		} else if (powerup >= 34 && powerup < 67) {
+			unstoppable();
+		} else if (powerup >= 67) {
 			pupDirection();
 		}
 		collisionPupRaquette = false;
@@ -706,18 +715,14 @@ animation = function () {
 			revy = true;
 			collisionMemeSens = true;
 			if (keyState[39] && revx) {
-				xPasAnim += 0.8;
-				yPasAnim -= 0.8;
+				angleLine += 0.15;
 			} else if (keyState[39] && !revx) {
-				xPasAnim -= 0.8;
-				yPasAnim += 0.8;
+				angleLine -= 0.15;
 			}
 			if (keyState[37] && revx) {
-				xPasAnim -= 0.8;
-				yPasAnim += 0.8;
+				angleLine -= 0.15;
 			} else if (keyState[37] && !revx) {
-				xPasAnim += 0.8;
-				yPasAnim -= 0.8;
+				angleLine += 0.15;
 			}
 			if (xPasAnim <= 0) {
 				revx = !revx;
@@ -762,29 +767,25 @@ animation = function () {
 			revy = true;
 			collisionMemeSens = true;
 			if (keyState[39] && revx) {
-				xPasAnim += 0.8;
-				yPasAnim -= 0.8;
+				angleLine -= 0.1;
 			} else if (keyState[39] && !revx) {
-				xPasAnim -= 0.8;
-				yPasAnim += 0.8;
+				angleLine += 0.1;
 			}
 			if (keyState[37] && revx) {
-				xPasAnim -= 0.8;
-				yPasAnim += 0.8;
+				angleLine += 0.1;
 			} else if (keyState[37] && !revx) {
-				xPasAnim += 0.8;
-				yPasAnim -= 0.8;
+				angleLine -= 0.1;
 			}
 			if (xPasAnim <= 0) {
 				revx = !revx;
 				xPasAnim = -xPasAnim;
 			}
 			if (yPasAnim <= 0) {
-				yPasAnim = 0;
 				revy = !revy;
+				yPasAnim = 0;
 			}
 			if (pupDirect) {
-				angleLine = -Math.PI;
+				angleLine = -Math.PI / 2;
 				pupDirectActi = true;
 			}
 			raquetteSfx.play();
