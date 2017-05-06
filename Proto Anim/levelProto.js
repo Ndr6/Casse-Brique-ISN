@@ -853,14 +853,13 @@ backgroundMusic = function () {
 	audioBG.play();
 	audioBG.volume = 0.3;
 	bgLoop = setTimeout(backgroundMusic, 202000);
-
-
-	//Lancement des fonctions principales après chargement de la page
-	setTimeout(creaBriques, 499);
-	setTimeout(animation, 500);
-	setTimeout(controls, 501);
-	backgroundMusic();
 };
+
+//Lancement des fonctions principales après chargement de la page
+setTimeout(creaBriques, 499);
+setTimeout(animation, 500);
+setTimeout(controls, 501);
+backgroundMusic();
 
 /******************************************************
                     Fin du programme
