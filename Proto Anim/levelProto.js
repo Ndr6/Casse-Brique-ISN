@@ -275,15 +275,22 @@ pupDirection = function () {
 			revAngle = true;
 		}
 		if (keyState[32]) {
-			xPasAnim = Math.cos(angleLine) * 5;
-			yPasAnim = Math.sin(angleLine) * 5;
-			if (xPasAnim < 0) {
-				xPasAnim = -xPasAnim;
-				revx = !revx;
+			xPasAnim = Math.cos(angleLine) * 7.07;
+			yPasAnim = Math.sin(angleLine) * 7.07;
+			if (angleLine < -Math.PI / 2) {
+				if (xPasAnim < 0) {
+					xPasAnim = -xPasAnim;
+				}
+				revx = true;
+			} else if (angleLine > -Math.PI / 2) {
+				if (xPasAnim < 0) {
+					xPasAnim = -xPasAnim;
+				}
+				revx = false;
 			}
 			if (yPasAnim < 0) {
 				yPasAnim = -yPasAnim;
-				revy = !revy;
+				revy = false;
 			}
 			moveRaquette = true;
             reset();
