@@ -26,6 +26,7 @@ var pauseSfx = new Audio("pauseSfx.wav");
 var unpauseSfx = new Audio("unpauseSfx.wav");
 var audioBG = new Audio("space_corsair.mp3");
 var bgLoop;
+var wallSfx = new Audio("murSfx.wav");
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -561,11 +562,14 @@ animation = function () {
     if (moveRaquette) {
         if (xBalle < 0) {
             revx = false;
+            wallSfx.play();
         } else if (xBalle + 50 > 1280) {
             revx = true;
+            wallSfx.play();
         }
         if (yBalle < 0) {
             revy = false;
+            wallSfx.play();
         } else if (yBalle + 50 > 1000) {
             loseLife();
             go();
