@@ -117,8 +117,8 @@ var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs poweru
 var xBriques, yBriques, life, hit; //Variables briques
 var pupDirect = false; //Drapeux détection capsule Direction
 var pupDirectActi = false; //Drapeux d'activation powerup Direction
-var directDone = false;
 var revAngle = true; //Inversion changement d'angle
+var loseDirect = true;
 
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //Pattern briques
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
@@ -192,8 +192,8 @@ timer1 = function () {
 		document.forsec.sec.value = " " + secon;
 		compte = setTimeout(timer1, 1000);
 		if (secon === 0) {
-			reset();
 			powerup = Math.floor((Math.random() * 100) + 1);
+			reset();
 			clock = false;
 		}
 	}
@@ -225,7 +225,6 @@ reset = function () {
 			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		}
 		allowPowerup = true;
-		directDone = false;
 	}
 };
 
@@ -269,7 +268,9 @@ unstoppable = function () {
 //Fonction powerup Direction
 pupDirection = function () {
 	"use strict";
-	pupDirect = true;
+	if (loseDirect) {
+		pupDirect = true;
+	}
 	if (pupDirectActi) {
 		yBalle = yRaquette - 55;
 		moveRaquette = false;
@@ -311,7 +312,7 @@ pupDirection = function () {
 			}
 			moveRaquette = true;
 			reset();
-			powerup = powerup = Math.floor((Math.random() * 100) + 1);
+			powerup = Math.floor((Math.random() * 100) + 1);
 		}
 	}
 };
@@ -324,6 +325,7 @@ loseLife = function () {
 	moveRaquette = false;
 	pupDirect = false;
 	pupDirectActi = false;
+	loseDirect = false;
 	if (pupDef) {
 		xRaquette = 496;
 		xBalle = xRaquette + 119;
@@ -696,6 +698,7 @@ animation = function () {
 	if (yCapsule > 800) {
 		allowPowerup = true;
 		masquagePup = false;
+		powerup = Math.floor((Math.random() * 100) + 1);
 	}
 	if (collisionPupRaquette) {
 		if (powerup < 34) {
@@ -734,6 +737,7 @@ animation = function () {
 			}
 			if (pupDirect) {
 				angleLine = -Math.PI / 2;
+				loseDirect = true;
 				pupDirectActi = true;
 			}
 			raquetteSfx.play();
@@ -767,14 +771,14 @@ animation = function () {
 			revy = true;
 			collisionMemeSens = true;
 			if (keyState[39] && revx) {
-				angleLine -= 0.1;
+				angleLine += 0.15;
 			} else if (keyState[39] && !revx) {
-				angleLine += 0.1;
+				angleLine -= 0.15;
 			}
 			if (keyState[37] && revx) {
-				angleLine += 0.1;
+				angleLine -= 0.15;
 			} else if (keyState[37] && !revx) {
-				angleLine -= 0.1;
+				angleLine += 0.15;
 			}
 			if (xPasAnim <= 0) {
 				revx = !revx;
