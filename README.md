@@ -1,4 +1,4 @@
-# Casse-Brique-ISN - http://isn.ender.ovh/
+# Casse-Brique-ISN - https://isn.ender.ovh/
 
 Projet ISN de Casse Brique
 
