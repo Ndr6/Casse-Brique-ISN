@@ -175,7 +175,7 @@ select = function () {
             //4e choix
             flag = false;
             alert("Meuuuurge !");
-            location.reload();
+            location.replace("../Niveau 3/Niveau3.html");
         } else if (posx === 1115) {
             //5e choix
             flag = false;
