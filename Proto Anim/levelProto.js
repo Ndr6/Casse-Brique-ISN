@@ -104,9 +104,14 @@ briqueSfx.volume = 0.5;
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1);
 var powerup = Math.floor((Math.random() * 100) + 1); //Génère un powerup aléatoire
-var capsuleImg = new Image();
-capsuleImg.width = 40;
-capsuleImg.height = 80;
+var capsuleDEFImg = new Image();
+capsuleDEFImg.src = "capsuleDEF.png";
+capsuleDEFImg.width = 40;
+capsuleDEFImg.height = 80;
+var capsuleATKImg = new Image();
+capsuleATKImg.src = "capsuleATK.png";
+capsuleATKImg.width = 40;
+capsuleATKImg.height = 80;
 var xCapsule = 0;
 var yCapsule = 0;
 var masquagePup = false; //détection collisions powerups / raquette + lance la disparition de la capsule
@@ -224,7 +229,7 @@ reset = function () {
 defense = function () {
 	"use strict";
 	if (!pupDef && moveRaquette) {
-		scene.clearRect(xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
+		scene.clearRect(xCapsule, yCapsule, capsuleDEFImg.width, capsuleDEFImg.height);
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		raquetteImg.src = "RaquettePUPDef.png";
 		DefSfx.play(); //la ferme !
@@ -552,12 +557,10 @@ animation = function () {
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	if (masquagePup) {
 		if (powerup < 50) {
-			capsuleImg.src = "capsuleDEF.png";
-			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
+			scene.drawImage(capsuleDEFImg, xCapsule, yCapsule, capsuleDEFImg.width, capsuleDEFImg.height);
 			yCapsule += 4;
 		} else if (powerup >= 50) {
-			capsuleImg.src = "capsuleATK.png";
-			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
+			scene.drawImage(capsuleATKImg, xCapsule, yCapsule, capsuleATKImg.width, capsuleATKImg.height);
 			yCapsule += 4;
 		}
 	}
