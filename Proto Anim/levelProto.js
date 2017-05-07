@@ -106,11 +106,20 @@ briqueSfx.volume = 0.5;
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1); //Aléatoire activation powerup ou pas
 var powerup = Math.floor((Math.random() * 100) + 1); //Génère un powerup aléatoire
-var capsuleImg = new Image();
-capsuleImg.width = 40; //Taille capsule
-capsuleImg.height = 80;
-var xCapsule = 0;
-var yCapsule = 0;
+var capsuleDEFImg = new Image();
+var xCapsule,
+	yCapsule;
+capsuleDEFImg.src = "capsuleDEF.png";
+capsuleDEFImg.width = 40;
+capsuleDEFImg.height = 80;
+var capsuleATKImg = new Image();
+capsuleATKImg.src = "capsuleATK.png";
+capsuleATKImg.width = 40;
+capsuleATKImg.height = 80;
+var capsuleDIRECTImg = new Image();
+capsuleDIRECTImg.src = "capsuleDIRECT.png";
+capsuleDIRECTImg.width = 40;
+capsuleDIRECTImg.height = 80;
 var masquagePup = false; //détection collisions powerups / raquette + lance la disparition de la capsule
 var collisionPupRaquette = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
 var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
@@ -232,7 +241,7 @@ reset = function () {
 defense = function () {
 	"use strict";
 	if (!pupDef && moveRaquette) {
-		scene.clearRect(xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
+		scene.clearRect(xCapsule, yCapsule, capsuleDEFImg.width, capsuleDEFImg.height);
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		raquetteImg.src = "RaquettePUPDef.png";
 		DefSfx.play(); //la ferme !
@@ -614,16 +623,13 @@ animation = function () {
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	if (masquagePup) {
 		if (powerup < 34) {
-			capsuleImg.src = "capsuleDEF.png";
-			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
+			scene.drawImage(capsuleDEFImg, xCapsule, yCapsule, capsuleDEFImg.width, capsuleDEFImg.height);
 			yCapsule += 4;
 		} else if (powerup >= 34 && powerup < 67) {
-			capsuleImg.src = "capsuleATK.png";
-			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
+			scene.drawImage(capsuleATKImg, xCapsule, yCapsule, capsuleATKImg.width, capsuleATKImg.height);
 			yCapsule += 4;
 		} else if (powerup >= 67) {
-			capsuleImg.src = "capsuleDIRECT.png";
-			scene.drawImage(capsuleImg, xCapsule, yCapsule, capsuleImg.width, capsuleImg.height);
+			scene.drawImage(capsuleDIRECTImg, xCapsule, yCapsule, capsuleDIRECTImg.width, capsuleDIRECTImg.height);
 			yCapsule += 4;
 		}
 	}
@@ -753,8 +759,9 @@ animation = function () {
 					xBalle = xRaquette - 50;
 				}
 				revx = true;
+				raquetteSfx.play();
 			}
-			raquetteSfx.play();
+			collisionMemeSens = false;
 		}
 		if (yBalle + 50 > yRaquette && yBalle < yRaquette + 50 && xBalle < xRaquette + 200 && xBalle > xRaquette + 100) {
 			if (!collisionMemeSens) {
