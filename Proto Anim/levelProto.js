@@ -25,7 +25,10 @@ var pupLoseSfx = new Audio("PUP_Lose.wav");
 var pauseSfx = new Audio("pauseSfx.wav");
 var unpauseSfx = new Audio("unpauseSfx.wav");
 var audioBG = new Audio("space_corsair.mp3");
-var bgLoop;
+audioBG.volume = 0.3;
+audioBG.loop = true;
+audioBG.play();
+
 var wallSfx = new Audio("murSfx.wav");
 
 //Variables menu pause
@@ -288,7 +291,6 @@ loseLife = function () {
 var gameoverSound = function () {
 	"use strict";
 	audioBG.pause();
-	clearInterval(bgLoop);
 	gameoverSfx.play();
 };
 
@@ -849,18 +851,11 @@ animation = function () {
 	}
 };
 
-backgroundMusic = function () {
-	"use strict";
-	audioBG.play();
-	audioBG.volume = 0.3;
-	bgLoop = setTimeout(backgroundMusic, 202000);
-};
 
 //Lancement des fonctions principales après chargement de la page
-setTimeout(creaBriques, 499);
-setTimeout(animation, 500);
-setTimeout(controls, 501);
-backgroundMusic();
+setTimeout(creaBriques, 2000);
+setTimeout(animation, 2001);
+setTimeout(controls, 2002);
 
 /******************************************************
                     Fin du programme
