@@ -25,7 +25,6 @@ var pupLoseSfx = new Audio("PUP_Lose.wav");
 var pauseSfx = new Audio("pauseSfx.wav");
 var unpauseSfx = new Audio("unpauseSfx.wav");
 var audioBG = new Audio("space_corsair.mp3");
-var bgLoop;
 var wallSfx = new Audio("murSfx.wav");
 
 //Variables menu pause
@@ -288,7 +287,6 @@ loseLife = function () {
 var gameoverSound = function () {
 	"use strict";
 	audioBG.pause();
-	clearInterval(bgLoop);
 	gameoverSfx.play();
 };
 
@@ -853,7 +851,7 @@ backgroundMusic = function () {
 	"use strict";
 	audioBG.play();
 	audioBG.volume = 0.3;
-	bgLoop = setTimeout(backgroundMusic, 202000);
+	setTimeout(backgroundMusic, 202000);
 };
 
 //Lancement des fonctions principales après chargement de la page
