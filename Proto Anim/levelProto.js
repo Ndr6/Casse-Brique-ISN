@@ -310,17 +310,17 @@ pupDirection = function () {
 				yPasAnim = Math.sin(angleLine) * 7.07;
 				if (angleLine < -Math.PI / 2) {
 					if (xPasAnim < 0) {
-						xPasAnim = -xPasAnim;
+						xPasAnim = Math.abs(xPasAnim);
 					}
 					revx = true;
 				} else if (angleLine > -Math.PI / 2) {
 					if (xPasAnim < 0) {
-						xPasAnim = -xPasAnim;
+						xPasAnim = Math.abs(xPasAnim);
 					}
 					revx = false;
 				}
 				if (yPasAnim < 0) {
-					yPasAnim = -yPasAnim;
+					yPasAnim = Math.abs(yPasAnim);
 					revy = false;
 				}
 				moveRaquette = true;
@@ -742,7 +742,7 @@ animation = function () {
 			if (keyState[39] && revx) {
 				angleLine += 0.15;
 			} else if (keyState[39] && !revx) {
-				angleLine += 0.15;
+				angleLine -= 0.15;
 			}
 			if (keyState[37] && revx) {
 				angleLine -= 0.15;
@@ -751,11 +751,11 @@ animation = function () {
 			}
 			if (xPasAnim <= 0) {
 				revx = !revx;
-				xPasAnim = -xPasAnim;
+				xPasAnim = Math.abs(xPasAnim);
 			}
 			if (yPasAnim <= 0) {
 				revy = !revy;
-				yPasAnim = -yPasAnim;
+				yPasAnim = Math.abs(yPasAnim);
 			}
 			if (pupDirect) {
 				angleLine = -Math.PI / 2;
@@ -804,11 +804,11 @@ animation = function () {
 			}
 			if (xPasAnim < 0) {
 				revx = !revx;
-				xPasAnim = -xPasAnim;
+				xPasAnim = Math.abs(xPasAnim);
 			}
 			if (yPasAnim < 0) {
 				revy = !revy;
-				yPasAnim = -yPasAnim;
+				yPasAnim = Math.abs(yPasAnim);
 			}
 			if (pupDirect) {
 				angleLine = -Math.PI / 2;
