@@ -21,19 +21,19 @@ var timer1;
 var go; //Game over
 
 //Variables son
-var pupLoseSfx = new Audio("PUP_Lose.wav");
-var pauseSfx = new Audio("pauseSfx.wav");
-var unpauseSfx = new Audio("unpauseSfx.wav");
-var audioBG = new Audio("space_corsair.mp3");
+var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
+var pauseSfx = new Audio("sfx/pauseSfx.wav");
+var unpauseSfx = new Audio("sfx/unpauseSfx.wav");
+var audioBG = new Audio("sfx/space_corsair.mp3");
 audioBG.volume = 0.3;
 audioBG.loop = true;
 audioBG.play();
 
-var wallSfx = new Audio("murSfx.wav");
+var wallSfx = new Audio("sfx/murSfx.wav");
 
 //Variables menu pause
 var pauseImg = new Image();
-pauseImg.src = "pausetest.png";
+pauseImg.src = "gfx/pausetest.png";
 pauseImg.width = 400;
 pauseImg.height = 400;
 
@@ -42,14 +42,14 @@ var xRaquette = 540,
 	yRaquette = 700; //Position raquette 
 
 var raquetteImg = new Image();
-raquetteImg.src = "Raquette.png"; //Asset graphique barre
+raquetteImg.src = "gfx/Raquette.png"; //Asset graphique barre
 raquetteImg.width = 200;
 raquetteImg.height = 50; //Dimensions asset barre
 
 var pupDef = false; //Drapeau powerup défense
-var DefSfx = new Audio("PUPDef_sound.mp3");
+var DefSfx = new Audio("sfx/PUPDef_sound.mp3");
 
-var raquetteSfx = new Audio("raquetteSfx.wav");
+var raquetteSfx = new Audio("sfx/raquetteSfx.wav");
 raquetteSfx.volume = 0.5;
 
 //Variables balle
@@ -69,31 +69,31 @@ var pupUnstop = false;
 var k, j; //Ce sont juste des compteurs pour les boucles for
 
 var balleImg = new Image(); //Asset graphique de la balle
-balleImg.src = "balle.png";
+balleImg.src = "gfx/balle.png";
 balleImg.width = 50;
 balleImg.height = 50; //Dimensions balle
 
 //Variables gain
 var hasWon = false;
 var winImg = new Image();
-winImg.src = "win.png";
+winImg.src = "gfx/win.png";
 winImg.width = 313;
 winImg.height = 232;
 var xWinImg = 484,
 	yWinImg = 284;
 
-var winSfx = new Audio("victory.wav");
+var winSfx = new Audio("sfx/victory.wav");
 winSfx.volume = 0.7;
 var winSfxPlayed = false;
 
 //Variables briques
 
 var briqueImg = new Image(); //Asset graphique des briques
-briqueImg.src = "briqueProto.png";
+briqueImg.src = "gfx/briqueProto.png";
 briqueImg.width = 80;
 briqueImg.height = 40;
 var brique2Img = new Image();
-brique2Img.src = "briqueProto2.png";
+brique2Img.src = "gfx/briqueProto2.png";
 brique2Img.width = 80;
 brique2Img.height = 40;
 
@@ -101,18 +101,18 @@ var briquesObj = [];
 
 var cheatBrick = 0;
 
-var briqueSfx = new Audio("brickSfx.wav");
+var briqueSfx = new Audio("sfx/brickSfx.wav");
 briqueSfx.volume = 0.5;
 
 //Variables powerup
 var powerupTime = Math.floor((Math.random() * 100) + 1);
 var powerup = Math.floor((Math.random() * 100) + 1); //Génère un powerup aléatoire
 var capsuleDEFImg = new Image();
-capsuleDEFImg.src = "capsuleDEF.png";
+capsuleDEFImg.src = "gfx/capsuleDEF.png";
 capsuleDEFImg.width = 40;
 capsuleDEFImg.height = 80;
 var capsuleATKImg = new Image();
-capsuleATKImg.src = "capsuleATK.png";
+capsuleATKImg.src = "gfx/capsuleATK.png";
 capsuleATKImg.width = 40;
 capsuleATKImg.height = 80;
 var xCapsule = 0;
@@ -141,22 +141,22 @@ var drawLife;
 var nblife = 3;
 
 var vieImg = new Image();
-vieImg.src = "vieImg.png";
+vieImg.src = "gfx/vieImg.png";
 
 var vieCheatImg = new Image();
-vieCheatImg.src = "vieCheat.png";
+vieCheatImg.src = "gfx/vieCheat.png";
 
 //image "Game over"
 var goImg = new Image();
-goImg.src = "gameover.jpg";
+goImg.src = "gfx/gameover.jpg";
 goImg.width = 421;
 goImg.height = 105;
 var hasLost = false;
 
-var loseLifeSfx = new Audio("SfxLoseLife.wav");
+var loseLifeSfx = new Audio("sfx/SfxLoseLife.wav");
 loseLifeSfx.volume = 0.5;
 
-var gameoverSfx = new Audio("gameoverSfx.wav");
+var gameoverSfx = new Audio("sfx/gameoverSfx.wav");
 /****************************************
            Début du programme
 ****************************************/
@@ -208,8 +208,8 @@ reset = function () {
 		xCapsule = 0;
 		yCapsule = 0;
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "Raquette.png";
-		balleImg.src = "balle.png";
+		raquetteImg.src = "gfx/Raquette.png";
+		balleImg.src = "gfx/balle.png";
 		pupLoseSfx.play();
 		raquetteImg.width = 200;
 		raquetteImg.height = 50;
@@ -234,7 +234,7 @@ defense = function () {
 	if (!pupDef && moveRaquette) {
 		scene.clearRect(xCapsule, yCapsule, capsuleDEFImg.width, capsuleDEFImg.height);
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "RaquettePUPDef.png";
+		raquetteImg.src = "gfx/RaquettePUPDef.png";
 		DefSfx.play(); //la ferme !
 		raquetteImg.width = 288;
 		raquetteImg.height = 50;
@@ -256,7 +256,7 @@ unstoppable = function () {
 	"use strict";
 	if (!pupUnstop && moveRaquette) {
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		balleImg.src = "balleUnstop.png";
+		balleImg.src = "gfx/balleUnstop.png";
 		//X.play(); la ferme !
 		pupUnstop = true;
 		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -437,8 +437,8 @@ function controls() {
 	//CHEAT Reset powerups (0/à)
 	if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "Raquette.png";
-		balleImg.src = "balle.png";
+		raquetteImg.src = "gfx/Raquette.png";
+		balleImg.src = "gfx/balle.png";
 		//Il manque un son pour perdre le PUP
 		raquetteImg.width = 200;
 		raquetteImg.height = 50;
@@ -459,7 +459,7 @@ function controls() {
 	//CHEAT Défense ("1/&")
 	if (keyState[49] && !pupDef) {
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "RaquettePUPDef.png";
+		raquetteImg.src = "gfx/RaquettePUPDef.png";
 		//DefSfx.play(); la ferme !
 		raquetteImg.width = 288;
 		raquetteImg.height = 50;
@@ -477,7 +477,7 @@ function controls() {
 	if (keyState[50] && !pupUnstop) {
 		if (!pupUnstop) {
 			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			balleImg.src = "balleUnstop.png";
+			balleImg.src = "gfx/balleUnstop.png";
 			//X.play(); la ferme !
 			pupUnstop = true;
 			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
