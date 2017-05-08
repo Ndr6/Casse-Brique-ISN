@@ -54,7 +54,7 @@ var raquetteSfx = new Audio("raquetteSfx.wav");
 raquetteSfx.volume = 0.5;
 
 //Variables balle
-var moveBalle = true; //Activation de la balle
+var moveBalle = false; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
 var rayon = 25; //Rayon balle
 var angleLine = -Math.PI / 4; //Angle de la trajectoire de la balle
@@ -127,10 +127,10 @@ var masquagePup = false; //détection collisions powerups / raquette + lance la 
 var collisionPupRaquette = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
 var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
 var xBriques, yBriques, life, hit; //Variables briques
-var pupDirect = true; //Drapeux détection capsule Direction
-var pupDirectActi = true; //Drapeux d'activation powerup Direction
+var pupDirect = false; //Drapeux détection capsule Direction
+var pupDirectActi = false; //Drapeux d'activation powerup Direction
 var revAngle = true; //Inversion changement d'angle
-var youLose = true;
+var youLose = false;
 
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //Pattern briques
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
@@ -281,51 +281,58 @@ unstoppable = function () {
 pupDirection = function () {
 	"use strict";
 	pupDirect = true;
-	if (pupDirectActi) {
-		yBalle = yRaquette - 55;
+	if (xBalle <= xRaquette + 200 && xBalle + 50 >= xRaquette && yBalle + 50 >= yRaquette && yBalle + 60 >= yRaquette && yBalle + 40 <= yRaquette) {
+		yBalle = yRaquette - 50;
 		if (!youLose) {
 			moveRaquette = false;
-		}
-		scene.beginPath();
-		scene.moveTo(xBalle + 25, yBalle + 25);
-		scene.lineTo(xBalle + 25 + 110 * Math.cos(angleLine), yBalle + 25 + 110 * Math.sin(angleLine)); //Dessin ligne
-		scene.stroke();
-		scene.strokeStyle = "#ffffff"; //couleur ligne en hexadécimal
-		scene.closePath();
-		if (revAngle) {
-			angleLine += 0.008;
-		} else {
-			angleLine -= 0.008;
-		}
-		if (angleLine > 0) {
-			angleLine = 0;
-			revAngle = false;
-		} else if (angleLine < -Math.PI) {
-			angleLine = -Math.PI;
-			revAngle = true;
+			scene.beginPath();
+			scene.moveTo(xBalle + 25, yBalle + 25);
+			scene.lineTo(xBalle + 25 + 110 * Math.cos(angleLine), yBalle + 25 + 110 * Math.sin(angleLine)); //Dessin ligne
+			scene.stroke();
+			scene.strokeStyle = "#ffffff"; //couleur ligne en hexadécimal
+			scene.closePath();
+			if (revAngle) {
+				angleLine += 0.008;
+			} else {
+				angleLine -= 0.008;
+			}
+			if (angleLine > 0) {
+				angleLine = 0;
+				revAngle = false;
+			} else if (angleLine < -Math.PI) {
+				angleLine = -Math.PI;
+				revAngle = true;
+			}
 		}
 		if (keyState[32]) {
-			xPasAnim = Math.cos(angleLine) * 7.07;
-			yPasAnim = Math.sin(angleLine) * 7.07;
-			if (angleLine < -Math.PI / 2) {
-				if (xPasAnim < 0) {
-					xPasAnim = -xPasAnim;
+			if (!youLose) {
+				xPasAnim = Math.cos(angleLine) * 7.07;
+				yPasAnim = Math.sin(angleLine) * 7.07;
+				if (angleLine < -Math.PI / 2) {
+					if (xPasAnim < 0) {
+						xPasAnim = -xPasAnim;
+					}
+					revx = true;
+				} else if (angleLine > -Math.PI / 2) {
+					if (xPasAnim < 0) {
+						xPasAnim = -xPasAnim;
+					}
+					revx = false;
 				}
-				revx = true;
-			} else if (angleLine > -Math.PI / 2) {
-				if (xPasAnim < 0) {
-					xPasAnim = -xPasAnim;
+				if (yPasAnim < 0) {
+					yPasAnim = -yPasAnim;
+					revy = false;
 				}
-				revx = false;
+				moveRaquette = true;
+				reset();
+				powerup = Math.floor((Math.random() * 100) + 1);
+				youLose = false;
+			} else {
+				angleLine = -Math.PI / 4;
+				moveRaquette = true;
+				pupDirect = false;
+				pupDirectActi = false;
 			}
-			if (yPasAnim < 0) {
-				yPasAnim = -yPasAnim;
-				revy = false;
-			}
-			moveRaquette = true;
-			reset();
-			powerup = Math.floor((Math.random() * 100) + 1);
-			youLose = false;
 		}
 	}
 };
@@ -578,7 +585,7 @@ function controls() {
 	if (keyState[53]) {
 		nblife = 999;
 	}
-	
+
 	//CHEAT pupDirection
 	if (keyState[54]) {
 		pupDirection();
@@ -643,7 +650,7 @@ animation = function () {
 		pupDirection();
 	}
 	//Trajectoire de la balle (à isoler)
-	if (!youLose && !pupDirectActi) {
+	if (!pupDirectActi) {
 		xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
 		yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
 		if (xBalle < 0) {
@@ -720,6 +727,7 @@ animation = function () {
 		} else if (powerup >= 34 && powerup < 67) {
 			unstoppable();
 		} else if (powerup >= 67) {
+			youLose = false;
 			pupDirection();
 		}
 		collisionPupRaquette = false;
