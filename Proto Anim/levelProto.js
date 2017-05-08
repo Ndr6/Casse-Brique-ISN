@@ -334,7 +334,6 @@ loseLife = function () {
 	yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
-	moveRaquette = false;
 	pupDirect = false;
 	pupDirectActi = false;
 	loseDirect = false;
@@ -352,6 +351,7 @@ loseLife = function () {
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 	moveBalle = false;
+	allowPowerup = true;
 };
 
 var gameoverSound = function () {
