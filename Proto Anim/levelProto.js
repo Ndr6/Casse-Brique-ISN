@@ -54,7 +54,7 @@ var raquetteSfx = new Audio("raquetteSfx.wav");
 raquetteSfx.volume = 0.5;
 
 //Variables balle
-var moveBalle = false; //Activation de la balle
+var moveBalle = true; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
 var rayon = 25; //Rayon balle
 var angleLine = -Math.PI / 4; //Angle de la trajectoire de la balle
@@ -127,10 +127,10 @@ var masquagePup = false; //détection collisions powerups / raquette + lance la 
 var collisionPupRaquette = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
 var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
 var xBriques, yBriques, life, hit; //Variables briques
-var pupDirect = false; //Drapeux détection capsule Direction
-var pupDirectActi = false; //Drapeux d'activation powerup Direction
+var pupDirect = true; //Drapeux détection capsule Direction
+var pupDirectActi = true; //Drapeux d'activation powerup Direction
 var revAngle = true; //Inversion changement d'angle
-var loseDirect = true;
+var youLose = true;
 
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //Pattern briques
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
@@ -280,12 +280,12 @@ unstoppable = function () {
 //Fonction powerup Direction
 pupDirection = function () {
 	"use strict";
-	if (loseDirect) {
-		pupDirect = true;
-	}
+	pupDirect = true;
 	if (pupDirectActi) {
 		yBalle = yRaquette - 55;
-		moveRaquette = false;
+		if (!youLose) {
+			moveRaquette = false;
+		}
 		scene.beginPath();
 		scene.moveTo(xBalle + 25, yBalle + 25);
 		scene.lineTo(xBalle + 25 + 110 * Math.cos(angleLine), yBalle + 25 + 110 * Math.sin(angleLine)); //Dessin ligne
@@ -325,18 +325,17 @@ pupDirection = function () {
 			moveRaquette = true;
 			reset();
 			powerup = Math.floor((Math.random() * 100) + 1);
+			youLose = false;
 		}
 	}
 };
 //Fonction quand on perd une vie
 loseLife = function () {
 	"use strict";
+	youLose = true;
 	yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
-	pupDirect = false;
-	pupDirectActi = false;
-	loseDirect = false;
 	if (pupDef) {
 		xRaquette = 496;
 		xBalle = xRaquette + 119;
@@ -350,7 +349,8 @@ loseLife = function () {
 	timer1();
 	scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
-	moveBalle = false;
+	pupDirect = true;
+	pupDirectActi = true;
 	allowPowerup = true;
 };
 
@@ -639,7 +639,7 @@ animation = function () {
 		pupDirection();
 	}
 	//Trajectoire de la balle (à isoler)
-	if (moveRaquette) {
+	if (!youLose && !pupDirectActi) {
 		xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
 		yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
 		if (xBalle < 0) {
@@ -666,6 +666,8 @@ animation = function () {
 		} else {
 			xBalle = xBalle - xPasAnim;
 		}
+	} else {
+		xBalle = xRaquette + 75;
 	}
 	//collisions pup raquette
 	if (!pupDef) {
@@ -741,11 +743,10 @@ animation = function () {
 			}
 			if (yPasAnim <= 0) {
 				revy = !revy;
-				yPasAnim = 0;
+				yPasAnim = -yPasAnim;
 			}
 			if (pupDirect) {
 				angleLine = -Math.PI / 2;
-				loseDirect = true;
 				pupDirectActi = true;
 			}
 			raquetteSfx.play();
@@ -795,7 +796,7 @@ animation = function () {
 			}
 			if (yPasAnim <= 0) {
 				revy = !revy;
-				yPasAnim = 0;
+				yPasAnim = -yPasAnim;
 			}
 			if (pupDirect) {
 				angleLine = -Math.PI / 2;
