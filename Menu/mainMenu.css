@@ -3,7 +3,7 @@ canvas
 	border-color: green;
 	border: solid;
     /*background-color: black;*/
-    background-image: url(BGlol.PNG);    
+    background-image: url(gfx/BGlol.PNG);    
 }
 
 body
@@ -50,5 +50,5 @@ table{
 
 p
 {
-    text-align: center;
+    color: red;
 }
