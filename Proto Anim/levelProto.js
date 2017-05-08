@@ -49,7 +49,11 @@ raquetteImg.width = 200;
 raquetteImg.height = 50; //Dimensions asset barre
 
 var pupDef = false; //Drapeau powerup défense
-var DefSfx = new Audio("sfx/PUPDef_sound.mp3");
+var DefSfx = new Audio("sfx/PUPDef_sound.wav");
+DefSfx.volume = 0.5;
+
+var ViseeSfx = new Audio("sfx/PUPVisee.wav"); //PUP pas implémenté, j'attends
+ViseeSfx.volume = 0.5;
 
 var raquetteSfx = new Audio("sfx/raquetteSfx.wav");
 raquetteSfx.volume = 0.5;
@@ -75,6 +79,13 @@ var balleImg = new Image(); //Asset graphique de la balle
 balleImg.src = "gfx/balle.png";
 balleImg.width = 50;
 balleImg.height = 50; //Dimensions balle
+
+var UnstopSfx = new Audio("sfx/PUPUnstop.wav");
+UnstopSfx.volume = 0.8;
+
+var UnstopLoop = new Audio("sfx/PUPUnstopLoop.wav");
+UnstopLoop.loop = true;
+UnstopLoop.volume = 0.8;
 
 //Variables gain
 var hasWon = false;
@@ -228,6 +239,7 @@ reset = function () {
 		}
 		pupDef = false;
 		pupUnstop = false;
+        UnstopLoop.pause();
 		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		if (xRaquette >= 1270 - raquetteImg.width) {
 			xRaquette = 1270 - raquetteImg.width;
@@ -267,7 +279,8 @@ unstoppable = function () {
 	if (!pupUnstop && moveRaquette) {
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		balleImg.src = "gfx/balleUnstop.png";
-		//X.play(); la ferme !
+		UnstopSfx.play();
+        UnstopLoop.play();
 		pupUnstop = true;
 		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		clock = true;
