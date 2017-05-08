@@ -578,7 +578,11 @@ function controls() {
 	if (keyState[53]) {
 		nblife = 999;
 	}
-
+	
+	//CHEAT pupDirection
+	if (keyState[54]) {
+		pupDirection();
+	}
 	setTimeout(controls, 15); //Bouclage de la fonction controls
 }
 
@@ -666,7 +670,7 @@ animation = function () {
 		} else {
 			xBalle = xBalle - xPasAnim;
 		}
-	} else {
+	} else if (youLose) {
 		xBalle = xRaquette + 75;
 	}
 	//collisions pup raquette
@@ -790,11 +794,11 @@ animation = function () {
 			} else if (keyState[37] && !revx) {
 				angleLine += 0.15;
 			}
-			if (xPasAnim <= 0) {
+			if (xPasAnim < 0) {
 				revx = !revx;
 				xPasAnim = -xPasAnim;
 			}
-			if (yPasAnim <= 0) {
+			if (yPasAnim < 0) {
 				revy = !revy;
 				yPasAnim = -yPasAnim;
 			}
