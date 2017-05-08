@@ -4,9 +4,10 @@
 # Date limite du projet : 22 mai
 
 # Niveaux prévus :
-  - Niveau 1 : Space
-  - Niveau 2 : Nordic
-  - Niveau 3 : ?
+  - Niveau 1 : Nordic
+  - Niveau 2 : Orbit
+  - Niveau 3 : Space
+  - Niveau 4 : Mars
 
 # Crédits :
 
