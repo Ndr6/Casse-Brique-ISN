@@ -734,12 +734,12 @@ animation = function () {
 			if (keyState[39] && revx) {
 				angleLine += 0.15;
 			} else if (keyState[39] && !revx) {
-				angleLine -= 0.15;
+				angleLine += 0.15;
 			}
 			if (keyState[37] && revx) {
 				angleLine -= 0.15;
 			} else if (keyState[37] && !revx) {
-				angleLine += 0.15;
+				angleLine -= 0.15;
 			}
 			if (xPasAnim <= 0) {
 				revx = !revx;
