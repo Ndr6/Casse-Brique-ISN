@@ -20,4 +20,4 @@
 
 -Musiques : Voir crédits ingame
 
--Remerciements : Fabien A, Bruno B, Julien B, GitHub
+-Remerciements : Fabien A, Bruno B, Julien B, Théo T-M, Antonin B, GitHub
