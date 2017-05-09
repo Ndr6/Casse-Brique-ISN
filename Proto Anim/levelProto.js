@@ -738,6 +738,8 @@ animation = function () {
         powerup = Math.floor((Math.random() * 100) + 1);
     }
     if (collisionPupRaquette) {
+        xCapsule = -100;
+        yCapsule = -100;
         if (powerup < 34) {
             defense();
         } else if (powerup >= 34 && powerup < 67) {
@@ -751,6 +753,7 @@ animation = function () {
     if (pupDirect) {
         pupDirection();
     }
+    console.log(nbPupDirection);
     //Fonction collision avec la raquette :
     if (!pupDef) {
         if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collision sur le dessus
