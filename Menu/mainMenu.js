@@ -171,8 +171,7 @@ select = function () {
         } else if (posx === 615) {
             //3e choix
             flag = false;
-            alert("Niveau Espaaaaaace ! : Pas prêt");
-            location.reload();
+            location.replace("../Space/levelSpace.html");
         } else if (posx === 865) {
             //4e choix
             flag = false;
