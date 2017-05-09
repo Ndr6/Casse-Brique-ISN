@@ -617,11 +617,11 @@ animation = function () {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
-		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
+		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
-		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 10 > xRaquette + 200) {
+		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 21 > xRaquette + 200) {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
@@ -634,7 +634,7 @@ animation = function () {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
-		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
+		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
@@ -642,7 +642,7 @@ animation = function () {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
-		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
+		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 21 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
