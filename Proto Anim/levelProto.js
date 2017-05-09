@@ -284,6 +284,7 @@ loseLife = function () {
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
     scene.clearRect(xCapsule, yCapsule, 80, 40);
+    masquagePup = false;
 	moveRaquette = false;
 	if (pupDef) {
 		xRaquette = 496;
