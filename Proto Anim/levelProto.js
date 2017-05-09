@@ -800,6 +800,8 @@ animation = function () {
                     xBalle = xRaquette - 50;
                 }
                 revx = true;
+                revy = true;
+                angleLine = -Math.PI / 8;
                 raquetteSfx.play();
             }
             collisionMemeSens = false;
@@ -810,6 +812,8 @@ animation = function () {
                     xBalle = xRaquette + 200;
                 }
                 revx = false;
+                revy = true;
+                angleLine = 9 * -Math.PI / 8;
                 raquetteSfx.play();
             }
             collisionMemeSens = false;
@@ -855,6 +859,8 @@ animation = function () {
                     xBalle = xRaquette - 50;
                 }
                 revx = true;
+                revy = true;
+                angleLine = -Math.PI / 8;
             }
             raquetteSfx.play();
         }
@@ -864,6 +870,8 @@ animation = function () {
                     xBalle = xRaquette + 288;
                 }
                 revx = false;
+                revy = true;
+                angleLine = 9 * -Math.PI / 8;
             }
             raquetteSfx.play();
         }
