@@ -88,10 +88,10 @@ UnstopLoop.volume = 0.8;
 var hasWon = false;
 var winImg = new Image();
 winImg.src = "gfx/win.png";
-winImg.width = 313;
-winImg.height = 232;
-var xWinImg = 484,
-	yWinImg = 284;
+winImg.width = 400;
+winImg.height = 207;
+var xWinImg = 440,
+	yWinImg = 297;
 
 var winSfx = new Audio("sfx/victory.wav");
 winSfx.volume = 0.7;
