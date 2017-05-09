@@ -126,8 +126,8 @@ var capsuleATKImg = new Image();
 capsuleATKImg.src = "gfx/capsuleATK.png";
 capsuleATKImg.width = 40;
 capsuleATKImg.height = 80;
-var xCapsule = 0;
-var yCapsule = 0;
+var xCapsule = -100;
+var yCapsule = -100;
 var masquagePup = false; //détection collisions powerups / raquette + lance la disparition de la capsule
 var collisionPupRaquette = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
 var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
@@ -216,8 +216,8 @@ timer1 = function () {
 reset = function () {
 	"use strict";
 	if (!pause) {
-		xCapsule = 0;
-		yCapsule = 0;
+		xCapsule = -100;
+		yCapsule = -100;
 		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 		raquetteImg.src = "gfx/Raquette.png";
 		balleImg.src = "gfx/balle.png";
@@ -283,6 +283,8 @@ loseLife = function () {
 	yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
+    scene.clearRect(xCapsule - 25, yCapsule - 25, 105, 125);
+    masquagePup = false;
 	moveRaquette = false;
 	if (pupDef) {
 		xRaquette = 496;
@@ -615,11 +617,11 @@ animation = function () {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
-		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
+		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
-		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 10 > xRaquette + 200) {
+		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 21 > xRaquette + 200) {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
@@ -632,7 +634,7 @@ animation = function () {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
-		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
+		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
@@ -640,7 +642,7 @@ animation = function () {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
-		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
+		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 21 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
 			masquagePup = false;
 			collisionPupRaquette = true;
 		}
