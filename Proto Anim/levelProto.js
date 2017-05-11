@@ -122,8 +122,6 @@ briqueSfx.volume = 0.5;
 var powerupTime = Math.floor((Math.random() * 100) + 1); //Aléatoire activation powerup ou pas
 var powerup = Math.floor((Math.random() * 100) + 1); //Génère un powerup aléatoire
 var capsuleDEFImg = new Image();
-var xCapsule,
-    yCapsule;
 capsuleDEFImg.src = "gfx/capsuleDEF.png";
 capsuleDEFImg.width = 40;
 capsuleDEFImg.height = 80;
@@ -135,6 +133,8 @@ var capsuleDIRECTImg = new Image();
 capsuleDIRECTImg.src = "capsuleDIRECT.png";
 capsuleDIRECTImg.width = 40;
 capsuleDIRECTImg.height = 80;
+var xCapsule = -100;
+var yCapsule = -100;
 var masquagePup = false; //détection collisions powerups / raquette + lance la disparition de la capsule
 var collisionPupRaquette = false; //Détection collisions powerups / raquette + lance la génération aléatoire du powerup
 var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs powerups dans une partie
@@ -226,21 +226,22 @@ timer1 = function () {
 
 //Fonction de reset des powerups
 reset = function () {
-    "use strict";
-    if (!pause) {
-        xCapsule = 0;
-        yCapsule = 0;
-        scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-        raquetteImg.src = "gfx/Raquette.png";
-        balleImg.src = "gfx/balle.png";
-        pupLoseSfx.play();
-        raquetteImg.width = 200;
-        raquetteImg.height = 50;
-        if (pupDef) {
-            xRaquette += 44;
-        }
-        pupDef = false;
-        pupUnstop = false;
+	"use strict";
+	if (!pause) {
+		xCapsule = -100;
+		yCapsule = -100;
+		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+		raquetteImg.src = "gfx/Raquette.png";
+		balleImg.src = "gfx/balle.png";
+		pupLoseSfx.play();
+		raquetteImg.width = 200;
+		raquetteImg.height = 50;
+		if (pupDef) {
+			xRaquette += 44;
+		}
+		pupDef = false;
+		pupUnstop = false;
+
         UnstopLoop.pause();
         scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
         if (xRaquette >= 1270 - raquetteImg.width) {
@@ -357,7 +358,7 @@ loseLife = function () {
     yBalle = 649;
     scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
     scene.clearRect(xBalle, yBalle, 50, 50);
-    scene.clearRect(xCapsule, yCapsule, 80, 40);
+    scene.clearRect(xCapsule - 25, yCapsule - 25, 105, 125);
     masquagePup = false;
     if (pupDef) {
         xRaquette = 496;
