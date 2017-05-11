@@ -141,7 +141,7 @@ var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs poweru
 var xBriques, yBriques, life, hit; //Variables briques
 var revAngle = true; //Inversion changement d'angle
 var pupDirect = false;
-var nbPupDirection = 1;
+var nbPupDirection = 0;
 var inversTrajectoire = false;
 var stopTime = false;
 
@@ -604,12 +604,12 @@ function controls() {
         nblife = 999;
     }
 
-    //CHEAT pupDirection
+    //Lancement pupDirection
     if (keyState[54]) {
         if (nbPupDirection > 0) {
             pupDirect = true;
-            pupDirection();
             nbPupDirection -= 1;
+			keyState[54] = false;
         }
     }
     setTimeout(controls, 15); //Bouclage de la fonction controls
@@ -703,11 +703,11 @@ animation = function () {
             masquagePup = false;
             collisionPupRaquette = true;
         }
-        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
+        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
             masquagePup = false;
             collisionPupRaquette = true;
         }
-        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 10 > xRaquette + 200) {
+        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 21 > xRaquette + 200) {
             masquagePup = false;
             collisionPupRaquette = true;
         }
@@ -720,11 +720,11 @@ animation = function () {
             masquagePup = false;
             collisionPupRaquette = true;
         }
-        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 30 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
+        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
             masquagePup = false;
             collisionPupRaquette = true;
         }
-        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 288 && xCapsule - 10 < xRaquette + 288 && xCapsule + 10 > xRaquette + 288) {
+        if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 288 && xCapsule - 10 < xRaquette + 288 && xCapsule + 21 > xRaquette + 288) {
             masquagePup = false;
             collisionPupRaquette = true;
         }
