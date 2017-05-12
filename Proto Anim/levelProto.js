@@ -141,7 +141,7 @@ var allowPowerup = true; //Créer une boucle qui permet d'avoir plusieurs poweru
 var xBriques, yBriques, life, hit; //Variables briques
 var revAngle = true; //Inversion changement d'angle
 var pupDirect = false;
-var nbPupDirection = 1;
+var nbPupDirection = 0;
 var inversTrajectoire = false;
 var stopTime = false;
 var voyantVert = new Image();
