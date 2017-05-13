@@ -163,6 +163,13 @@ var yBoss = 20;
 var hitBoss = 100;
 var dead = false;
 var alreadyHit = false;
+var project = [];
+var projectileImg = new Image();
+var lancementProjec;
+var l, directProject, xPasProject, yPasProject, xProject, yProject;
+projectileImg.src = "gfx/Projectile.png";
+projectileImg.width = 5;
+projectileImg.height = 5;
 //Variables Timer
 var secon;
 var compte;
@@ -286,6 +293,13 @@ var creaBriques = function () {
 			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
 		}
 	}
+};
+var Projectiles = function (xProject, yProject, xPasProject, yPasProject) {
+	"use strict";
+	this.xProject = xPasProject;
+	this.yProject = yPasProject;
+	this.xPasProject = xPasProject;
+	this.yPasProject = yPasProject;
 };
 //Fonction du décompte pour les powerups
 timer1 = function () {
@@ -732,6 +746,11 @@ animation = function () {
 			}
 		}
 	}
+	for (l = 0; k < project.length; l += 1) {
+		scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+		project[l].xProject += project[l].xPasProject;
+		project[l].yProject += project[l].yPasProject;
+	}
 	if (!moveRaquette && pause) {
 		scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
 	}
@@ -787,6 +806,35 @@ animation = function () {
 			xBalle = xBalle + xPasAnim;
 		} else {
 			xBalle = xBalle - xPasAnim;
+		}
+	}
+	for (l = 0; l < project.length; l += 1) {
+		if (!pupDef) {
+			if (project[l].xProject < xRaquette + 200 && project[l].xProject + 5 > xRaquette && project[l].yProject + 5 > yRaquette && project[l].yProject + 15 > yRaquette && project[l].yProject - 5 < yRaquette) { //collision sur le dessus
+				project.splice(0, l);
+			}
+			if (project[l].xProject < xRaquette + 200 && project[l].xProject + 5 > xRaquette && project[l].yProject < yRaquette + 50 && project[l].yProject + 10 > yRaquette + 50 && project[l].yProject - 10 < yRaquette + 50) {
+				project.splice(0, l);
+			}
+			if (project[l].yProject + 5 > yRaquette && project[l].yProject < yRaquette + 50 && project[l].xProject + 5 > xRaquette && project[l].xProject + 5 < xRaquette + 100) { //collision gauche
+				project.splice(0, l);
+			}
+			if (project[l].yProject + 5 > yRaquette && project[l].yProject < yRaquette + 50 && project[l].xProject < xRaquette + 200 && project[l].xProject > xRaquette + 100) {
+				project.splice(0, l);
+			}
+		} else {
+			if (project[l].xProject < xRaquette + 288 && project[l].xProject + 5 > xRaquette && project[l].yProject + 5 > yRaquette && project[l].yProject + 15 > yRaquette && project[l].yProject - 5 < yRaquette) { //collision sur le dessus
+				project.splice(0, l);
+			}
+			if (project[l].xProject < xRaquette + 288 && project[l].xProject + 5 > xRaquette && project[l].yProject < yRaquette + 50 && project[l].yProject + 10 > yRaquette + 50 && project[l].yProject - 10 < yRaquette + 50) {
+				project.splice(0, l);
+			}
+			if (project[l].yProject + 5 > yRaquette && project[l].yProject < yRaquette + 50 && project[l].xProject + 5 > xRaquette && project[l].xProject + 5 < xRaquette + 144) { //collision gauche
+				project.splice(0, l);
+			}
+			if (project[l].yProject + 5 > yRaquette && project[l].yProject < yRaquette + 50 && project[l].xProject < xRaquette + 288 && project[l].xProject > xRaquette + 144) {
+				project.splice(0, l);
+			}
 		}
 	}
 	//collisions pup raquette
@@ -1160,6 +1208,15 @@ animation = function () {
 				}
 			}
 		}
+	}
+	lancementProjec = Math.floor((Math.random() * 1000) + 1);
+	if (lancementProjec === 1) {
+		directProject = Math.floor((Math.random() * 5 * Math.PI / 6) + Math.PI / 6);
+		xPasProject = 10 * Math.cos(directProject);
+		yPasProject = 10 * Math.sin(directProject);
+		xProject = 640;
+		yProject = 180;
+		project.push(new Projectiles(xProject, yProject, xPasProject, yPasProject));
 	}
 	powerupTime = Math.floor((Math.random() * 1000) + 1);
 	if (allowPowerup) {
