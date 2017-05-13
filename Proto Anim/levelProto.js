@@ -130,7 +130,7 @@ capsuleATKImg.src = "gfx/capsuleATK.png";
 capsuleATKImg.width = 40;
 capsuleATKImg.height = 80;
 var capsuleDIRECTImg = new Image();
-capsuleDIRECTImg.src = "capsuleDIRECT.png";
+capsuleDIRECTImg.src = "gfx/capsuleDIRECT.png";
 capsuleDIRECTImg.width = 40;
 capsuleDIRECTImg.height = 80;
 var xCapsule = -100;
@@ -761,6 +761,7 @@ animation = function () {
 		} else if (powerup >= 67) {
 			nbPupDirection += 1;
 			allowPowerup = true;
+			powerup = Math.floor((Math.random() * 100) + 1);
 		}
 		collisionPupRaquette = false;
 	}
