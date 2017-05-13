@@ -110,6 +110,9 @@ var brique2Img = new Image();
 brique2Img.src = "gfx/briqueProto2.png";
 brique2Img.width = 80;
 brique2Img.height = 40;
+var rev;
+var trajecx;
+var trajecy;
 
 var briquesObj = [];
 
@@ -153,21 +156,13 @@ voyantRouge.src = "gfx/voyantRouge.png";
 voyantRouge.width = 20;
 voyantRouge.height = 20;
 
-var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //Pattern briques
-               1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-               1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
-               1, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 1,
-               1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+var pattern = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4];
 //Variables boss
-var hautGauchex, hautDroitex, basDroitex, basGauchex;
-var hautGauchey = 250;
-var hautDroitey = 100;
-var basDroitey = 250;
-var basGauchey = 400;
-var allCoor = [];
-var l;
-var disty, distx, distance;
+var xBoss = 480;
+var yBoss = 20;
+var hitBoss = 100;
+var dead = false;
+var alreadyHit = false;
 //Variables Timer
 var secon;
 var compte;
@@ -207,51 +202,89 @@ var creaBriques = function () {
 	canvas = document.getElementById('canvas');
 	scene = canvas.getContext("2d");
 
-	var v, i, Briques = function (xBriques, yBriques, life, hit) { //C'est juste des variables pour les boucles for
+	var v, i, Briques = function (xBriques, yBriques, life, hit, rev, trajecx, trajecy) { //C'est juste des variables pour les boucles for
 		this.x = xBriques;
 		this.y = yBriques;
 		this.life = life;
 		this.hit = hit;
+		this.rev = rev;
+		this.trajecy = trajecy;
+		this.trajecx = trajecx;
 	};
-	for (v = 0; v < 6; v += 1) {
-		for (i = 0; i < 15; i += 1) {
-			xBriques = 83 * i + 19;
-			yBriques = 43 * v + 5;
+	for (v = 1; v < 9; v += 1) {
+		if (v === 1) {
+			xBriques = 25;
+			yBriques = 20;
 			life = true;
 			hit = false;
-			briquesObj.push(new Briques(xBriques, yBriques, life, hit));
+			rev = true;
+			trajecx = 0;
+			trajecy = 0;
+			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
+		} else if (v === 2) {
+			xBriques = 25;
+			yBriques = 120;
+			life = true;
+			hit = false;
+			rev = true;
+			trajecx = 0;
+			trajecy = 0;
+			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
+		} else if (v === 3) {
+			xBriques = 25;
+			yBriques = 220;
+			life = true;
+			hit = false;
+			rev = true;
+			trajecx = 0;
+			trajecy = 0;
+			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
+		} else if (v === 4) {
+			xBriques = 440;
+			yBriques = 220;
+			life = true;
+			hit = false;
+			rev = true;
+			trajecx = 0;
+			trajecy = 0;
+			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
+		} else if (v === 5) {
+			xBriques = 760;
+			yBriques = 220;
+			life = true;
+			hit = false;
+			rev = true;
+			trajecx = 0;
+			trajecy = 0;
+			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
+		} else if (v === 6) {
+			xBriques = 1185;
+			yBriques = 20;
+			life = true;
+			hit = false;
+			rev = true;
+			trajecx = 0;
+			trajecy = 0;
+			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
+		} else if (v === 7) {
+			xBriques = 1185;
+			yBriques = 120;
+			life = true;
+			hit = false;
+			rev = true;
+			trajecx = 0;
+			trajecy = 0;
+			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
+		} else if (v === 8) {
+			xBriques = 1185;
+			yBriques = 220;
+			life = true;
+			hit = false;
+			rev = true;
+			trajecx = 0;
+			trajecy = 0;
+			briquesObj.push(new Briques(xBriques, yBriques, life, hit, rev, trajecx, trajecy));
 		}
-	}
-};
-var coorBoss = function () {
-	"use strict";
-	var xBoss, yBoss, Boss = function (xBoss, yBoss) {
-		this.xBoss = xBoss;
-		this.yBoss = yBoss;
-	};
-	for (hautGauchex = 550; hautGauchex <= 700; hautGauchex += 1) {
-		hautGauchey -= 1;
-		xBoss = hautGauchex;
-		yBoss = hautGauchey;
-		allCoor.push(new Boss(xBoss, yBoss));
-	}
-	for (hautDroitex = 700; hautDroitex <= 850; hautDroitex += 1) {
-		hautDroitey += 1;
-		xBoss = hautDroitex;
-		yBoss = hautDroitey;
-		allCoor.push(new Boss(xBoss, yBoss));
-	}
-	for (basDroitex = 850; basDroitex <= 700; basDroitex -= 1) {
-		basDroitey += 1;
-		xBoss = basDroitex;
-		yBoss = basDroitey;
-		allCoor.push(new Boss(xBoss, yBoss));
-	}
-	for (basGauchex = 700; basGauchex <= 550; basGauchex -= 1) {
-		basGauchey -= 1;
-		xBoss = basGauchex;
-		yBoss = basDroitey;
-		allCoor.push(new Boss(xBoss, yBoss));
 	}
 };
 //Fonction du décompte pour les powerups
@@ -687,15 +720,14 @@ drawLife = function () {
 animation = function () {
 	"use strict";
 	//(Re)construction de la scène
-	console.log(allCoor);
 	scene.clearRect(0, 0, 1280, 800);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 	for (k = 0; k < briquesObj.length; k = k + 1) {
 		if (briquesObj[k].life) {
-			if (pattern[k] === 1) {
+			if (pattern[k] === 4 || pattern[k] === 3) {
 				scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
 			}
-			if (pattern[k] === 2) {
+			if (pattern[k] === 2 || pattern[k] === 1) {
 				scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
 			}
 		}
@@ -721,18 +753,13 @@ animation = function () {
 	} else if (nbPupDirection > 1) {
 		scene.drawImage(voyantVert, 1250, 770, 20, 20);
 	}
-	scene.beginPath();
-	scene.moveTo(550, 250);
-	scene.lineTo(700, 100);
-	scene.lineTo(850, 250);
-	scene.lineTo(700, 400);
-	scene.lineTo(550, 250);
-	scene.lineWidth = 10;
-	scene.stroke();
-	scene.strokeStyle = "red";
-	scene.fill();
-	scene.fillStyle = "red";
-	scene.closePath();
+	if (!dead) {
+		scene.beginPath();
+		scene.rect(xBoss, yBoss, 320, 160);
+		scene.fill();
+		scene.fillStyle = "white";
+		scene.closePath();
+	}
 	//Trajectoire de la balle (à isoler)
 	xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
 	yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
@@ -760,14 +787,6 @@ animation = function () {
 			xBalle = xBalle + xPasAnim;
 		} else {
 			xBalle = xBalle - xPasAnim;
-		}
-	}
-	for (l = 0; l < 600; l += 1) {
-		distx = xBalle + 25 - allCoor[l].xBoss;
-		disty = yBalle + 25 - allCoor[l].yBoss;
-		distance = Math.pow(Math.pow(distx, 2) + Math.pow(disty, 2), 0.5);
-		if (distance < 25) {
-			angleLine = -angleLine;
 		}
 	}
 	//collisions pup raquette
@@ -828,7 +847,6 @@ animation = function () {
 	if (pupDirect) {
 		pupDirection();
 	}
-	console.log(nbPupDirection);
 	//Fonction collision avec la raquette :
 	if (!pupDef) {
 		if (xBalle < xRaquette + 200 && xBalle + 50 > xRaquette && yBalle + 50 > yRaquette && yBalle + 60 > yRaquette && yBalle + 40 < yRaquette) { //collision sur le dessus
@@ -955,15 +973,52 @@ animation = function () {
 		}
 		collisionMemeSens = false;
 	}
-
-	//Collisions balle-briques
+	//Collisions balle-boss
+	if (!dead) {
+		if (yBalle + 50 > yBoss && yBalle < yBoss + 160 && xBalle + 50 > xBoss && xBalle + 40 < xBoss && xBalle + 60 > xBoss) { //collision gauche
+			revx = true;
+			hitBoss -= 1;
+			alreadyHit = true;
+			if (hitBoss <= 0) {
+				dead = true;
+			}
+		}
+		if (yBalle + 50 > yBoss && yBalle < yBoss + 160 && xBalle < xBoss + 320 && xBalle - 10 < xBoss + 320 && xBalle + 10 > xBoss + 320) { //collision droite
+			revx = false;
+			hitBoss -= 1;
+			alreadyHit = true;
+			if (hitBoss <= 0) {
+				dead = true;
+			}
+		}
+		if (yBalle < yBoss + 160 && yBalle - 10 < yBoss + 160 && yBalle + 10 > yBoss + 160 && xBalle + 50 > xBoss && xBalle < xBoss + 320) { //collision bas
+			revy = false;
+			hitBoss -= 1;
+			alreadyHit = true;
+			if (hitBoss <= 0) {
+				dead = true;
+			}
+		}
+		if (yBalle + 50 > yBoss && yBalle + 40 < yBoss && yBalle + 60 > yBoss && xBalle + 50 > xBoss && xBalle < xBoss + 320) { //collision haut
+			revy = true;
+			hitBoss -= 1;
+			alreadyHit = true;
+			if (hitBoss <= 0) {
+				dead = true;
+			}
+		}
+		alreadyHit = false;
+	}
 	for (j = 0; j < briquesObj.length; j += 1) {
 		if (pattern[j] > 0) {
 			if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle + 40 < briquesObj[j].x && xBalle + 60 > briquesObj[j].x) { //collision gauche
-				if (!pupUnstop) {
-					revx = true;
+				if (pattern[j] > 0 && !briquesObj[j].hit && pupUnstop) {
+					pattern[j] -= 2;
+					briquesObj[j].hit = true;
+					briqueSfx.play();
 				}
-				if (pattern[j] > 0 && !briquesObj[j].hit) {
+				revx = true;
+				if (pattern[j] > 0 && !briquesObj[j].hit && !pupUnstop) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
 					briqueSfx.play();
@@ -971,20 +1026,16 @@ animation = function () {
 				if (pattern[j] <= 0) {
 					briquesObj[j].life = false;
 					win();
-					powerupTime = Math.floor((Math.random() * 100) + 1);
-					if (powerupTime <= 20 && allowPowerup) {
-						xCapsule = briquesObj[j].x + 20;
-						yCapsule = briquesObj[j].y + 40;
-						masquagePup = true;
-						allowPowerup = false;
-					}
 				}
 			}
 			if (yBalle + 50 > briquesObj[j].y && yBalle < briquesObj[j].y + 40 && xBalle < briquesObj[j].x + 80 && xBalle - 10 < briquesObj[j].x + 80 && xBalle + 10 > briquesObj[j].x + 80) { //collision droite
-				if (!pupUnstop) {
-					revx = false;
+				if (pattern[j] > 0 && !briquesObj[j].hit && pupUnstop) {
+					pattern[j] -= 2;
+					briquesObj[j].hit = true;
+					briqueSfx.play();
 				}
-				if (pattern[j] > 0 && !briquesObj[j].hit) {
+				revx = false;
+				if (pattern[j] > 0 && !briquesObj[j].hit && !pupUnstop) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
 					briqueSfx.play();
@@ -992,20 +1043,41 @@ animation = function () {
 				if (pattern[j] <= 0) {
 					briquesObj[j].life = false;
 					win();
-					powerupTime = Math.floor((Math.random() * 100) + 1);
-					if (powerupTime <= 20 && allowPowerup) {
-						xCapsule = briquesObj[j].x + 20;
-						yCapsule = briquesObj[j].y + 40;
-						masquagePup = true;
-						allowPowerup = false;
-					}
 				}
 			}
 			if (yBalle < briquesObj[j].y + 40 && yBalle - 10 < briquesObj[j].y + 40 && yBalle + 10 > briquesObj[j].y + 40 && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision bas
-				if (!pupUnstop) {
-					revy = false;
+				if (pattern[j] > 0 && !briquesObj[j].hit && pupUnstop) {
+					pattern[j] -= 2;
+					briquesObj[j].hit = true;
+					briqueSfx.play();
 				}
-				if (pattern[j] > 0 && !briquesObj[j].hit) {
+				revy = false;
+				if (j === 3 || j === 4) {
+					if (!inversTrajectoire) {
+						if (briquesObj[j].rev && revx) {
+							angleLine += 0.15;
+						} else if (briquesObj[j].rev && !revx) {
+							angleLine -= 0.15;
+						}
+						if (!briquesObj[j].rev && revx) {
+							angleLine -= 0.15;
+						} else if (!briquesObj[j].rev && !revx) {
+							angleLine += 0.15;
+						}
+					} else {
+						if (briquesObj[j].rev && revx) {
+							angleLine -= 0.15;
+						} else if (briquesObj[j].rev && !revx) {
+							angleLine += 0.15;
+						}
+						if (!briquesObj[j].rev && revx) {
+							angleLine += 0.15;
+						} else if (!briquesObj[j].rev && !revx) {
+							angleLine -= 0.15;
+						}
+					}
+				}
+				if (pattern[j] > 0 && !briquesObj[j].hit && !pupUnstop) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
 					briqueSfx.play();
@@ -1013,20 +1085,41 @@ animation = function () {
 				if (pattern[j] <= 0) {
 					briquesObj[j].life = false;
 					win();
-					powerupTime = Math.floor((Math.random() * 100) + 1);
-					if (powerupTime <= 20 && allowPowerup) {
-						xCapsule = briquesObj[j].x + 20;
-						yCapsule = briquesObj[j].y + 40;
-						masquagePup = true;
-						allowPowerup = false;
-					}
 				}
 			}
 			if (yBalle + 50 > briquesObj[j].y && yBalle + 40 < briquesObj[j].y && yBalle + 60 > briquesObj[j].y && xBalle + 50 > briquesObj[j].x && xBalle < briquesObj[j].x + 80) { //collision haut
-				if (!pupUnstop) {
-					revy = true;
+				if (pattern[j] > 0 && !briquesObj[j].hit && pupUnstop) {
+					pattern[j] -= 2;
+					briquesObj[j].hit = true;
+					briqueSfx.play();
 				}
-				if (pattern[j] > 0 && !briquesObj[j].hit) {
+				revy = true;
+				if (j === 3 || j === 4) {
+					if (!inversTrajectoire) {
+						if (briquesObj[j].rev && revx) {
+							angleLine -= 0.15;
+						} else if (briquesObj[j].rev && !revx) {
+							angleLine += 0.15;
+						}
+						if (!briquesObj[j].rev && revx) {
+							angleLine += 0.15;
+						} else if (!briquesObj[j].rev && !revx) {
+							angleLine -= 0.15;
+						}
+					} else {
+						if (briquesObj[j].rev && revx) {
+							angleLine += 0.15;
+						} else if (briquesObj[j].rev && !revx) {
+							angleLine -= 0.15;
+						}
+						if (!briquesObj[j].rev && revx) {
+							angleLine -= 0.15;
+						} else if (!briquesObj[j].rev && !revx) {
+							angleLine += 0.15;
+						}
+					}
+				}
+				if (pattern[j] > 0 && !briquesObj[j].hit && !pupUnstop) {
 					pattern[j] -= 1;
 					briquesObj[j].hit = true;
 					briqueSfx.play();
@@ -1034,16 +1127,49 @@ animation = function () {
 				if (pattern[j] <= 0) {
 					briquesObj[j].life = false;
 					win();
-					powerupTime = Math.floor((Math.random() * 100) + 1);
-					if (powerupTime <= 100 && allowPowerup) {
-						xCapsule = briquesObj[j].x + 20;
-						yCapsule = briquesObj[j].y + 40;
-						masquagePup = true;
-						allowPowerup = false;
-					}
 				}
 			}
 			briquesObj[j].hit = false;
+			if (briquesObj[j].rev) {
+				if (j === 0 || j === 1 || j === 2 || j === 5 || j === 6 || j === 7) {
+					briquesObj[j].y += 1.5;
+					briquesObj[j].trajecy += 1.5;
+					if (briquesObj[j].trajecy === 150) {
+						briquesObj[j].rev = false;
+					}
+				} else if (j === 3 || j === 4) {
+					briquesObj[j].x += 1.5;
+					briquesObj[j].trajecx += 1.5;
+					if (briquesObj[j].trajecx === 150) {
+						briquesObj[j].rev = false;
+					}
+				}
+			} else {
+				if (j === 0 || j === 1 || j === 2 || j === 5 || j === 6 || j === 7) {
+					briquesObj[j].y -= 1.5;
+					briquesObj[j].trajecy -= 1.5;
+					if (briquesObj[j].trajecy === 0) {
+						briquesObj[j].rev = true;
+					}
+				} else if (j === 3 || j === 4) {
+					briquesObj[j].x -= 1.5;
+					briquesObj[j].trajecx -= 1.5;
+					if (briquesObj[j].trajecx === 0) {
+						briquesObj[j].rev = true;
+					}
+				}
+			}
+		}
+	}
+	powerupTime = Math.floor((Math.random() * 1000) + 1);
+	if (allowPowerup) {
+		if (powerupTime === 1) {
+			powerup = Math.floor((Math.random() * 100) + 1);
+			xCapsule = Math.floor((Math.random() * 1240) + 1);
+			yCapsule = 10;
+			masquagePup = true;
+			allowPowerup = false;
+			powerupTime = Math.floor((Math.random() * 1000) + 1);
 		}
 	}
 	drawLife();
@@ -1055,9 +1181,8 @@ animation = function () {
 
 //Lancement des fonctions principales après chargement de la page
 setTimeout(creaBriques, 2000);
-setTimeout(coorBoss, 2001);
-setTimeout(animation, 2002);
-setTimeout(controls, 2003);
+setTimeout(animation, 2001);
+setTimeout(controls, 2002);
 
 /******************************************************
                     Fin du programme
