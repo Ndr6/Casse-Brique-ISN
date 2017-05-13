@@ -152,7 +152,6 @@ var voyantRouge = new Image();
 voyantRouge.src = "gfx/voyantRouge.png";
 voyantRouge.width = 20;
 voyantRouge.height = 20;
-var hautGauchex, hautGauchey, hautDroitex, hautDroitey, basDroitex, basDroitey, basGauchex, basGauchey;
 
 var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //Pattern briques
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
@@ -160,7 +159,15 @@ var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //Pattern briques
                1, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 1,
                1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-
+//Variables boss
+var hautGauchex, hautDroitex, basDroitex, basGauchex;
+var hautGauchey = 250;
+var hautDroitey = 100;
+var basDroitey = 250;
+var basGauchey = 400;
+var allCoor = [];
+var l;
+var disty, distx, distance;
 //Variables Timer
 var secon;
 var compte;
@@ -214,6 +221,37 @@ var creaBriques = function () {
 			hit = false;
 			briquesObj.push(new Briques(xBriques, yBriques, life, hit));
 		}
+	}
+};
+var coorBoss = function () {
+	"use strict";
+	var xBoss, yBoss, Boss = function (xBoss, yBoss) {
+		this.xBoss = xBoss;
+		this.yBoss = yBoss;
+	};
+	for (hautGauchex = 550; hautGauchex <= 700; hautGauchex += 1) {
+		hautGauchey -= 1;
+		xBoss = hautGauchex;
+		yBoss = hautGauchey;
+		allCoor.push(new Boss(xBoss, yBoss));
+	}
+	for (hautDroitex = 700; hautDroitex <= 850; hautDroitex += 1) {
+		hautDroitey += 1;
+		xBoss = hautDroitex;
+		yBoss = hautDroitey;
+		allCoor.push(new Boss(xBoss, yBoss));
+	}
+	for (basDroitex = 850; basDroitex <= 700; basDroitex -= 1) {
+		basDroitey += 1;
+		xBoss = basDroitex;
+		yBoss = basDroitey;
+		allCoor.push(new Boss(xBoss, yBoss));
+	}
+	for (basGauchex = 700; basGauchex <= 550; basGauchex -= 1) {
+		basGauchey -= 1;
+		xBoss = basGauchex;
+		yBoss = basDroitey;
+		allCoor.push(new Boss(xBoss, yBoss));
 	}
 };
 //Fonction du décompte pour les powerups
@@ -649,6 +687,7 @@ drawLife = function () {
 animation = function () {
 	"use strict";
 	//(Re)construction de la scène
+	console.log(allCoor);
 	scene.clearRect(0, 0, 1280, 800);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 	for (k = 0; k < briquesObj.length; k = k + 1) {
@@ -697,34 +736,6 @@ animation = function () {
 	//Trajectoire de la balle (à isoler)
 	xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
 	yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
-	for (hautGauchex = 550; hautGauchex <= 700; hautGauchex += 1) {
-		for (hautGauchey = 250; hautGauchey <= 100; hautGauchey -= 1) {
-			if (hautGauchex < xBalle + 50 && hautGauchex > xBalle && hautGauchey > yBalle && hautGauchey < yBalle + 50) {
-				xPasAnim += 10;
-			}
-		}
-	}
-	for (hautDroitex = 700; hautDroitex <= 850; hautDroitex += 1) {
-		for (hautDroitey = 100; hautDroitey <= 250; hautDroitey += 1) {
-			if (hautDroitex < xBalle + 50 && hautDroitex > xBalle && hautDroitey > yBalle && hautDroitey < yBalle + 50) {
-				xPasAnim += 10;
-			}
-		}
-	}
-	for (basDroitex = 850; basDroitex <= 700; basDroitex -= 1) {
-		for (basDroitey = 250; basDroitey <= 400; basDroitey += 1) {
-			if (basDroitex < xBalle + 50 && basDroitex > xBalle && basDroitey > yBalle && basDroitey < yBalle + 50) {
-				xPasAnim += 10;
-			}
-		}
-	}
-	for (basGauchex = 700; basGauchex <= 550; basGauchex -= 1) {
-		for (basGauchey = 400; basGauchey <= 250; basGauchey -= 1) {
-			if (basGauchex < xBalle + 50 && basGauchex > xBalle && basGauchey > yBalle && basGauchey < yBalle + 50) {
-				xPasAnim += 10;
-			}
-		}
-	}
 	if (moveRaquette) {
 		if (xBalle < 0) {
 			revx = false;
@@ -749,6 +760,14 @@ animation = function () {
 			xBalle = xBalle + xPasAnim;
 		} else {
 			xBalle = xBalle - xPasAnim;
+		}
+	}
+	for (l = 0; l < 600; l += 1) {
+		distx = xBalle + 25 - allCoor[l].xBoss;
+		disty = yBalle + 25 - allCoor[l].yBoss;
+		distance = Math.pow(Math.pow(distx, 2) + Math.pow(disty, 2), 0.5);
+		if (distance < 25) {
+			angleLine = -angleLine;
 		}
 	}
 	//collisions pup raquette
@@ -1036,8 +1055,9 @@ animation = function () {
 
 //Lancement des fonctions principales après chargement de la page
 setTimeout(creaBriques, 2000);
-setTimeout(animation, 2001);
-setTimeout(controls, 2002);
+setTimeout(coorBoss, 2001);
+setTimeout(animation, 2002);
+setTimeout(controls, 2003);
 
 /******************************************************
                     Fin du programme
