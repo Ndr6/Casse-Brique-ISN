@@ -638,31 +638,31 @@ function controls() {
 				xRaquette += 20;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			}
-			for (l = 0; l < project.length; l += 1) {
-				if (!project[l].touch) {
-					scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
-					if (!stopTime) {
-						project[l].xProject += project[l].xPasProject;
-						project[l].yProject += project[l].yPasProject;
-					}
-				}
-			}
-			if (!dead) {
-				scene.beginPath();
-				scene.rect(xBoss, yBoss, 320, 160);
-				scene.fill();
-				if (!invincible) {
-					scene.fillStyle = "white";
-				} else {
-					scene.fillStyle = "red";
-				}
-				scene.closePath();
-			}
 			if (!moveBalle && xBalle <= 1205) {
 				xBalle = xRaquette + 75;
 				scene.clearRect(0, 0, 1280, 800);
 				scene.beginPath();
 				scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
+				for (l = 0; l < project.length; l += 1) {
+					if (!project[l].touch) {
+						scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+						if (!stopTime) {
+							project[l].xProject += project[l].xPasProject;
+							project[l].yProject += project[l].yPasProject;
+						}
+					}
+				}
+				if (!dead) {
+					scene.beginPath();
+					scene.rect(xBoss, yBoss, 320, 160);
+					scene.fill();
+					if (!invincible) {
+						scene.fillStyle = "white";
+					} else {
+						scene.fillStyle = "red";
+					}
+					scene.closePath();
+				}
 				for (k = 0; k < briquesObj.length; k = k + 1) {
 					if (briquesObj[k].life) {
 						if (pattern[k] === 4 || pattern[k] === 3) {
@@ -1098,6 +1098,9 @@ animation = function () {
 				revx = true;
 				revy = true;
 				angleLine = -Math.PI / 8;
+				if (!inversTrajectoire) {
+					inversTrajectoire = true;
+				}
 			}
 			raquetteSfx.play();
 		}
@@ -1109,6 +1112,9 @@ animation = function () {
 				revx = false;
 				revy = true;
 				angleLine = 9 * -Math.PI / 8;
+				if (inversTrajectoire) {
+					inversTrajectoire = false;
+				}
 			}
 			raquetteSfx.play();
 		}
@@ -1345,10 +1351,10 @@ animation = function () {
 		project.push(new Projectiles(xProject, yProject, xPasProject, yPasProject, touch));
 		angleMachineGun += 0.01;
 	}
-	if (angleMachineGun >= 1.04 && revAngleMachineGun) {
+	if (angleMachineGun >= 0.8 && revAngleMachineGun) {
 		angleMachineGun = 0;
 		revAngleMachineGun = false;
-	} else if (angleMachineGun >= 1.04 && !revAngleMachineGun) {
+	} else if (angleMachineGun >= 0.8 && !revAngleMachineGun) {
 		clockBoss = true;
 		seconBoss = 1;
 		timerBoss();
@@ -1367,7 +1373,7 @@ animation = function () {
 		}
 	}
 	if (!stopTime) {
-		powerupBoss = Math.floor((Math.random() * 100) + 1);
+		powerupBoss = Math.floor((Math.random() * 1000) + 1);
 	}
 	if (allowPowerupBoss) {
 		if (powerupBoss === 1) {
