@@ -796,3 +796,4 @@ setTimeout(controls, 2002);
 /******************************************************
                     Fin du programme
 ******************************************************/
+//Il manquait une ligne pour atteindre les 800, donc la voici !
