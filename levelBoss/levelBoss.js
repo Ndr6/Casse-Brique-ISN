@@ -60,7 +60,7 @@ ViseeSfx.volume = 0.5;
 var raquetteSfx = new Audio("sfx/raquetteSfx.wav");
 raquetteSfx.volume = 0.5;
 
-var lifeRaquette = 1;
+var lifeRaquette = 5;
 //Variables balle
 var moveBalle = false; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
@@ -163,7 +163,7 @@ var pattern = [4, 4, 4, 4, 4, 4, 4, 4, 4];
 //Variables boss
 var xBoss = 480;
 var yBoss = 20;
-var hitBoss = 100;
+var hitBoss = 50;
 var dead = false;
 var alreadyHit = false;
 var alreadyHitProject = false;
@@ -1367,7 +1367,7 @@ animation = function () {
 		}
 	}
 	if (!stopTime) {
-		powerupBoss = Math.floor((Math.random() * 1000) + 1);
+		powerupBoss = Math.floor((Math.random() * 2000) + 1);
 	}
 	if (allowPowerupBoss) {
 		if (powerupBoss === 1) {
