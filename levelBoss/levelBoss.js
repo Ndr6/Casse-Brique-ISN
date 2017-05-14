@@ -1367,12 +1367,12 @@ animation = function () {
 		}
 	}
 	if (!stopTime) {
-		powerupBoss = Math.floor((Math.random() * 2000) + 1);
+		powerupBoss = Math.floor((Math.random() * 100) + 1);
 	}
 	if (allowPowerupBoss) {
 		if (powerupBoss === 1) {
-			choosePowerup = Math.floor((Math.random() * 100) + 1);
-			if (choosePowerup <= 51) {
+			choosePowerup = Math.floor((Math.random() * 1000) + 1);
+			if (choosePowerup <= 50) {
 				clockBoss = true;
 				invincible = true;
 				seconBoss = 5;
