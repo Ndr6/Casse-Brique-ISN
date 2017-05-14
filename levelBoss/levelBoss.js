@@ -15,10 +15,12 @@ var defense; //Fonction d'activation du powerup Défense
 var unstoppable; //Fonction d'activation du powerup Unstoppable
 var pupDirection; //Fonction d'activation du powerup Direction
 var reset; //Fonction de désactivation des powerups
+var resetBoss;
 var loseLife; //ça c'est un bon nom
 var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
 var timer1; //Fonction qui permet d'avoir le décompte du powerup
+var timerBoss;
 var go; //Game over
 var prepaDirection;
 
@@ -58,6 +60,7 @@ ViseeSfx.volume = 0.5;
 var raquetteSfx = new Audio("sfx/raquetteSfx.wav");
 raquetteSfx.volume = 0.5;
 
+var lifeRaquette = 1;
 //Variables balle
 var moveBalle = false; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
@@ -156,20 +159,31 @@ voyantRouge.src = "gfx/voyantRouge.png";
 voyantRouge.width = 20;
 voyantRouge.height = 20;
 
-var pattern = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4];
+var pattern = [4, 4, 4, 4, 4, 4, 4, 4, 4];
 //Variables boss
 var xBoss = 480;
 var yBoss = 20;
 var hitBoss = 100;
 var dead = false;
 var alreadyHit = false;
+var alreadyHitProject = false;
 var project = [];
 var projectileImg = new Image();
 var lancementProjec;
-var l, directProject, xPasProject, yPasProject, xProject, yProject;
+var l, directProject, xPasProject, yPasProject, xProject, yProject, m, touch;
 projectileImg.src = "gfx/Projectile.png";
 projectileImg.width = 5;
 projectileImg.height = 5;
+var invincible = false;
+var powerupBoss = Math.floor((Math.random() * 1000) + 1);
+var allowPowerupBoss = true;
+var choosePowerup = Math.floor((Math.random() * 1000) + 1);
+var angleMachineGun = 0;
+var machineGun = false;
+var revAngleMachineGun = true;
+var seconBoss;
+var compteBoss;
+var clockBoss;
 //Variables Timer
 var secon;
 var compte;
@@ -294,12 +308,13 @@ var creaBriques = function () {
 		}
 	}
 };
-var Projectiles = function (xProject, yProject, xPasProject, yPasProject) {
+var Projectiles = function (xProject, yProject, xPasProject, yPasProject, touch) {
 	"use strict";
-	this.xProject = xPasProject;
-	this.yProject = yPasProject;
+	this.xProject = xProject;
+	this.yProject = yProject;
 	this.xPasProject = xPasProject;
 	this.yPasProject = yPasProject;
+	this.touch = touch;
 };
 //Fonction du décompte pour les powerups
 timer1 = function () {
@@ -318,6 +333,33 @@ timer1 = function () {
 	}
 };
 
+timerBoss = function () {
+	"use strict";
+	if (clockBoss) {
+		if (!pause && !stopTime) {
+			seconBoss -= 1;
+		}
+		compteBoss = setTimeout(timerBoss, 1000);
+		if (seconBoss === 0) {
+			powerupBoss = Math.floor((Math.random() * 1000) + 1);
+			resetBoss();
+			clockBoss = false;
+		}
+	}
+};
+
+resetBoss = function () {
+	"use strict";
+	if (invincible) {
+		invincible = false;
+	}
+	if (machineGun) {
+		angleMachineGun = 0;
+		revAngleMachineGun = true;
+		machineGun = false;
+	}
+	allowPowerupBoss = true;
+};
 //Fonction de reset des powerups
 reset = function () {
 	"use strict";
@@ -454,6 +496,8 @@ loseLife = function () {
 	scene.clearRect(xBalle, yBalle, 50, 50);
 	scene.clearRect(xCapsule - 25, yCapsule - 25, 105, 125);
 	masquagePup = false;
+	lifeRaquette = 1;
+	project = [];
 	if (pupDef) {
 		xRaquette = 496;
 		xBalle = xRaquette + 119;
@@ -502,7 +546,7 @@ function win() {
 	sumLife = pattern.reduce(addLife, 0);
 	console.log(sumLife);
 	console.log(pattern);
-	if (sumLife === 0) {
+	if (sumLife === 0 || dead) {
 		hasWon = true;
 		moveBalle = false;
 		moveRaquette = false;
@@ -547,12 +591,32 @@ function controls() {
 				scene.clearRect(0, 0, 1280, 800);
 				scene.beginPath();
 				scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
+				for (l = 0; l < project.length; l += 1) {
+					if (!project[l].touch) {
+						scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+						if (!stopTime) {
+							project[l].xProject += project[l].xPasProject;
+							project[l].yProject += project[l].yPasProject;
+						}
+					}
+				}
+				if (!dead) {
+					scene.beginPath();
+					scene.rect(xBoss, yBoss, 320, 160);
+					scene.fill();
+					if (!invincible) {
+						scene.fillStyle = "white";
+					} else {
+						scene.fillStyle = "red";
+					}
+					scene.closePath();
+				}
 				for (k = 0; k < briquesObj.length; k = k + 1) {
 					if (briquesObj[k].life) {
-						if (pattern[k] === 1) {
+						if (pattern[k] === 4 || pattern[k] === 3) {
 							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
-						if (pattern[k] === 2) {
+						if (pattern[k] === 2 || pattern[k] === 1) {
 							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
 					}
@@ -574,6 +638,26 @@ function controls() {
 				xRaquette += 20;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			}
+			for (l = 0; l < project.length; l += 1) {
+				if (!project[l].touch) {
+					scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+					if (!stopTime) {
+						project[l].xProject += project[l].xPasProject;
+						project[l].yProject += project[l].yPasProject;
+					}
+				}
+			}
+			if (!dead) {
+				scene.beginPath();
+				scene.rect(xBoss, yBoss, 320, 160);
+				scene.fill();
+				if (!invincible) {
+					scene.fillStyle = "white";
+				} else {
+					scene.fillStyle = "red";
+				}
+				scene.closePath();
+			}
 			if (!moveBalle && xBalle <= 1205) {
 				xBalle = xRaquette + 75;
 				scene.clearRect(0, 0, 1280, 800);
@@ -581,10 +665,10 @@ function controls() {
 				scene.drawImage(balleImg, xBalle, yRaquette - 51, 50, 50);
 				for (k = 0; k < briquesObj.length; k = k + 1) {
 					if (briquesObj[k].life) {
-						if (pattern[k] === 1) {
+						if (pattern[k] === 4 || pattern[k] === 3) {
 							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
-						if (pattern[k] === 2) {
+						if (pattern[k] === 2 || pattern[k] === 1) {
 							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
 					}
@@ -746,10 +830,14 @@ animation = function () {
 			}
 		}
 	}
-	for (l = 0; k < project.length; l += 1) {
-		scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
-		project[l].xProject += project[l].xPasProject;
-		project[l].yProject += project[l].yPasProject;
+	for (l = 0; l < project.length; l += 1) {
+		if (!project[l].touch) {
+			scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+			if (!stopTime) {
+				project[l].xProject += project[l].xPasProject;
+				project[l].yProject += project[l].yPasProject;
+			}
+		}
 	}
 	if (!moveRaquette && pause) {
 		scene.drawImage(pauseImg, 440, 200, pauseImg.width, pauseImg.height);
@@ -776,7 +864,11 @@ animation = function () {
 		scene.beginPath();
 		scene.rect(xBoss, yBoss, 320, 160);
 		scene.fill();
-		scene.fillStyle = "white";
+		if (!invincible) {
+			scene.fillStyle = "white";
+		} else {
+			scene.fillStyle = "red";
+		}
 		scene.closePath();
 	}
 	//Trajectoire de la balle (à isoler)
@@ -808,34 +900,35 @@ animation = function () {
 			xBalle = xBalle - xPasAnim;
 		}
 	}
-	for (l = 0; l < project.length; l += 1) {
-		if (!pupDef) {
-			if (project[l].xProject < xRaquette + 200 && project[l].xProject + 5 > xRaquette && project[l].yProject + 5 > yRaquette && project[l].yProject + 15 > yRaquette && project[l].yProject - 5 < yRaquette) { //collision sur le dessus
-				project.splice(0, l);
+	for (m = 0; m < project.length; m += 1) {
+		if (!project[m].touch) {
+			if (!pupDef) {
+				if (project[m].xProject < xRaquette + 200 && project[m].xProject + 5 > xRaquette && project[m].yProject + 5 > yRaquette && project[m].yProject + 15 > yRaquette && project[m].yProject - 5 < yRaquette) { //collision sur le dessus
+					lifeRaquette -= 0.1;
+					alreadyHitProject = true;
+					project[m].touch = true;
+				}
+			} else {
+				if (project[m].xProject < xRaquette + 288 && project[m].xProject + 5 > xRaquette && project[m].yProject + 5 > yRaquette && project[m].yProject + 15 > yRaquette && project[m].yProject - 5 < yRaquette) { //collision sur le dessus
+					lifeRaquette -= 0.01;
+					alreadyHitProject = true;
+					project[m].touch = true;
+				}
 			}
-			if (project[l].xProject < xRaquette + 200 && project[l].xProject + 5 > xRaquette && project[l].yProject < yRaquette + 50 && project[l].yProject + 10 > yRaquette + 50 && project[l].yProject - 10 < yRaquette + 50) {
-				project.splice(0, l);
-			}
-			if (project[l].yProject + 5 > yRaquette && project[l].yProject < yRaquette + 50 && project[l].xProject + 5 > xRaquette && project[l].xProject + 5 < xRaquette + 100) { //collision gauche
-				project.splice(0, l);
-			}
-			if (project[l].yProject + 5 > yRaquette && project[l].yProject < yRaquette + 50 && project[l].xProject < xRaquette + 200 && project[l].xProject > xRaquette + 100) {
-				project.splice(0, l);
-			}
-		} else {
-			if (project[l].xProject < xRaquette + 288 && project[l].xProject + 5 > xRaquette && project[l].yProject + 5 > yRaquette && project[l].yProject + 15 > yRaquette && project[l].yProject - 5 < yRaquette) { //collision sur le dessus
-				project.splice(0, l);
-			}
-			if (project[l].xProject < xRaquette + 288 && project[l].xProject + 5 > xRaquette && project[l].yProject < yRaquette + 50 && project[l].yProject + 10 > yRaquette + 50 && project[l].yProject - 10 < yRaquette + 50) {
-				project.splice(0, l);
-			}
-			if (project[l].yProject + 5 > yRaquette && project[l].yProject < yRaquette + 50 && project[l].xProject + 5 > xRaquette && project[l].xProject + 5 < xRaquette + 144) { //collision gauche
-				project.splice(0, l);
-			}
-			if (project[l].yProject + 5 > yRaquette && project[l].yProject < yRaquette + 50 && project[l].xProject < xRaquette + 288 && project[l].xProject > xRaquette + 144) {
-				project.splice(0, l);
+			alreadyHitProject = false;
+			if (!alreadyHitProject) {
+				if (project[m].yProject > 850) {
+					project[m].touch = true;
+				}
 			}
 		}
+	}
+	if (lifeRaquette <= 0) {
+		go();
+		loseLife();
+	}
+	if (dead) {
+		win();
 	}
 	//collisions pup raquette
 	if (!pupDef) {
@@ -1025,7 +1118,11 @@ animation = function () {
 	if (!dead) {
 		if (yBalle + 50 > yBoss && yBalle < yBoss + 160 && xBalle + 50 > xBoss && xBalle + 40 < xBoss && xBalle + 60 > xBoss) { //collision gauche
 			revx = true;
-			hitBoss -= 1;
+			if (!invincible && !pupUnstop) {
+				hitBoss -= 1;
+			} else if (!invincible && pupUnstop) {
+				hitBoss -= 5;
+			}
 			alreadyHit = true;
 			if (hitBoss <= 0) {
 				dead = true;
@@ -1033,7 +1130,11 @@ animation = function () {
 		}
 		if (yBalle + 50 > yBoss && yBalle < yBoss + 160 && xBalle < xBoss + 320 && xBalle - 10 < xBoss + 320 && xBalle + 10 > xBoss + 320) { //collision droite
 			revx = false;
-			hitBoss -= 1;
+			if (!invincible && !pupUnstop) {
+				hitBoss -= 1;
+			} else if (!invincible && pupUnstop) {
+				hitBoss -= 5;
+			}
 			alreadyHit = true;
 			if (hitBoss <= 0) {
 				dead = true;
@@ -1041,7 +1142,11 @@ animation = function () {
 		}
 		if (yBalle < yBoss + 160 && yBalle - 10 < yBoss + 160 && yBalle + 10 > yBoss + 160 && xBalle + 50 > xBoss && xBalle < xBoss + 320) { //collision bas
 			revy = false;
-			hitBoss -= 1;
+			if (!invincible && !pupUnstop) {
+				hitBoss -= 1;
+			} else if (!invincible && pupUnstop) {
+				hitBoss -= 5;
+			}
 			alreadyHit = true;
 			if (hitBoss <= 0) {
 				dead = true;
@@ -1049,7 +1154,11 @@ animation = function () {
 		}
 		if (yBalle + 50 > yBoss && yBalle + 40 < yBoss && yBalle + 60 > yBoss && xBalle + 50 > xBoss && xBalle < xBoss + 320) { //collision haut
 			revy = true;
-			hitBoss -= 1;
+			if (!invincible && !pupUnstop) {
+				hitBoss -= 1;
+			} else if (!invincible && pupUnstop) {
+				hitBoss -= 5;
+			}
 			alreadyHit = true;
 			if (hitBoss <= 0) {
 				dead = true;
@@ -1209,16 +1318,44 @@ animation = function () {
 			}
 		}
 	}
-	lancementProjec = Math.floor((Math.random() * 1000) + 1);
-	if (lancementProjec === 1) {
-		directProject = Math.floor((Math.random() * 5 * Math.PI / 6) + Math.PI / 6);
-		xPasProject = 10 * Math.cos(directProject);
-		yPasProject = 10 * Math.sin(directProject);
+	if (!machineGun && !stopTime) {
+		lancementProjec = Math.floor((Math.random() * 50) + 1);
+	} else if (!stopTime) {
+		lancementProjec = 1;
+	}
+	if (lancementProjec === 1 && !machineGun) {
+		directProject = (Math.random() * 5 * Math.PI / 6) + Math.PI / 6;
+		xPasProject = 7 * Math.cos(directProject);
+		yPasProject = 7 * Math.sin(directProject);
 		xProject = 640;
 		yProject = 180;
-		project.push(new Projectiles(xProject, yProject, xPasProject, yPasProject));
+		touch = false;
+		project.push(new Projectiles(xProject, yProject, xPasProject, yPasProject, touch));
+	} else if (lancementProjec === 1 && machineGun) {
+		if (revAngleMachineGun) {
+			xPasProject = 7 * Math.cos(Math.PI / 6 + angleMachineGun);
+			yPasProject = 7 * Math.sin(Math.PI / 6 + angleMachineGun);
+		} else {
+			xPasProject = 7 * Math.cos(Math.PI * 5 / 6 - angleMachineGun);
+			yPasProject = 7 * Math.sin(Math.PI * 5 / 6 - angleMachineGun);
+		}
+		xProject = 640;
+		yProject = 180;
+		touch = false;
+		project.push(new Projectiles(xProject, yProject, xPasProject, yPasProject, touch));
+		angleMachineGun += 0.01;
 	}
-	powerupTime = Math.floor((Math.random() * 1000) + 1);
+	if (angleMachineGun >= 1.04 && revAngleMachineGun) {
+		angleMachineGun = 0;
+		revAngleMachineGun = false;
+	} else if (angleMachineGun >= 1.04 && !revAngleMachineGun) {
+		clockBoss = true;
+		seconBoss = 1;
+		timerBoss();
+	}
+	if (!stopTime) {
+		powerupTime = Math.floor((Math.random() * 1000) + 1);
+	}
 	if (allowPowerup) {
 		if (powerupTime === 1) {
 			powerup = Math.floor((Math.random() * 100) + 1);
@@ -1227,6 +1364,23 @@ animation = function () {
 			masquagePup = true;
 			allowPowerup = false;
 			powerupTime = Math.floor((Math.random() * 1000) + 1);
+		}
+	}
+	if (!stopTime) {
+		powerupBoss = Math.floor((Math.random() * 1000) + 1);
+	}
+	if (allowPowerupBoss) {
+		if (powerupBoss === 1) {
+			choosePowerup = Math.floor((Math.random() * 100) + 1);
+			if (choosePowerup <= 51) {
+				clockBoss = true;
+				invincible = true;
+				seconBoss = 5;
+				timerBoss();
+			} else if (choosePowerup > 50) {
+				machineGun = true;
+			}
+			allowPowerupBoss = false;
 		}
 	}
 	drawLife();
