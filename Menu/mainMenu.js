@@ -187,9 +187,9 @@ select = function () {
 };
 
 //Lancement des fonctions principales après chargement de la page
-setTimeout(creaBriques, 10000);
+setTimeout(creaBriques, 499);
 setTimeout(animation, 10001);
-setTimeout(select, 10002);
+setTimeout(select, 500);
 
 
 /******************************************************
