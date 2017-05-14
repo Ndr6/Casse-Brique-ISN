@@ -72,6 +72,7 @@ var creaBriques = function () {
     "use strict";
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
+    scene.drawImage(controlsHelp, 1080, 712, 200, 88);
 };
 
 //Appel de la fonction de création des briques au chargement terminé de la page
