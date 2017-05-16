@@ -4,16 +4,16 @@
 # Date limite du projet : 22 mai
 
 # Niveaux prévus :
-  - Niveau 1 : Nordic
-  - Niveau 2 : Orbit
-  - Niveau 3 : Space
-  - Niveau 4 : Mars
+  - Niveau 1 : Nordic (Assets en cours de production)
+  - Niveau 2 : Orbit (Non commencé)
+  - Niveau 3 : Space (Fonctionnel, vérifications à faire)
+  - Niveau 4 : Mars (Non commencé)
 
 # Crédits :
 
 -Programmation : Ndr, Dufduf, Nagib, Apachaisan
 
--Graphismes : Nagib (bon, on attend pas mal mais bon)
+-Graphismes : Nagib
 
 -Sons : Ndr, Nagib
 

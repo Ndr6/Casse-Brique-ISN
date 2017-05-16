@@ -10,7 +10,7 @@ H1, Ul, li{
     text-align: center;
 }
 h2{
-    font-size: 25px;
+    font-size: 20px;
     }
 
 ul{
@@ -34,7 +34,7 @@ p{
 h5{
     text-align: center;
     color: red;
-    font-size: 20px;
+    font-size: 15px;
     line-height: 5px
 }
 
@@ -44,4 +44,5 @@ h1{
 
 #retour{
     text-align: center;
+    font-size: 20px;
 }
