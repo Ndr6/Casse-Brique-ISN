@@ -60,7 +60,7 @@ ViseeSfx.volume = 0.5;
 var raquetteSfx = new Audio("sfx/raquetteSfx.wav");
 raquetteSfx.volume = 0.5;
 
-var lifeRaquette = 5;
+var lifeRaquette = 2;
 //Variables balle
 var moveBalle = false; //Activation de la balle
 var moveRaquette = true; //Activation de la raquette
