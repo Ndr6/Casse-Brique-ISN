@@ -22,7 +22,7 @@ body{
 }
 
 a{
-    color: lightcyan;
+    color: dodgerblue;
 }
 
 p{
@@ -33,7 +33,7 @@ p{
 
 h5{
     text-align: center;
-    color: red;
+    color: white;
     font-size: 15px;
     line-height: 5px
 }
