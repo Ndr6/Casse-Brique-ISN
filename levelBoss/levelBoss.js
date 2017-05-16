@@ -161,6 +161,10 @@ voyantRouge.height = 20;
 
 var pattern = [4, 4, 4, 4, 4, 4, 4, 4, 4];
 //Variables boss
+var bossImg = new Image();
+bossImg.src = "gfx/boss.png";
+bossImg.width = 320;
+bossImg.height = 160;
 var xBoss = 480;
 var yBoss = 20;
 var hitBoss = 50;
@@ -358,6 +362,7 @@ resetBoss = function () {
         revAngleMachineGun = true;
         machineGun = false;
     }
+    bossImg.src = "gfx/boss.png";
     allowPowerupBoss = true;
 };
 //Fonction de reset des powerups
@@ -601,15 +606,7 @@ function controls() {
                     }
                 }
                 if (!dead) {
-                    scene.beginPath();
-                    scene.rect(xBoss, yBoss, 320, 160);
-                    scene.fill();
-                    if (!invincible) {
-                        scene.fillStyle = "white";
-                    } else {
-                        scene.fillStyle = "red";
-                    }
-                    scene.closePath();
+                    scene.drawImage(bossImg, xBoss, yBoss, 320, 160);
                 }
                 for (k = 0; k < briquesObj.length; k = k + 1) {
                     if (briquesObj[k].life) {
@@ -653,15 +650,7 @@ function controls() {
                     }
                 }
                 if (!dead) {
-                    scene.beginPath();
-                    scene.rect(xBoss, yBoss, 320, 160);
-                    scene.fill();
-                    if (!invincible) {
-                        scene.fillStyle = "white";
-                    } else {
-                        scene.fillStyle = "red";
-                    }
-                    scene.closePath();
+                    scene.drawImage(bossImg, xBoss, yBoss, 320, 160);
                 }
                 for (k = 0; k < briquesObj.length; k = k + 1) {
                     if (briquesObj[k].life) {
@@ -861,13 +850,7 @@ animation = function () {
         scene.drawImage(voyantVert, 1250, 770, 20, 20);
     }
     if (!dead) {
-        scene.rect(xBoss, yBoss, 320, 160);
-        scene.fill();
-        if (!invincible) {
-            scene.fillStyle = "white";
-        } else {
-            scene.fillStyle = "red";
-        }
+        scene.drawImage(bossImg, xBoss, yBoss, 320, 160);
     }
     //Trajectoire de la balle (à isoler)
     xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
@@ -1380,13 +1363,15 @@ animation = function () {
     }
     if (allowPowerupBoss) {
         if (powerupBoss === 1) {
-            choosePowerup = Math.floor((Math.random() * 1000) + 1);
+            choosePowerup = Math.floor((Math.random() * 100) + 1);
             if (choosePowerup <= 50) {
                 clockBoss = true;
                 invincible = true;
-                seconBoss = 5;
+                bossImg.src = "gfx/bossInvincible.png";
+                seconBoss = 10;
                 timerBoss();
             } else if (choosePowerup > 50) {
+                bossImg.src = "gfx/bossColere.png";
                 machineGun = true;
             }
             allowPowerupBoss = false;
