@@ -312,15 +312,15 @@ defense = function () {
     if (!pupDef && moveRaquette) {
         moveBalle = false;
         moveRaquette = false;
-        setTimeout(timeToStop, 1200);
+        setTimeout(timeToStop, 900);
         raquetteImg.src = "gfx/RaquettePUPDef.png";
         DefSfx.play(); //la ferme !
         raquetteImg.width = 288;
         raquetteImg.height = 50;
         pupDef = true;
         xRaquette -= 44;
-        setTimeout(recommence, 1201);
-        draww = setInterval(draw, 200);
+        setTimeout(recommence, 901);
+        draww = setInterval(draw, 150);
         if (ready) {
             if (xRaquette >= 1272 - raquetteImg.width) {
                 xRaquette = 1272 - raquetteImg.width;
