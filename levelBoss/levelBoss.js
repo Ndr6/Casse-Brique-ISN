@@ -861,7 +861,6 @@ animation = function () {
         scene.drawImage(voyantVert, 1250, 770, 20, 20);
     }
     if (!dead) {
-        scene.beginPath();
         scene.rect(xBoss, yBoss, 320, 160);
         scene.fill();
         if (!invincible) {
@@ -869,12 +868,7 @@ animation = function () {
         } else {
             scene.fillStyle = "red";
         }
-        scene.closePath();
     }
-    scene.beginPath();
-    scene.fillRect(20, 850, 200, 30);
-    scene.fillStyle = "cyan";
-    scene.closePath();
     //Trajectoire de la balle (à isoler)
     xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
     yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
