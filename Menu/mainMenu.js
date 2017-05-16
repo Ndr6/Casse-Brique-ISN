@@ -72,6 +72,7 @@ var creaBriques = function () {
     "use strict";
     canvas = document.getElementById('canvas');
     scene = canvas.getContext("2d");
+    scene.drawImage(controlsHelp, 1080, 712, 200, 88);
 };
 
 //Appel de la fonction de création des briques au chargement terminé de la page
@@ -166,12 +167,11 @@ select = function () {
         } else if (posx === 365) {
             //2e choix
             flag = false;
-            alert("Niveau Orbite : Pas prêt");
-            location.reload();
+            location.replace("../Orbit/levelOrbit.html");
         } else if (posx === 615) {
             //3e choix
             flag = false;
-            alert("Niveau Espaaaaaace ! : Pas prêt");
+            alert("Niveau Space : Plus prêt...");
             location.reload();
         } else if (posx === 865) {
             //4e choix
@@ -188,9 +188,9 @@ select = function () {
 };
 
 //Lancement des fonctions principales après chargement de la page
-setTimeout(creaBriques, 10000);
+setTimeout(creaBriques, 499);
 setTimeout(animation, 10001);
-setTimeout(select, 10002);
+setTimeout(select, 500);
 
 
 /******************************************************
