@@ -210,7 +210,7 @@ var creaBriques = function () {
 			xBriques = 83 * i + 19;
 			yBriques = 43 * v + 5;
 			life = true;
-			hit = false; 
+			hit = false;
 			briquesObj.push(new Briques(xBriques, yBriques, life, hit));
 		}
 	}
