@@ -871,6 +871,10 @@ animation = function () {
         }
         scene.closePath();
     }
+    scene.beginPath();
+    scene.fillRect(20, 850, 200, 30);
+    scene.fillStyle = "cyan";
+    scene.closePath();
     //Trajectoire de la balle (à isoler)
     xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
     yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
