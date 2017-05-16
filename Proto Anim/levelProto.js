@@ -630,14 +630,11 @@ drawLife = function () {
 	if (nblife <= 0) {
 		hasLost = true;
 	}
-	if (nblife >= 1) {
+	if (nblife >= 2) {
 		scene.drawImage(vieImg, 0, 750, 75, 50);
 	}
-	if (nblife >= 2) {
-		scene.drawImage(vieImg, 75, 750, 75, 50);
-	}
 	if (nblife >= 3) {
-		scene.drawImage(vieImg, 150, 750, 75, 50);
+        scene.drawImage(vieImg, 75, 750, 75, 50);
 	}
 	if (nblife > 3) {
 		scene.drawImage(vieCheatImg, 0, 750, 225, 50);
