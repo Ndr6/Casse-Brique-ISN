@@ -20,7 +20,6 @@ var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
 var timer1; //Fonction qui permet d'avoir le décompte du powerup
 var go; //Game over
-var prepaDirection;
 
 //Variables son
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
@@ -32,6 +31,22 @@ audioBG.loop = true;
 audioBG.play();
 
 var wallSfx = new Audio("sfx/murSfx.wav");
+
+//anim
+var anima = new Image();
+anima.src = "gfx/RaquettePUPDefAnim.png";
+anima.width = 290;
+anima.height = 292;
+var rows = 6;
+var etape = anima.height / rows;
+var debutX = 0; // X du dessin
+var debutY = 0; // Y du dessin
+var draww;
+var ready = false;
+//départ
+var curFrame = 0;
+//total d'étapes
+var frameCount = 6;
 
 //Variables menu pause
 var pauseImg = new Image();
@@ -215,6 +230,36 @@ var creaBriques = function () {
 		}
 	}
 };
+
+function updateFrame() {
+    "use strict";
+    curFrame = ++curFrame % frameCount;
+    //change "d'étape"
+    debutY = curFrame * 50; //change la coordonnée Y afin de changer le sprite
+    scene.clearRect(xRaquette, yRaquette, anima.widht, anima.height); // on efface le sprite precedent
+}
+
+function draw() {
+    "use strict";
+    //change de frame
+    updateFrame(); // lance la fonction qui change de frame
+    //DESSIN
+    scene.drawImage(anima, debutX, debutY, anima.width, etape, xRaquette, yRaquette, anima.width, 50);
+}
+
+function recommence() {
+    "use strict";
+    moveBalle = true;
+    moveRaquette = true;
+    ready = true;
+    animation();
+}
+
+function timeToStop() {
+    "use strict";
+    clearInterval(draww);
+}
+
 //Fonction du décompte pour les powerups
 timer1 = function () {
 	"use strict";
@@ -263,26 +308,30 @@ reset = function () {
 
 //Fonction d'activation standard du powerup Défense
 defense = function () {
-	"use strict";
-	if (!pupDef && moveRaquette) {
-		scene.clearRect(xCapsule, yCapsule, capsuleDEFImg.width, capsuleDEFImg.height);
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/RaquettePUPDef.png";
-		DefSfx.play(); //la ferme !
-		raquetteImg.width = 288;
-		raquetteImg.height = 50;
-		pupDef = true;
-		xRaquette -= 44;
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1272 - raquetteImg.width) {
-			xRaquette = 1272 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-		clock = true;
-		secon = 20;
-		timer1();
-	}
+    "use strict";
+    if (!pupDef && moveRaquette) {
+        moveBalle = false;
+        moveRaquette = false;
+        setTimeout(timeToStop, 900);
+        raquetteImg.src = "gfx/RaquettePUPDef.png";
+        DefSfx.play(); //la ferme !
+        raquetteImg.width = 288;
+        raquetteImg.height = 50;
+        pupDef = true;
+        xRaquette -= 44;
+        setTimeout(recommence, 901);
+        draww = setInterval(draw, 150);
+        if (ready) {
+            if (xRaquette >= 1272 - raquetteImg.width) {
+                xRaquette = 1272 - raquetteImg.width;
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            }
+        }
+        clock = true;
+        secon = 20;
+        timer1();
+    }
 };
 //Fonction du powerup Unstoppable
 unstoppable = function () {
