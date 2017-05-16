@@ -2,8 +2,7 @@ canvas
 {
 	border-color: green;
 	border: solid;
-    /*background-color: black;*/
-    background-image: url(gfx/BGMenu.gif);    
+    background-image: url(gfx/BGSpace.png);
 }
 
 body
@@ -20,8 +19,14 @@ td, th
 
 h1
 {
-    font-size: 25px;
+    font-size: 23px;
     color: white;
+    text-align: center;
+}
+
+h2{
+    font-size: 25px;
+    color: red;
     text-align: center;
 }
 
@@ -50,5 +55,5 @@ table{
 
 p
 {
-    color: red;
+    text-align: center;
 }
