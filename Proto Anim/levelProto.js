@@ -364,7 +364,7 @@ pupDirection = function () {
 			stopTime = true;
 			yBalle = yRaquette - 50;
 			moveRaquette = false;
-			scene.clearRect(0, 550, 1280, 800);
+			scene.clearRect(xRaquette, yRaquette - 100, 200, 300);
 			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 			drawLife();
@@ -838,7 +838,9 @@ animation = function () {
 		} else if (powerup >= 34 && powerup < 67) {
 			unstoppable();
 		} else if (powerup >= 67) {
-			nbPupDirection += 1;
+			if (nbPupDirection < 3) {
+				nbPupDirection += 1;
+			}
 			allowPowerup = true;
 			powerup = Math.floor((Math.random() * 100) + 1);
 		}
