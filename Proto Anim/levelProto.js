@@ -20,6 +20,7 @@ var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
 var timer1; //Fonction qui permet d'avoir le décompte du powerup
 var go; //Game over
+var combo; //fonction compteur de combo
 
 //Variables son
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
@@ -195,6 +196,10 @@ var pause = false; //Drapeaux activation pause
 //Compteur de vie
 var drawLife;
 var nblife = 3; //Nombre de vie
+
+//compteur de combo
+var nbCombo = 0; //nombre de briques
+var clkCombo = 5; //décompte avant fin du combo
 
 var vieImg = new Image();
 vieImg.src = "gfx/vieImg.png";
@@ -420,6 +425,7 @@ pupDirection = function () {
 loseLife = function () {
 	"use strict";
 	moveBalle = false;
+    nbCombo = 0;
 	yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
@@ -454,7 +460,6 @@ go = function () { //Perte des vies
 	"use strict";
 	nblife -= 1;
 	loseLifeSfx.play();
-	console.log(nblife);
 	if (nblife <= 0) {
 		scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
 		moveBalle = false;
@@ -463,6 +468,30 @@ go = function () { //Perte des vies
 		setTimeout(gameoverSound, 2000);
 	}
 };
+
+combo = function () {
+    "use strict";
+    
+    if (clkCombo > 0) { //ajoute 1 au combo et remet le decompte à 5 s'il n'est pas arrivé à 0
+        nbCombo += 1;
+        clkCombo = 5;
+    } else {  //
+        clkCombo = 5;
+        nbCombo = 1; //redémare le décompte s'il etait arrivé à 0;
+    }
+    console.log("combo actuel:", nbCombo);
+    scene.fillText("nbCombo", 0, 750, 50);
+};
+
+
+
+function horlogeCombo() { //horloge du combo qui est appelée par la fonction intervale, retire 1 à la variable qui fait le décomtpe
+    "use strict";
+    clkCombo -= 1;
+    console.log("décompte:", clkCombo);
+}
+setInterval(horlogeCombo, 1000); //intervale qui apelle la fonction au dessus toutes les secondes
+              
 
 function win() {
 	"use strict";
@@ -473,6 +502,7 @@ function win() {
 	sumLife = pattern.reduce(addLife, 0);
 	console.log(sumLife);
 	console.log(pattern);
+    combo();
 	if (sumLife === 0) {
 		hasWon = true;
 		moveBalle = false;
