@@ -167,7 +167,6 @@ bossImg.width = 320;
 bossImg.height = 160;
 var xBoss = 480;
 var yBoss = 20;
-var hitBoss = 50;
 var dead = false;
 var alreadyHit = false;
 var alreadyHitProject = false;
@@ -881,11 +880,6 @@ animation = function () {
             xBalle = xBalle - xPasAnim;
         }
     }
-    if (angleLine < -Math.PI / 2) {
-        inversTrajectoire = true;
-    } else if (angleLine > -Math.PI / 2) {
-        inversTrajectoire = false;
-    }
     for (m = 0; m < project.length; m += 1) {
         if (!project[m].touch) {
             if (!pupDef) {
@@ -1084,9 +1078,6 @@ animation = function () {
                 revx = true;
                 revy = true;
                 angleLine = -Math.PI / 8;
-                if (!inversTrajectoire) {
-                    inversTrajectoire = true;
-                }
             }
             raquetteSfx.play();
         }
@@ -1098,9 +1089,6 @@ animation = function () {
                 revx = false;
                 revy = true;
                 angleLine = 9 * -Math.PI / 8;
-                if (inversTrajectoire) {
-                    inversTrajectoire = false;
-                }
             }
             raquetteSfx.play();
         }
@@ -1311,7 +1299,11 @@ animation = function () {
         }
     }
     if (!machineGun && !stopTime) {
-        lancementProjec = Math.floor((Math.random() * 50) + 1);
+		if (hitBoss <= 10) {
+			lancementProjec = Math.floor((Math.random() * 15) + 1);
+		} else {
+			lancementProjec = Math.floor((Math.random() * 50) + 1);
+		}
     } else if (!stopTime) {
         lancementProjec = 1;
     }
@@ -1323,7 +1315,7 @@ animation = function () {
         yProject = 180;
         touch = false;
         project.push(new Projectiles(xProject, yProject, xPasProject, yPasProject, touch));
-    } else if (lancementProjec === 1 && machineGun) {
+    } else if (lancementProjec === 1 && machineGun && !stopTime) {
         if (revAngleMachineGun) {
             xPasProject = 7 * Math.cos(Math.PI / 6 + angleMachineGun);
             yPasProject = 7 * Math.sin(Math.PI / 6 + angleMachineGun);
@@ -1337,10 +1329,10 @@ animation = function () {
         project.push(new Projectiles(xProject, yProject, xPasProject, yPasProject, touch));
         angleMachineGun += 0.01;
     }
-    if (angleMachineGun >= 0.8 && revAngleMachineGun) {
+    if (angleMachineGun >= 0.9 && revAngleMachineGun) {
         angleMachineGun = 0;
         revAngleMachineGun = false;
-    } else if (angleMachineGun >= 0.8 && !revAngleMachineGun) {
+    } else if (angleMachineGun >= 0.9 && !revAngleMachineGun) {
         clockBoss = true;
         seconBoss = 1;
         timerBoss();
