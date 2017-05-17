@@ -167,6 +167,7 @@ bossImg.width = 320;
 bossImg.height = 160;
 var xBoss = 480;
 var yBoss = 20;
+var hitBoss = 30;
 var dead = false;
 var alreadyHit = false;
 var alreadyHitProject = false;
