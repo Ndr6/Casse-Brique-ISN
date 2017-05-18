@@ -22,7 +22,6 @@ var win; //Bah quand on gagne, quoi
 var timer1; //Fonction qui permet d'avoir le décompte du powerup
 var timerBoss;
 var go; //Game over
-var prepaDirection;
 
 //Variables son
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
@@ -835,13 +834,19 @@ animation = function () {
     if (masquagePup) {
         if (powerup < 34) {
             scene.drawImage(capsuleDEFImg, xCapsule, yCapsule, capsuleDEFImg.width, capsuleDEFImg.height);
-            yCapsule += 4;
+            if (!stopTime) {
+                yCapsule += 4;
+            }
         } else if (powerup >= 34 && powerup < 67) {
             scene.drawImage(capsuleATKImg, xCapsule, yCapsule, capsuleATKImg.width, capsuleATKImg.height);
-            yCapsule += 4;
+            if (!stopTime) {
+                yCapsule += 4;
+            }
         } else if (powerup >= 67) {
             scene.drawImage(capsuleDIRECTImg, xCapsule, yCapsule, capsuleDIRECTImg.width, capsuleDIRECTImg.height);
-            yCapsule += 4;
+            if (!stopTime) {
+                yCapsule += 4;
+            }
         }
     }
     if (nbPupDirection === 1) {
@@ -1270,30 +1275,38 @@ animation = function () {
             briquesObj[j].hit = false;
             if (briquesObj[j].rev) {
                 if (j === 0 || j === 1 || j === 2 || j === 5 || j === 6 || j === 7) {
-                    briquesObj[j].y += 1.5;
-                    briquesObj[j].trajecy += 1.5;
-                    if (briquesObj[j].trajecy === 150) {
-                        briquesObj[j].rev = false;
+                    if (!stopTime) {
+                        briquesObj[j].y += 1.5;
+                        briquesObj[j].trajecy += 1.5;
+                        if (briquesObj[j].trajecy === 150) {
+                            briquesObj[j].rev = false;
+                        }
                     }
                 } else if (j === 3 || j === 4) {
-                    briquesObj[j].x += 1.5;
-                    briquesObj[j].trajecx += 1.5;
-                    if (briquesObj[j].trajecx === 150) {
-                        briquesObj[j].rev = false;
+                    if (!stopTime) {
+                        briquesObj[j].x += 1.5;
+                        briquesObj[j].trajecx += 1.5;
+                        if (briquesObj[j].trajecx === 150) {
+                            briquesObj[j].rev = false;
+                        }
                     }
                 }
             } else {
                 if (j === 0 || j === 1 || j === 2 || j === 5 || j === 6 || j === 7) {
-                    briquesObj[j].y -= 1.5;
-                    briquesObj[j].trajecy -= 1.5;
-                    if (briquesObj[j].trajecy === 0) {
-                        briquesObj[j].rev = true;
+                    if (!stopTime) {
+                        briquesObj[j].y -= 1.5;
+                        briquesObj[j].trajecy -= 1.5;
+                        if (briquesObj[j].trajecy === 0) {
+                            briquesObj[j].rev = true;
+                        }
                     }
                 } else if (j === 3 || j === 4) {
-                    briquesObj[j].x -= 1.5;
-                    briquesObj[j].trajecx -= 1.5;
-                    if (briquesObj[j].trajecx === 0) {
-                        briquesObj[j].rev = true;
+                    if (!stopTime) {
+                        briquesObj[j].x -= 1.5;
+                        briquesObj[j].trajecx -= 1.5;
+                        if (briquesObj[j].trajecx === 0) {
+                            briquesObj[j].rev = true;
+                        }
                     }
                 }
             }
@@ -1301,8 +1314,14 @@ animation = function () {
     }
     if (!machineGun && !stopTime) {
 		if (hitBoss <= 10) {
-			lancementProjec = Math.floor((Math.random() * 15) + 1);
-		} else {
+            if (nblife === 3) {
+                lancementProjec = Math.floor((Math.random() * 7) + 1);
+            } else if (nblife === 2) {
+                lancementProjec = Math.floor((Math.random() * 15) + 1);
+            } else if (nblife === 1) {
+                lancementProjec = Math.floor((Math.random() * 30) + 1);
+            }
+		} else if (hitBoss > 10) {
 			lancementProjec = Math.floor((Math.random() * 50) + 1);
 		}
     } else if (!stopTime) {
