@@ -200,6 +200,7 @@ var nblife = 3; //Nombre de vie
 //compteur de combo
 var nbCombo = 0; //nombre de briques détruites avant la fin du décompte
 var clkCombo = 5; //décompte avant fin du combo
+var nbScore = 0; //le score commence à 0
 
 var vieImg = new Image();
 vieImg.src = "gfx/vieImg.png";
@@ -426,6 +427,7 @@ loseLife = function () {
 	"use strict";
 	moveBalle = false;
     nbCombo = 0;
+    nbScore -= 100;
 	yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
@@ -494,6 +496,15 @@ function horlogeCombo() { //horloge du combo qui est appelée par la fonction in
     }
 }
 setInterval(horlogeCombo, 1000); //intervale qui apelle la fonction au dessus toutes les secondes
+
+function score() {
+    "use strict";
+    if (nbCombo < 10) {
+        nbScore += 10;
+    } else {
+        nbScore += 10 + nbCombo;
+    }
+}
               
 
 function win() {
@@ -506,6 +517,7 @@ function win() {
 	//console.log(sumLife);
 	//console.log(pattern);
     combo();
+    score();
 	if (sumLife === 0) {
 		hasWon = true;
 		moveBalle = false;
@@ -767,10 +779,31 @@ animation = function () {
 	//(Re)construction de la scène
 	scene.clearRect(0, 0, 1280, 800);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
-    canvas.style.fontFamily = "arial";
-    scene.font = "50px arial";
-    scene.fontcolor = "white";
-    scene.fillText(nbCombo, 0, 500, 500);
+    
+    if (0 < nbCombo && nbCombo < 9) {
+        canvas.style.fontFamily = "Fixedsys";
+        scene.font = "50px Fixedsys";
+        //mettre le changement de couleur ici
+        scene.fillText(nbCombo, 300, 786, 500);
+    }
+    if (10 < nbCombo && nbCombo < 19) {
+        canvas.style.fontFamily = "Fixedsys";
+        scene.font = "50px Fixedsys";
+        //mettre le changement de couleur ici
+        scene.fillText(nbCombo, 300, 786, 500);
+    }
+    if (20 < nbCombo) {
+        canvas.style.fontFamily = "Fixedsys";
+        scene.font = "50px Fixedsys";
+        //mettre le changement de couleur ici
+        scene.fillText(nbCombo, 300, 786, 500);
+    }
+    
+    canvas.style.fontFamily = "Fixedsys";
+    scene.font = "50px Fixedsys";
+    //mettre le changement de couleur ici
+    scene.fillText(nbScore, 400, 786, 500);
+
     
 	for (k = 0; k < briquesObj.length; k = k + 1) {
 		if (briquesObj[k].life) {
