@@ -198,10 +198,8 @@ var drawLife;
 var nblife = 3; //Nombre de vie
 
 //compteur de combo
-var nbCombo = 0; //nombre de briques
+var nbCombo = 0; //nombre de briques détruites avant la fin du décompte
 var clkCombo = 5; //décompte avant fin du combo
-nbCombo.fontSize = "50px";
-nbCombo.color = "white";
 
 var vieImg = new Image();
 vieImg.src = "gfx/vieImg.png";
@@ -227,7 +225,7 @@ var gameoverSfx = new Audio("sfx/gameoverSfx.wav");
 //Fonction de définition du pattern de briques (plutôt basique pour l'instant)
 var creaBriques = function () {
 	"use strict";
-	canvas = document.getElementById('canvas');
+	canvas = document.getElementById("canvas");
 	scene = canvas.getContext("2d");
 
 	var v, i, Briques = function (xBriques, yBriques, life, hit) { //C'est juste des variables pour les boucles for
@@ -482,6 +480,8 @@ combo = function () {
         nbCombo = 1; //redémare le décompte s'il etait arrivé à 0;
     }
     console.log("combo actuel:", nbCombo);
+    
+    
 };
 
 
@@ -489,6 +489,9 @@ function horlogeCombo() { //horloge du combo qui est appelée par la fonction in
     "use strict";
     clkCombo -= 1;
     //console.log("décompte:", clkCombo);
+    if (clkCombo === 0) {
+        nbCombo = 0;
+    }
 }
 setInterval(horlogeCombo, 1000); //intervale qui apelle la fonction au dessus toutes les secondes
               
@@ -764,10 +767,11 @@ animation = function () {
 	//(Re)construction de la scène
 	scene.clearRect(0, 0, 1280, 800);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
-    scene.fillText(nbCombo, 0, 500, 1000);
-    nbCombo.font = "50px";
-    nbCombo.color = "white";
-
+    canvas.style.fontFamily = "arial";
+    scene.font = "50px arial";
+    scene.fontcolor = "white";
+    scene.fillText(nbCombo, 0, 500, 500);
+    
 	for (k = 0; k < briquesObj.length; k = k + 1) {
 		if (briquesObj[k].life) {
 			if (pattern[k] === 1) {
