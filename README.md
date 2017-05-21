@@ -3,10 +3,10 @@
 # Date limite du projet : 22 mai
 
 # Niveaux prévus :
-  - Niveau 1 : Nordic (Assets a vérifier)
-  - Niveau 2 : Orbit (Assets OK)
-  - Niveau 3 : Space (Assets ?)
-  - Niveau 4 : Mars (Assets ?)
+  - Niveau 1 : Nordic (A construire)
+  - Niveau 2 : Orbit (A reconstruire)
+  - Niveau 3 : Space (A construire)
+  - Niveau 4 : Mars (A construire)
 
 # Crédits :
 
