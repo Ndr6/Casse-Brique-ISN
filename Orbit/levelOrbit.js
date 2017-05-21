@@ -434,6 +434,7 @@ loseLife = function () {
 	}
 	yRaquette = 700;
 	angleLine = -Math.PI / 4;
+	inversTrajectoire = false;
 	secon = 1;
 	stopTime = false;
 	timer1();
