@@ -27,7 +27,7 @@ var go; //Game over
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
 var pauseSfx = new Audio("sfx/pauseSfx.wav");
 var unpauseSfx = new Audio("sfx/unpauseSfx.wav");
-var audioBG = new Audio("sfx/space_corsair.mp3");
+var audioBG = new Audio("sfx/background.mp3");
 audioBG.volume = 0.3;
 audioBG.loop = true;
 audioBG.play();
@@ -121,13 +121,21 @@ var winSfxPlayed = false;
 //Variables briques
 
 var briqueImg = new Image(); //Asset graphique des briques
-briqueImg.src = "gfx/briqueProto.png";
+briqueImg.src = "gfx/brique1.png";
 briqueImg.width = 80;
 briqueImg.height = 40;
 var brique2Img = new Image();
-brique2Img.src = "gfx/briqueProto2.png";
+brique2Img.src = "gfx/brique2.png";
 brique2Img.width = 80;
 brique2Img.height = 40;
+var brique3Img = new Image();
+brique3Img.src = "gfx/brique3.png";
+brique3Img.width = 80;
+brique3Img.height = 40;
+var brique4Img = new Image();
+brique4Img.src = "gfx/brique4.png";
+brique4Img.width = 80;
+brique4Img.height = 40;
 var rev;
 var trajecx;
 var trajecy;
@@ -151,7 +159,7 @@ capsuleATKImg.src = "gfx/capsuleATK.png";
 capsuleATKImg.width = 40;
 capsuleATKImg.height = 80;
 var capsuleDIRECTImg = new Image();
-capsuleDIRECTImg.src = "gfx/capsuleDIRECT.png";
+capsuleDIRECTImg.src = "gfx/capsuleVIS.png";
 capsuleDIRECTImg.width = 40;
 capsuleDIRECTImg.height = 80;
 var xCapsule = -100;
@@ -906,11 +914,17 @@ animation = function () {
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
 	for (k = 0; k < briquesObj.length; k = k + 1) {
 		if (briquesObj[k].life) {
-			if (pattern[k] === 4 || pattern[k] === 3) {
-				scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+			if (pattern[k] === 4) {
+				scene.drawImage(brique4Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
 			}
-			if (pattern[k] === 2 || pattern[k] === 1) {
+			if (pattern[k] === 3) {
+				scene.drawImage(brique3Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+			}
+			if (pattern[k] === 2) {
 				scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+			}
+			if (pattern[k] === 1) {
+				scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
 			}
 		}
 	}
