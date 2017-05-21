@@ -577,7 +577,7 @@ function controls() {
 		animation();
 	}
 	if (keyState[32] && hasWon) {
-		location.replace("../Menu/mainMenu.html");
+		location.replace("../Space/levelSpace.html");
 	}
 	if (keyState[32] && hasLost) {
 		location.reload();
