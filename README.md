@@ -1,19 +1,18 @@
 # Casse-Brique-ISN - https://isn.ender.ovh/
 # Ultimate Space Vikings, projet pour l'ISN 2017
-# Pré-release prévue le 9 mai !
 # Date limite du projet : 22 mai
 
 # Niveaux prévus :
-  - Niveau 1 : Nordic
-  - Niveau 2 : Orbit
-  - Niveau 3 : Space
-  - Niveau 4 : Mars
+  - Niveau 1 : Nordic (Assets a vérifier)
+  - Niveau 2 : Orbit (Assets OK)
+  - Niveau 3 : Space (Assets ?)
+  - Niveau 4 : Mars (Assets ?)
 
 # Crédits :
 
 -Programmation : Ndr, Dufduf, Nagib, Apachaisan
 
--Graphismes : Nagib (bon, on attend pas mal mais bon)
+-Graphismes : Nagib
 
 -Sons : Ndr, Nagib
 
