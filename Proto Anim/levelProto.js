@@ -25,7 +25,7 @@ var go; //Game over
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
 var pauseSfx = new Audio("sfx/pauseSfx.wav");
 var unpauseSfx = new Audio("sfx/unpauseSfx.wav");
-var audioBG = new Audio("sfx/space_corsair.mp3");
+var audioBG = new Audio("sfx/background.mp3");
 audioBG.volume = 0.3;
 audioBG.loop = true;
 audioBG.play();
@@ -50,7 +50,7 @@ var frameCount = 6;
 
 //Variables menu pause
 var pauseImg = new Image();
-pauseImg.src = "gfx/pausetest.png";
+pauseImg.src = "gfx/pauseImg.png";
 pauseImg.width = 400;
 pauseImg.height = 400;
 
@@ -118,11 +118,11 @@ var winSfxPlayed = false;
 //Variables briques
 
 var briqueImg = new Image(); //Asset graphique des briques
-briqueImg.src = "gfx/briqueProto.png";
+briqueImg.src = "gfx/brique2.png";
 briqueImg.width = 80;
 briqueImg.height = 40;
 var brique2Img = new Image();
-brique2Img.src = "gfx/briqueProto2.png";
+brique2Img.src = "gfx/brique4.png";
 brique2Img.width = 80;
 brique2Img.height = 40;
 
@@ -145,7 +145,7 @@ capsuleATKImg.src = "gfx/capsuleATK.png";
 capsuleATKImg.width = 40;
 capsuleATKImg.height = 80;
 var capsuleDIRECTImg = new Image();
-capsuleDIRECTImg.src = "gfx/capsuleDIRECT.png";
+capsuleDIRECTImg.src = "gfx/capsuleVIS.png";
 capsuleDIRECTImg.width = 40;
 capsuleDIRECTImg.height = 80;
 var xCapsule = -100;
