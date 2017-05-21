@@ -665,7 +665,7 @@ function controls() {
 		if (!pause && !hasWon && !hasLost && moveRaquette) {
 			if (xRaquette <= 0) {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette -= 0;
+				xRaquette = 0;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			} else {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -715,7 +715,7 @@ function controls() {
 		if (!pause && !hasWon && !hasLost && moveRaquette) {
 			if (xRaquette >= 1280 - raquetteImg.width) {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette += 0;
+				xRaquette = 1280 - raquetteImg.width;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			} else {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);

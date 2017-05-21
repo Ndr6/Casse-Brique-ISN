@@ -122,7 +122,7 @@ briqueImg.src = "gfx/brique1.png";
 briqueImg.width = 80;
 briqueImg.height = 40;
 var brique2Img = new Image();
-brique2Img.src = "gfx/brique2.png";
+brique2Img.src = "gfx/brique4.png";
 brique2Img.width = 80;
 brique2Img.height = 40;
 
@@ -325,10 +325,6 @@ defense = function () {
 		DefSfx.play(); //la ferme !
 		raquetteImg.width = 288;
 		raquetteImg.height = 50;
-		pupDef = true;
-		xRaquette -= 44;
-		setTimeout(recommence, 901);
-		draww = setInterval(draw, 150);
 		if (ready) {
 			if (xRaquette >= 1272 - raquetteImg.width) {
 				xRaquette = 1272 - raquetteImg.width;
@@ -336,6 +332,10 @@ defense = function () {
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			}
 		}
+		pupDef = true;
+		xRaquette -= 44;
+		setTimeout(recommence, 901);
+		draww = setInterval(draw, 150);
 		clock = true;
 		secon = 20;
 		timer1();
@@ -506,7 +506,7 @@ function controls() {
 		if (!pause && !hasWon && !hasLost && moveRaquette) {
 			if (xRaquette <= 0) {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette -= 0;
+				xRaquette = 0;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			} else {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -538,7 +538,7 @@ function controls() {
 		if (!pause && !hasWon && !hasLost && moveRaquette) {
 			if (xRaquette >= 1280 - raquetteImg.width) {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette += 0;
+				xRaquette = 1280 - raquetteImg.width;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			} else {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
