@@ -20,22 +20,37 @@ var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
 var timer1; //Fonction qui permet d'avoir le décompte du powerup
 var go; //Game over
-var prepaDirection;
 
 //Variables son
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
 var pauseSfx = new Audio("sfx/pauseSfx.wav");
 var unpauseSfx = new Audio("sfx/unpauseSfx.wav");
-var audioBG = new Audio("sfx/space_corsair.mp3");
+var audioBG = new Audio("sfx/background.mp3");
 audioBG.volume = 0.3;
 audioBG.loop = true;
 audioBG.play();
 
 var wallSfx = new Audio("sfx/murSfx.wav");
 
+//anim
+var anima = new Image();
+anima.src = "gfx/RaquettePUPDefAnim.png";
+anima.width = 290;
+anima.height = 292;
+var rows = 6;
+var etape = anima.height / rows;
+var debutX = 0; // X du dessin
+var debutY = 0; // Y du dessin
+var draww;
+var ready = false;
+//départ
+var curFrame = 0;
+//total d'étapes
+var frameCount = 6;
+
 //Variables menu pause
 var pauseImg = new Image();
-pauseImg.src = "gfx/pausetest.png";
+pauseImg.src = "gfx/pauseImg.png";
 pauseImg.width = 400;
 pauseImg.height = 400;
 
@@ -103,11 +118,11 @@ var winSfxPlayed = false;
 //Variables briques
 
 var briqueImg = new Image(); //Asset graphique des briques
-briqueImg.src = "gfx/briqueProto.png";
+briqueImg.src = "gfx/brique.png";
 briqueImg.width = 80;
 briqueImg.height = 40;
 var brique2Img = new Image();
-brique2Img.src = "gfx/briqueProto2.png";
+brique2Img.src = "gfx/brique2.png";
 brique2Img.width = 80;
 brique2Img.height = 40;
 var briqueIndest = new Image();
@@ -137,7 +152,7 @@ capsuleATKImg.src = "gfx/capsuleATK.png";
 capsuleATKImg.width = 40;
 capsuleATKImg.height = 80;
 var capsuleDIRECTImg = new Image();
-capsuleDIRECTImg.src = "gfx/capsuleDIRECT.png";
+capsuleDIRECTImg.src = "gfx/capsuleVIS.png";
 capsuleDIRECTImg.width = 40;
 capsuleDIRECTImg.height = 80;
 var xCapsule = -100;
@@ -151,21 +166,30 @@ var pupDirect = false;
 var nbPupDirection = 0;
 var inversTrajectoire = false;
 var stopTime = false;
-var voyantVert = new Image();
-voyantVert.src = "gfx/voyantVert.png";
-voyantVert.width = 20;
-voyantVert.height = 20;
-var voyantRouge = new Image();
-voyantRouge.src = "gfx/voyantRouge.png";
-voyantRouge.width = 20;
-voyantRouge.height = 20;
+var drawPupTime;
+var jaugePup5 = new Image();
+jaugePup5.src = "gfx/jauge5.png";
+var jaugePup4 = new Image();
+jaugePup4.src = "gfx/jauge4.png";
+var jaugePup3 = new Image();
+jaugePup3.src = "gfx/jauge3.png";
+var jaugePup2 = new Image();
+jaugePup2.src = "gfx/jauge2.png";
+var jaugePup1 = new Image();
+jaugePup1.src = "gfx/jauge1.png";
+var jaugeVisee1 = new Image();
+jaugeVisee1.src = "gfx/visee1.png";
+var jaugeVisee2 = new Image();
+jaugeVisee2.src = "gfx/visee2.png";
+var jaugeVisee3 = new Image();
+jaugeVisee3.src = "gfx/visee3.png";
 
-var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //Pattern briques
-               1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-               1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
-               1, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 1,
-               1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+var pattern = [0, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 0,
+			   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			   2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2,
+			   2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2,
+			   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			   0, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0];
 
 //Variables Timer
 var secon;
@@ -222,6 +246,36 @@ var creaBriques = function () {
 		}
 	}
 };
+
+function updateFrame() {
+    "use strict";
+    curFrame = ++curFrame % frameCount;
+    //change "d'étape"
+    debutY = curFrame * 50; //change la coordonnée Y afin de changer le sprite
+    scene.clearRect(xRaquette, yRaquette, anima.widht, anima.height); // on efface le sprite precedent
+}
+
+function draw() {
+    "use strict";
+    //change de frame
+    updateFrame(); // lance la fonction qui change de frame
+    //DESSIN
+    scene.drawImage(anima, debutX, debutY, anima.width, etape, xRaquette, yRaquette, anima.width, 50);
+}
+
+function recommence() {
+    "use strict";
+    moveBalle = true;
+    moveRaquette = true;
+    ready = true;
+    animation();
+}
+
+function timeToStop() {
+    "use strict";
+    clearInterval(draww);
+}
+
 //Fonction du décompte pour les powerups
 timer1 = function () {
 	"use strict";
@@ -270,26 +324,30 @@ reset = function () {
 
 //Fonction d'activation standard du powerup Défense
 defense = function () {
-	"use strict";
-	if (!pupDef && moveRaquette) {
-		scene.clearRect(xCapsule, yCapsule, capsuleDEFImg.width, capsuleDEFImg.height);
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/RaquettePUPDef.png";
-		DefSfx.play(); //la ferme !
-		raquetteImg.width = 288;
-		raquetteImg.height = 50;
-		pupDef = true;
-		xRaquette -= 44;
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1272 - raquetteImg.width) {
-			xRaquette = 1272 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-		clock = true;
-		secon = 20;
-		timer1();
-	}
+    "use strict";
+    if (!pupDef && moveRaquette) {
+        moveBalle = false;
+        moveRaquette = false;
+        setTimeout(timeToStop, 900);
+        raquetteImg.src = "gfx/RaquettePUPDef.png";
+        DefSfx.play(); //la ferme !
+        raquetteImg.width = 288;
+        raquetteImg.height = 50;
+        pupDef = true;
+        xRaquette -= 44;
+        setTimeout(recommence, 901);
+        draww = setInterval(draw, 150);
+        if (ready) {
+            if (xRaquette >= 1272 - raquetteImg.width) {
+                xRaquette = 1272 - raquetteImg.width;
+                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+            }
+        }
+        clock = true;
+        secon = 20;
+        timer1();
+    }
 };
 //Fonction du powerup Unstoppable
 unstoppable = function () {
@@ -384,6 +442,7 @@ loseLife = function () {
 	}
 	yRaquette = 700;
 	angleLine = -Math.PI / 4;
+	inversTrajectoire = false;
 	secon = 1;
 	stopTime = false;
 	timer1();
@@ -456,7 +515,7 @@ function controls() {
 		if (!pause && !hasWon && !hasLost && moveRaquette) {
 			if (xRaquette <= 0) {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette -= 0;
+				xRaquette = 0;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			} else {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -489,7 +548,7 @@ function controls() {
 		if (!pause && !hasWon && !hasLost && moveRaquette) {
 			if (xRaquette >= 1280 - raquetteImg.width) {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette += 0;
+				xRaquette = 1280 - raquetteImg.width;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			} else {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -528,7 +587,7 @@ function controls() {
 		animation();
 	}
 	if (keyState[32] && hasWon) {
-		location.replace("../Menu/mainMenu.html");
+		location.replace("../Mars/levelMars.html");
 	}
 	if (keyState[32] && hasLost) {
 		location.reload();
@@ -540,85 +599,6 @@ function controls() {
 		pause = true;
 		moveRaquette = false;
 		pauseSfx.play();
-	}
-
-	//CHEAT Reset powerups (0/à)
-	if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/Raquette.png";
-		balleImg.src = "gfx/balle.png";
-		//Il manque un son pour perdre le PUP
-		raquetteImg.width = 200;
-		raquetteImg.height = 50;
-		if (pupDef) {
-			xRaquette += 44;
-		}
-		pupDef = false;
-		pupUnstop = false;
-		pupLoseSfx.play();
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1270 - raquetteImg.width) {
-			xRaquette = 1270 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
-
-	//CHEAT Défense ("1/&")
-	if (keyState[49] && !pupDef) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/RaquettePUPDef.png";
-		//DefSfx.play(); la ferme !
-		raquetteImg.width = 288;
-		raquetteImg.height = 50;
-		pupDef = true;
-		xRaquette -= 44;
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1272 - raquetteImg.width) {
-			xRaquette = 1272 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
-
-	//CHEAT Unstoppable ("2/é")
-	if (keyState[50] && !pupUnstop) {
-		if (!pupUnstop) {
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			balleImg.src = "gfx/balleUnstop.png";
-			//X.play(); la ferme !
-			pupUnstop = true;
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			setTimeout(reset, 15000);
-		}
-	}
-	//CHEAT Accéleration balle
-	if (keyState[76] && speedBalle === 10) {
-		speedBalle = 4;
-	}
-	if (keyState[77] && speedBalle === 4) {
-		speedBalle = 10;
-	}
-
-	//CHEAT Casser toutes les briques
-	var cheatBrickFunc = function () {
-		moveBalle = false;
-		moveRaquette = false;
-		if (cheatBrick < 90) {
-			pattern[cheatBrick] = 0;
-			cheatBrick += 1;
-			setTimeout(cheatBrickFunc, 60);
-		}
-		animation();
-		win();
-	};
-	if (keyState[51] && cheatBrick === 0) {
-		cheatBrickFunc();
-	}
-
-	//CHEAT vies illimitées
-	if (keyState[53]) {
-		nblife = 999;
 	}
 
 	//Lancement pupDirection
@@ -639,17 +619,44 @@ drawLife = function () {
 	if (nblife <= 0) {
 		hasLost = true;
 	}
-	if (nblife >= 1) {
+	if (nblife >= 2) {
 		scene.drawImage(vieImg, 0, 750, 75, 50);
 	}
-	if (nblife >= 2) {
-		scene.drawImage(vieImg, 75, 750, 75, 50);
-	}
 	if (nblife >= 3) {
-		scene.drawImage(vieImg, 150, 750, 75, 50);
+        scene.drawImage(vieImg, 75, 750, 75, 50);
 	}
 	if (nblife > 3) {
 		scene.drawImage(vieCheatImg, 0, 750, 225, 50);
+	}
+};
+
+drawPupTime = function () {
+    "use strict";
+    if (!pupUnstop && !pupDef) {
+        if (nbPupDirection === 1) {
+            scene.drawImage(jaugeVisee1, 905, 750, 375, 50);
+        }
+        if (nbPupDirection === 2) {
+            scene.drawImage(jaugeVisee2, 905, 750, 375, 50);
+        }
+        if (nbPupDirection === 3) {
+            scene.drawImage(jaugeVisee3, 905, 750, 375, 50);
+        }
+    }
+	if (((pupUnstop && secon === 1) || (pupDef && secon > 0))) {
+		scene.drawImage(jaugePup1, 905, 750, 375, 50);
+	}
+    if (((pupUnstop && secon === 2) || (pupDef && secon >= 5))) {
+		scene.drawImage(jaugePup2, 905, 750, 375, 50);
+	}
+    if (((pupUnstop && secon === 3) || (pupDef && secon >= 10))) {
+		scene.drawImage(jaugePup3, 905, 750, 375, 50);
+	}
+    if (((pupUnstop && secon === 4) || (pupDef && secon >= 15))) {
+		scene.drawImage(jaugePup4, 905, 750, 375, 50);
+	}
+    if (((pupUnstop && secon === 5) || (pupDef && secon === 20))) {
+		scene.drawImage(jaugePup5, 905, 750, 375, 50);
 	}
 };
 
@@ -685,11 +692,6 @@ animation = function () {
 			scene.drawImage(capsuleDIRECTImg, xCapsule, yCapsule, capsuleDIRECTImg.width, capsuleDIRECTImg.height);
 			yCapsule += 4;
 		}
-	}
-	if (nbPupDirection === 1) {
-		scene.drawImage(voyantRouge, 1250, 770, 20, 20);
-	} else if (nbPupDirection > 1) {
-		scene.drawImage(voyantVert, 1250, 770, 20, 20);
 	}
 	//Trajectoire de la balle (à isoler)
 	xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
@@ -909,7 +911,7 @@ animation = function () {
 	//Collisions brique incassable + trajectoire
 	if (xBriqueIndest < 0) {
 		revxBrique = false;
-	} else if (xBriqueIndest + 80 > 1280) {
+	} else if (xBriqueIndest + 120 > 1280) {
 		revxBrique = true;
 	}
 	if (!revxBrique) {
@@ -1070,6 +1072,7 @@ animation = function () {
 		}
 	}
 	drawLife();
+    drawPupTime();
 	//Bouclage de la fonction animation
 	if (moveBalle) {
 		setTimeout(animation, speedBalle); //Boucle qui lance la fonction animation

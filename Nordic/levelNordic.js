@@ -20,7 +20,6 @@ var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
 var timer1; //Fonction qui permet d'avoir le décompte du powerup
 var go; //Game over
-var combo; //fonction compteur de combo
 
 //Variables son
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
@@ -119,11 +118,11 @@ var winSfxPlayed = false;
 //Variables briques
 
 var briqueImg = new Image(); //Asset graphique des briques
-briqueImg.src = "gfx/brique2.png";
+briqueImg.src = "gfx/brique1.png";
 briqueImg.width = 80;
 briqueImg.height = 40;
 var brique2Img = new Image();
-brique2Img.src = "gfx/brique4.png";
+brique2Img.src = "gfx/brique2.png";
 brique2Img.width = 80;
 brique2Img.height = 40;
 
@@ -178,12 +177,12 @@ jaugeVisee2.src = "gfx/visee2.png";
 var jaugeVisee3 = new Image();
 jaugeVisee3.src = "gfx/visee3.png";
 
-var pattern = [0, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 0,
-               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-               2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2,
-               2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2,
-               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-               0, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0]; //Pattern briques
+var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			   1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+			   1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+			   1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+			   1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+			   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; //Pattern briques
 
 //Variables Timer
 var secon;
@@ -196,11 +195,6 @@ var pause = false; //Drapeaux activation pause
 //Compteur de vie
 var drawLife;
 var nblife = 3; //Nombre de vie
-
-//compteur de combo
-var nbCombo = 0; //nombre de briques détruites avant la fin du décompte
-var clkCombo = 5; //décompte avant fin du combo
-var nbScore = 0; //le score commence à 0
 
 var vieImg = new Image();
 vieImg.src = "gfx/vieImg.png";
@@ -226,7 +220,7 @@ var gameoverSfx = new Audio("sfx/gameoverSfx.wav");
 //Fonction de définition du pattern de briques (plutôt basique pour l'instant)
 var creaBriques = function () {
 	"use strict";
-	canvas = document.getElementById("canvas");
+	canvas = document.getElementById('canvas');
 	scene = canvas.getContext("2d");
 
 	var v, i, Briques = function (xBriques, yBriques, life, hit) { //C'est juste des variables pour les boucles for
@@ -426,8 +420,6 @@ pupDirection = function () {
 loseLife = function () {
 	"use strict";
 	moveBalle = false;
-    nbCombo = 0;
-    nbScore -= 100;
 	yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
@@ -463,6 +455,7 @@ go = function () { //Perte des vies
 	"use strict";
 	nblife -= 1;
 	loseLifeSfx.play();
+	console.log(nblife);
 	if (nblife <= 0) {
 		scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
 		moveBalle = false;
@@ -472,42 +465,6 @@ go = function () { //Perte des vies
 	}
 };
 
-combo = function () {
-    "use strict";
-    
-    if (clkCombo > 0) { //ajoute 1 au combo et remet le decompte à 5 s'il n'est pas arrivé à 0
-        nbCombo += 1;
-        clkCombo = 5;
-    } else {  //
-        clkCombo = 5;
-        nbCombo = 1; //redémare le décompte s'il etait arrivé à 0;
-    }
-    console.log("combo actuel:", nbCombo);
-    
-    
-};
-
-
-function horlogeCombo() { //horloge du combo qui est appelée par la fonction intervale, retire 1 à la variable qui fait le décomtpe
-    "use strict";
-    clkCombo -= 1;
-    //console.log("décompte:", clkCombo);
-    if (clkCombo === 0) {
-        nbCombo = 0;
-    }
-}
-setInterval(horlogeCombo, 1000); //intervale qui apelle la fonction au dessus toutes les secondes
-
-function score() {
-    "use strict";
-    if (nbCombo < 10) {
-        nbScore += 10;
-    } else {
-        nbScore += 10 + nbCombo;
-    }
-}
-              
-
 function win() {
 	"use strict";
 	var addLife, sumLife;
@@ -515,10 +472,8 @@ function win() {
 		return a + b;
 	};
 	sumLife = pattern.reduce(addLife, 0);
-	//console.log(sumLife);
-	//console.log(pattern);
-    combo();
-    score();
+	console.log(sumLife);
+	console.log(pattern);
 	if (sumLife === 0) {
 		hasWon = true;
 		moveBalle = false;
@@ -622,7 +577,7 @@ function controls() {
 		animation();
 	}
 	if (keyState[32] && hasWon) {
-		location.replace("../Menu/mainMenu.html");
+		location.replace("../Orbit/levelOrbit.html");
 	}
 	if (keyState[32] && hasLost) {
 		location.reload();
@@ -634,85 +589,6 @@ function controls() {
 		pause = true;
 		moveRaquette = false;
 		pauseSfx.play();
-	}
-
-	//CHEAT Reset powerups (0/à)
-	if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/Raquette.png";
-		balleImg.src = "gfx/balle.png";
-		//Il manque un son pour perdre le PUP
-		raquetteImg.width = 200;
-		raquetteImg.height = 50;
-		if (pupDef) {
-			xRaquette += 44;
-		}
-		pupDef = false;
-		pupUnstop = false;
-		pupLoseSfx.play();
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1270 - raquetteImg.width) {
-			xRaquette = 1270 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
-
-	//CHEAT Défense ("1/&")
-	if (keyState[49] && !pupDef) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/RaquettePUPDef.png";
-		//DefSfx.play(); la ferme !
-		raquetteImg.width = 288;
-		raquetteImg.height = 50;
-		pupDef = true;
-		xRaquette -= 44;
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1272 - raquetteImg.width) {
-			xRaquette = 1272 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
-
-	//CHEAT Unstoppable ("2/é")
-	if (keyState[50] && !pupUnstop) {
-		if (!pupUnstop) {
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			balleImg.src = "gfx/balleUnstop.png";
-			//X.play(); la ferme !
-			pupUnstop = true;
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			setTimeout(reset, 15000);
-		}
-	}
-	//CHEAT Accéleration balle
-	if (keyState[76] && speedBalle === 10) {
-		speedBalle = 4;
-	}
-	if (keyState[77] && speedBalle === 4) {
-		speedBalle = 10;
-	}
-
-	//CHEAT Casser toutes les briques
-	var cheatBrickFunc = function () {
-		moveBalle = false;
-		moveRaquette = false;
-		if (cheatBrick < 90) {
-			pattern[cheatBrick] = 0;
-			cheatBrick += 1;
-			setTimeout(cheatBrickFunc, 60);
-		}
-		animation();
-		win();
-	};
-	if (keyState[51] && cheatBrick === 0) {
-		cheatBrickFunc();
-	}
-
-	//CHEAT vies illimitées
-	if (keyState[53]) {
-		nblife = 999;
 	}
 
 	//Lancement pupDirection
@@ -780,32 +656,6 @@ animation = function () {
 	//(Re)construction de la scène
 	scene.clearRect(0, 0, 1280, 800);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
-    
-    if (0 < nbCombo && nbCombo < 9) {
-        canvas.style.fontFamily = "Fixedsys";
-        scene.font = "50px Fixedsys";
-        //mettre le changement de couleur ici
-        scene.fillText(nbCombo, 300, 786, 500);
-    }
-    if (10 < nbCombo && nbCombo < 19) {
-        canvas.style.fontFamily = "Fixedsys";
-        scene.font = "50px Fixedsys";
-        //mettre le changement de couleur ici
-        scene.fillText(nbCombo, 300, 786, 500);
-    }
-    if (20 < nbCombo) {
-        canvas.style.fontFamily = "Fixedsys";
-        scene.font = "50px Fixedsys";
-        //mettre le changement de couleur ici
-        scene.fillText(nbCombo, 300, 786, 500);
-    }
-    
-    canvas.style.fontFamily = "Fixedsys";
-    scene.font = "50px Fixedsys";
-    //mettre le changement de couleur ici
-    scene.fillText(nbScore, 400, 786, 500);
-
-    
 	for (k = 0; k < briquesObj.length; k = k + 1) {
 		if (briquesObj[k].life) {
 			if (pattern[k] === 1) {
