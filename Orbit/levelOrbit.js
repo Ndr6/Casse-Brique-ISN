@@ -177,12 +177,12 @@ jaugeVisee2.src = "gfx/visee2.png";
 var jaugeVisee3 = new Image();
 jaugeVisee3.src = "gfx/visee3.png";
 
-var pattern = [0, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 0,
-               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-               2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2,
-               2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2,
-               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-               0, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0]; //Pattern briques
+var pattern = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			   1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+			   1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1,
+			   1, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 1,
+			   1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+			   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; //Pattern briques
 
 //Variables Timer
 var secon;
@@ -241,32 +241,32 @@ var creaBriques = function () {
 };
 
 function updateFrame() {
-    "use strict";
-    curFrame = ++curFrame % frameCount;
-    //change "d'étape"
-    debutY = curFrame * 50; //change la coordonnée Y afin de changer le sprite
-    scene.clearRect(xRaquette, yRaquette, anima.widht, anima.height); // on efface le sprite precedent
+	"use strict";
+	curFrame = ++curFrame % frameCount;
+	//change "d'étape"
+	debutY = curFrame * 50; //change la coordonnée Y afin de changer le sprite
+	scene.clearRect(xRaquette, yRaquette, anima.widht, anima.height); // on efface le sprite precedent
 }
 
 function draw() {
-    "use strict";
-    //change de frame
-    updateFrame(); // lance la fonction qui change de frame
-    //DESSIN
-    scene.drawImage(anima, debutX, debutY, anima.width, etape, xRaquette, yRaquette, anima.width, 50);
+	"use strict";
+	//change de frame
+	updateFrame(); // lance la fonction qui change de frame
+	//DESSIN
+	scene.drawImage(anima, debutX, debutY, anima.width, etape, xRaquette, yRaquette, anima.width, 50);
 }
 
 function recommence() {
-    "use strict";
-    moveBalle = true;
-    moveRaquette = true;
-    ready = true;
-    animation();
+	"use strict";
+	moveBalle = true;
+	moveRaquette = true;
+	ready = true;
+	animation();
 }
 
 function timeToStop() {
-    "use strict";
-    clearInterval(draww);
+	"use strict";
+	clearInterval(draww);
 }
 
 //Fonction du décompte pour les powerups
@@ -275,7 +275,7 @@ timer1 = function () {
 	if (clock) {
 		if (!pause && !stopTime) {
 			secon -= 1;
-        }
+		}
 		compte = setTimeout(timer1, 1000);
 		if (secon === 0) {
 			powerup = Math.floor((Math.random() * 100) + 1);
@@ -316,30 +316,30 @@ reset = function () {
 
 //Fonction d'activation standard du powerup Défense
 defense = function () {
-    "use strict";
-    if (!pupDef && moveRaquette) {
-        moveBalle = false;
-        moveRaquette = false;
-        setTimeout(timeToStop, 900);
-        raquetteImg.src = "gfx/RaquettePUPDef.png";
-        DefSfx.play(); //la ferme !
-        raquetteImg.width = 288;
-        raquetteImg.height = 50;
-        pupDef = true;
-        xRaquette -= 44;
-        setTimeout(recommence, 901);
-        draww = setInterval(draw, 150);
-        if (ready) {
-            if (xRaquette >= 1272 - raquetteImg.width) {
-                xRaquette = 1272 - raquetteImg.width;
-                scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-                scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-            }
-        }
-        clock = true;
-        secon = 20;
-        timer1();
-    }
+	"use strict";
+	if (!pupDef && moveRaquette) {
+		moveBalle = false;
+		moveRaquette = false;
+		setTimeout(timeToStop, 900);
+		raquetteImg.src = "gfx/RaquettePUPDef.png";
+		DefSfx.play(); //la ferme !
+		raquetteImg.width = 288;
+		raquetteImg.height = 50;
+		pupDef = true;
+		xRaquette -= 44;
+		setTimeout(recommence, 901);
+		draww = setInterval(draw, 150);
+		if (ready) {
+			if (xRaquette >= 1272 - raquetteImg.width) {
+				xRaquette = 1272 - raquetteImg.width;
+				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
+			}
+		}
+		clock = true;
+		secon = 20;
+		timer1();
+	}
 };
 //Fonction du powerup Unstoppable
 unstoppable = function () {
@@ -612,7 +612,7 @@ drawLife = function () {
 		scene.drawImage(vieImg, 0, 750, 75, 50);
 	}
 	if (nblife >= 3) {
-        scene.drawImage(vieImg, 75, 750, 75, 50);
+		scene.drawImage(vieImg, 75, 750, 75, 50);
 	}
 	if (nblife > 3) {
 		scene.drawImage(vieCheatImg, 0, 750, 225, 50);
@@ -620,31 +620,31 @@ drawLife = function () {
 };
 
 drawPupTime = function () {
-    "use strict";
-    if (!pupUnstop && !pupDef) {
-        if (nbPupDirection === 1) {
-            scene.drawImage(jaugeVisee1, 905, 750, 375, 50);
-        }
-        if (nbPupDirection === 2) {
-            scene.drawImage(jaugeVisee2, 905, 750, 375, 50);
-        }
-        if (nbPupDirection === 3) {
-            scene.drawImage(jaugeVisee3, 905, 750, 375, 50);
-        }
-    }
+	"use strict";
+	if (!pupUnstop && !pupDef) {
+		if (nbPupDirection === 1) {
+			scene.drawImage(jaugeVisee1, 905, 750, 375, 50);
+		}
+		if (nbPupDirection === 2) {
+			scene.drawImage(jaugeVisee2, 905, 750, 375, 50);
+		}
+		if (nbPupDirection === 3) {
+			scene.drawImage(jaugeVisee3, 905, 750, 375, 50);
+		}
+	}
 	if (((pupUnstop && secon === 1) || (pupDef && secon > 0))) {
 		scene.drawImage(jaugePup1, 905, 750, 375, 50);
 	}
-    if (((pupUnstop && secon === 2) || (pupDef && secon >= 5))) {
+	if (((pupUnstop && secon === 2) || (pupDef && secon >= 5))) {
 		scene.drawImage(jaugePup2, 905, 750, 375, 50);
 	}
-    if (((pupUnstop && secon === 3) || (pupDef && secon >= 10))) {
+	if (((pupUnstop && secon === 3) || (pupDef && secon >= 10))) {
 		scene.drawImage(jaugePup3, 905, 750, 375, 50);
 	}
-    if (((pupUnstop && secon === 4) || (pupDef && secon >= 15))) {
+	if (((pupUnstop && secon === 4) || (pupDef && secon >= 15))) {
 		scene.drawImage(jaugePup4, 905, 750, 375, 50);
 	}
-    if (((pupUnstop && secon === 5) || (pupDef && secon === 20))) {
+	if (((pupUnstop && secon === 5) || (pupDef && secon === 20))) {
 		scene.drawImage(jaugePup5, 905, 750, 375, 50);
 	}
 };
@@ -988,7 +988,7 @@ animation = function () {
 		}
 	}
 	drawLife();
-    drawPupTime();
+	drawPupTime();
 	//Bouclage de la fonction animation
 	if (moveBalle) {
 		setTimeout(animation, speedBalle); //Boucle qui lance la fonction animation
