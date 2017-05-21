@@ -212,12 +212,16 @@ var dead = false;
 var alreadyHit = false;
 var alreadyHitProject = false;
 var project = [];
-var projectileImg = new Image();
 var lancementProjec;
 var l, directProject, xPasProject, yPasProject, xProject, yProject, m, touch;
+var projectileImg = new Image();
 projectileImg.src = "gfx/Projectile.png";
 projectileImg.width = 5;
 projectileImg.height = 5;
+var projectilePowerImg = new Image();
+projectilePowerImg.src = "gfx/ProjectilePower.png";
+projectilePowerImg.width = 5;
+projectilePowerImg.height = 5;
 var invincible = false;
 var powerupBoss = Math.floor((Math.random() * 1000) + 1);
 var allowPowerupBoss = true;
@@ -230,6 +234,7 @@ var compteBoss;
 var clockBoss;
 var almost = false;
 var difficulty;
+var aie = false;
 //Variables Timer
 var secon;
 var compte;
@@ -686,11 +691,17 @@ function controls() {
 				}
 				for (k = 0; k < briquesObj.length; k = k + 1) {
 					if (briquesObj[k].life) {
-						if (pattern[k] === 4 || pattern[k] === 3) {
-							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						if (pattern[k] === 4) {
+							scene.drawImage(brique4Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
-						if (pattern[k] === 2 || pattern[k] === 1) {
+						if (pattern[k] === 3) {
+							scene.drawImage(brique3Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 2) {
 							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 1) {
+							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
 					}
 				}
@@ -730,11 +741,17 @@ function controls() {
 				}
 				for (k = 0; k < briquesObj.length; k = k + 1) {
 					if (briquesObj[k].life) {
-						if (pattern[k] === 4 || pattern[k] === 3) {
-							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						if (pattern[k] === 4) {
+							scene.drawImage(brique4Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
-						if (pattern[k] === 2 || pattern[k] === 1) {
+						if (pattern[k] === 3) {
+							scene.drawImage(brique3Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 2) {
 							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 1) {
+							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
 					}
 				}
@@ -869,7 +886,7 @@ drawLife = function () {
 		scene.drawImage(vieImg, 0, 750, 75, 50);
 	}
 	if (nblife >= 3) {
-        scene.drawImage(vieImg, 75, 750, 75, 50);
+		scene.drawImage(vieImg, 75, 750, 75, 50);
 	}
 	if (nblife > 3) {
 		scene.drawImage(vieCheatImg, 0, 750, 225, 50);
@@ -930,7 +947,11 @@ animation = function () {
 	}
 	for (l = 0; l < project.length; l += 1) {
 		if (!project[l].touch) {
-			scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+			if (!aie) {
+				scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+			} else {
+				scene.drawImage(projectilePowerImg, project[l].xProject, project[l].yProject, 5, 5);
+			}
 			if (!stopTime) {
 				project[l].xProject += project[l].xPasProject;
 				project[l].yProject += project[l].yPasProject;
@@ -1000,13 +1021,21 @@ animation = function () {
 		if (!project[m].touch) {
 			if (!pupDef) {
 				if (project[m].xProject < xRaquette + 200 && project[m].xProject + 5 > xRaquette && project[m].yProject + 5 > yRaquette && project[m].yProject + 15 > yRaquette && project[m].yProject - 5 < yRaquette) { //collision sur le dessus
-					lifeRaquette -= 0.1;
+					if (!aie) {
+						lifeRaquette -= 0.1;
+					} else {
+						lifeRaquette -= 0.2;
+					}
 					alreadyHitProject = true;
 					project[m].touch = true;
 				}
 			} else {
 				if (project[m].xProject < xRaquette + 288 && project[m].xProject + 5 > xRaquette && project[m].yProject + 5 > yRaquette && project[m].yProject + 15 > yRaquette && project[m].yProject - 5 < yRaquette) { //collision sur le dessus
-					lifeRaquette -= 0.01;
+					if (!aie) {
+						lifeRaquette -= 0.01;
+					} else {
+						lifeRaquette -= 0.02;
+					}
 					alreadyHitProject = true;
 					project[m].touch = true;
 				}
@@ -1435,7 +1464,8 @@ animation = function () {
 				almost = true;
 			}
 			if (difficulty === 3) {
-				lancementProjec = Math.floor((Math.random() * 7) + 1);
+				lancementProjec = Math.floor((Math.random() * 15) + 1);
+				aie = true;
 			} else if (difficulty === 2) {
 				lancementProjec = Math.floor((Math.random() * 15) + 1);
 			} else if (difficulty === 1) {
