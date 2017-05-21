@@ -27,13 +27,13 @@ Statistiques au 21/05/2017 (11:27) :
 ---------- Result ------------
 
 # Physical :  5283
- Source :  4705
- Comment :  515
- Single-line comment :  451
- Block comment :  64
- Mixed :  253
- Empty :  316
- To Do :  0
+Source :  4705
+Comment :  515
+Single-line comment :  451
+Block comment :  64
+Mixed :  253
+Empty :  316
+To Do :  0
 
 Number of files read :  18
 
