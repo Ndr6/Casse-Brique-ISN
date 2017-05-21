@@ -911,7 +911,7 @@ animation = function () {
 	//Collisions brique incassable + trajectoire
 	if (xBriqueIndest < 0) {
 		revxBrique = false;
-	} else if (xBriqueIndest + 80 > 1280) {
+	} else if (xBriqueIndest + 120 > 1280) {
 		revxBrique = true;
 	}
 	if (!revxBrique) {
