@@ -3,10 +3,10 @@
 # Date limite du projet : 22 mai
 
 # Niveaux prévus :
-  - Niveau 1 : Nordic (Assets a vérifier)
-  - Niveau 2 : Orbit (Assets OK)
-  - Niveau 3 : Space (Assets ?)
-  - Niveau 4 : Mars (Assets ?)
+  - Niveau 1 : Nordic (A construire)
+  - Niveau 2 : Orbit (A reconstruire)
+  - Niveau 3 : Space (A construire)
+  - Niveau 4 : Mars (A construire)
 
 # Crédits :
 
@@ -21,3 +21,17 @@
 -Musiques : Voir crédits ingame
 
 -Remerciements : Fabien A, Bruno B, Julien B, Théo T-M, Antonin B, GitHub
+
+
+# Statistiques au 21/05/2017 (11:27) :
+
+- Physical :  5283
+- Source :  4705
+- Comment :  515
+- Single-line comment :  451
+- Block comment :  64
+- Mixed :  253
+- Empty :  316
+- To Do :  0
+
+- Number of files read :  18
