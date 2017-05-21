@@ -162,8 +162,7 @@ select = function () {
         if (posx === 115) {
             //1er choix
             flag = false;
-            alert("Niveau Terre : Pas prêt");
-            location.reload();
+            location.replace("../Nordic/levelNordic.html");
         } else if (posx === 365) {
             //2e choix
             flag = false;
@@ -171,13 +170,11 @@ select = function () {
         } else if (posx === 615) {
             //3e choix
             flag = false;
-            alert("Niveau Space : Plus prêt...");
-            location.reload();
+            location.replace("../Space/levelSpace.html");
         } else if (posx === 865) {
             //4e choix
             flag = false;
-            alert("Niveau Mars : Pas prêt");
-            location.reload();
+            location.replace("../Mars/levelMars.html");
         } else if (posx === 1115) {
             //5e choix
             flag = false;
