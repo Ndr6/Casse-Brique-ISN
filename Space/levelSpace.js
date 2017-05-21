@@ -956,25 +956,25 @@ animation = function () {
 	if (yBalle + 50 > yBriqueIndest && yBalle + 40 < yBriqueIndest && yBalle + 60 > yBriqueIndest && xBalle + 50 > xBriqueIndest && xBalle < xBriqueIndest + 120) {
 		if (!inversTrajectoire) {
 			if (!revxBrique && revx) {
-				angleLine -= 0.15;
-			} else if (!revxBrique && !revx) {
 				angleLine += 0.15;
+			} else if (!revxBrique && !revx) {
+				angleLine -= 0.15;
 			}
 			if (revxBrique && revx) {
-				angleLine += 0.15;
-			} else if (revxBrique && !revx) {
 				angleLine -= 0.15;
+			} else if (revxBrique && !revx) {
+				angleLine += 0.15;
 			}
 		} else {
 			if (!revxBrique && revx) {
-				angleLine += 0.15;
-			} else if (!revxBrique && !revx) {
 				angleLine -= 0.15;
+			} else if (!revxBrique && !revx) {
+				angleLine += 0.15;
 			}
 			if (revxBrique && revx) {
-				angleLine -= 0.15;
-			} else if (revxBrique && !revx) {
 				angleLine += 0.15;
+			} else if (revxBrique && !revx) {
+				angleLine -= 0.15;
 			}
 		}
 		revy = true;
