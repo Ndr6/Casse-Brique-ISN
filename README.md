@@ -23,8 +23,7 @@
 -Remerciements : Fabien A, Bruno B, Julien B, Théo T-M, Antonin B, GitHub
 
 
-Statistiques au 21/05/2017 (11:27) :
----------- Result ------------
+# Statistiques au 21/05/2017 (11:27) :
 
 - Physical :  5283
 - Source :  4705
@@ -36,5 +35,3 @@ Statistiques au 21/05/2017 (11:27) :
 - To Do :  0
 
 - Number of files read :  18
-
-------------------------------
