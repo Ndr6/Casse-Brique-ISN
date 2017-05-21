@@ -404,7 +404,6 @@ timer1 = function () {
 		if (!pause && !stopTime) {
 			secon -= 1;
 		}
-		document.forsec.sec.value = " " + secon;
 		compte = setTimeout(timer1, 1000);
 		if (secon === 0) {
 			powerup = Math.floor((Math.random() * 100) + 1);
