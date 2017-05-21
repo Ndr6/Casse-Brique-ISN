@@ -785,85 +785,6 @@ function controls() {
 		pauseSfx.play();
 	}
 
-	//CHEAT Reset powerups (0/à)
-	if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/Raquette.png";
-		balleImg.src = "gfx/balle.png";
-		//Il manque un son pour perdre le PUP
-		raquetteImg.width = 200;
-		raquetteImg.height = 50;
-		if (pupDef) {
-			xRaquette += 44;
-		}
-		pupDef = false;
-		pupUnstop = false;
-		pupLoseSfx.play();
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1270 - raquetteImg.width) {
-			xRaquette = 1270 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
-
-	//CHEAT Défense ("1/&")
-	if (keyState[49] && !pupDef) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/RaquettePUPDef.png";
-		//DefSfx.play(); la ferme !
-		raquetteImg.width = 288;
-		raquetteImg.height = 50;
-		pupDef = true;
-		xRaquette -= 44;
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1272 - raquetteImg.width) {
-			xRaquette = 1272 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
-
-	//CHEAT Unstoppable ("2/é")
-	if (keyState[50] && !pupUnstop) {
-		if (!pupUnstop) {
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			balleImg.src = "gfx/balleUnstop.png";
-			//X.play(); la ferme !
-			pupUnstop = true;
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			setTimeout(reset, 15000);
-		}
-	}
-	//CHEAT Accéleration balle
-	if (keyState[76] && speedBalle === 10) {
-		speedBalle = 4;
-	}
-	if (keyState[77] && speedBalle === 4) {
-		speedBalle = 10;
-	}
-
-	//CHEAT Casser toutes les briques
-	var cheatBrickFunc = function () {
-		moveBalle = false;
-		moveRaquette = false;
-		if (cheatBrick < 90) {
-			pattern[cheatBrick] = 0;
-			cheatBrick += 1;
-			setTimeout(cheatBrickFunc, 60);
-		}
-		animation();
-		win();
-	};
-	if (keyState[51] && cheatBrick === 0) {
-		cheatBrickFunc();
-	}
-
-	//CHEAT vies illimitées
-	if (keyState[53]) {
-		nblife = 999;
-	}
-
 	//Lancement pupDirection
 	if (keyState[40]) {
 		if (nbPupDirection > 0) {
@@ -979,11 +900,6 @@ animation = function () {
 				yCapsule += 4;
 			}
 		}
-	}
-	if (nbPupDirection === 1) {
-		scene.drawImage(voyantRouge, 1250, 770, 20, 20);
-	} else if (nbPupDirection > 1) {
-		scene.drawImage(voyantVert, 1250, 770, 20, 20);
 	}
 	if (!dead) {
 		scene.drawImage(bossImg, xBoss, yBoss, 320, 160);
