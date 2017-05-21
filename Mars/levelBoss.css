@@ -1,0 +1,59 @@
+canvas
+{
+	border-color: green;
+	border: solid;
+    background-image: url(gfx/background.png);
+}
+
+body
+{
+    background-color: black;
+}
+
+td, th
+{
+    border: 1px solid #dddddd;
+    padding: 20px;
+    background-color:darkgrey;
+}
+
+h1
+{
+    font-size: 23px;
+    color: white;
+    text-align: center;
+}
+
+h2{
+    font-size: 25px;
+    color: red;
+    text-align: center;
+}
+
+a
+{
+    font-size: large;
+    color: floralwhite;
+    text-align: center
+}
+
+h3
+{
+    font-size: 14px;
+    color: darkslategrey;
+}
+
+h4
+{
+    font-size: 12px;
+}
+
+table{
+    text-align: left;
+    background-color: white;
+}
+
+p
+{
+    text-align: center;
+}
