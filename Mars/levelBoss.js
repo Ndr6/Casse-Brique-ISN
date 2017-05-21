@@ -52,7 +52,7 @@ var frameCount = 6;
 
 //Variables menu pause
 var pauseImg = new Image();
-pauseImg.src = "gfx/pausetest.png";
+pauseImg.src = "gfx/pauseImg.png";
 pauseImg.width = 400;
 pauseImg.height = 400;
 
@@ -1327,7 +1327,6 @@ animation = function () {
 					win();
 				}
 			}
-			briquesObj[j].hit = false;
 			if (briquesObj[j].rev) {
 				if (j === 0 || j === 1 || j === 2 || j === 5 || j === 6 || j === 7) {
 					if (!stopTime) {
@@ -1366,6 +1365,7 @@ animation = function () {
 				}
 			}
 		}
+		briquesObj[j].hit = false;
 	}
 	if (!machineGun && !stopTime) {
 		if (hitBoss <= 10) {
