@@ -52,7 +52,7 @@ var frameCount = 6;
 
 //Variables menu pause
 var pauseImg = new Image();
-pauseImg.src = "gfx/pausetest.png";
+pauseImg.src = "gfx/pauseImg.png";
 pauseImg.width = 400;
 pauseImg.height = 400;
 
@@ -212,12 +212,16 @@ var dead = false;
 var alreadyHit = false;
 var alreadyHitProject = false;
 var project = [];
-var projectileImg = new Image();
 var lancementProjec;
 var l, directProject, xPasProject, yPasProject, xProject, yProject, m, touch;
+var projectileImg = new Image();
 projectileImg.src = "gfx/Projectile.png";
 projectileImg.width = 5;
 projectileImg.height = 5;
+var projectilePowerImg = new Image();
+projectilePowerImg.src = "gfx/ProjectilePower.png";
+projectilePowerImg.width = 5;
+projectilePowerImg.height = 5;
 var invincible = false;
 var powerupBoss = Math.floor((Math.random() * 1000) + 1);
 var allowPowerupBoss = true;
@@ -230,6 +234,7 @@ var compteBoss;
 var clockBoss;
 var almost = false;
 var difficulty;
+var aie = false;
 //Variables Timer
 var secon;
 var compte;
@@ -588,6 +593,7 @@ loseLife = function () {
 	}
 	yRaquette = 700;
 	angleLine = -Math.PI / 4;
+	inversTrajectoire = false;
 	secon = 1;
 	stopTime = false;
 	timer1();
@@ -660,7 +666,7 @@ function controls() {
 		if (!pause && !hasWon && !hasLost && moveRaquette) {
 			if (xRaquette <= 0) {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette -= 0;
+				xRaquette = 0;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			} else {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -686,11 +692,17 @@ function controls() {
 				}
 				for (k = 0; k < briquesObj.length; k = k + 1) {
 					if (briquesObj[k].life) {
-						if (pattern[k] === 4 || pattern[k] === 3) {
-							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						if (pattern[k] === 4) {
+							scene.drawImage(brique4Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
-						if (pattern[k] === 2 || pattern[k] === 1) {
+						if (pattern[k] === 3) {
+							scene.drawImage(brique3Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 2) {
 							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 1) {
+							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
 					}
 				}
@@ -704,7 +716,7 @@ function controls() {
 		if (!pause && !hasWon && !hasLost && moveRaquette) {
 			if (xRaquette >= 1280 - raquetteImg.width) {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-				xRaquette += 0;
+				xRaquette = 1280 - raquetteImg.width;
 				scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 			} else {
 				scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
@@ -730,11 +742,17 @@ function controls() {
 				}
 				for (k = 0; k < briquesObj.length; k = k + 1) {
 					if (briquesObj[k].life) {
-						if (pattern[k] === 4 || pattern[k] === 3) {
-							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						if (pattern[k] === 4) {
+							scene.drawImage(brique4Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
-						if (pattern[k] === 2 || pattern[k] === 1) {
+						if (pattern[k] === 3) {
+							scene.drawImage(brique3Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 2) {
 							scene.drawImage(brique2Img, briquesObj[k].x, briquesObj[k].y, 80, 40);
+						}
+						if (pattern[k] === 1) {
+							scene.drawImage(briqueImg, briquesObj[k].x, briquesObj[k].y, 80, 40);
 						}
 					}
 				}
@@ -768,85 +786,6 @@ function controls() {
 		pauseSfx.play();
 	}
 
-	//CHEAT Reset powerups (0/à)
-	if ((keyState[48] && pupDef) || (keyState[48] && pupUnstop)) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/Raquette.png";
-		balleImg.src = "gfx/balle.png";
-		//Il manque un son pour perdre le PUP
-		raquetteImg.width = 200;
-		raquetteImg.height = 50;
-		if (pupDef) {
-			xRaquette += 44;
-		}
-		pupDef = false;
-		pupUnstop = false;
-		pupLoseSfx.play();
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1270 - raquetteImg.width) {
-			xRaquette = 1270 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
-
-	//CHEAT Défense ("1/&")
-	if (keyState[49] && !pupDef) {
-		scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		raquetteImg.src = "gfx/RaquettePUPDef.png";
-		//DefSfx.play(); la ferme !
-		raquetteImg.width = 288;
-		raquetteImg.height = 50;
-		pupDef = true;
-		xRaquette -= 44;
-		scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		if (xRaquette >= 1272 - raquetteImg.width) {
-			xRaquette = 1272 - raquetteImg.width;
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-		}
-	}
-
-	//CHEAT Unstoppable ("2/é")
-	if (keyState[50] && !pupUnstop) {
-		if (!pupUnstop) {
-			scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			balleImg.src = "gfx/balleUnstop.png";
-			//X.play(); la ferme !
-			pupUnstop = true;
-			scene.drawImage(raquetteImg, xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
-			setTimeout(reset, 15000);
-		}
-	}
-	//CHEAT Accéleration balle
-	if (keyState[76] && speedBalle === 10) {
-		speedBalle = 4;
-	}
-	if (keyState[77] && speedBalle === 4) {
-		speedBalle = 10;
-	}
-
-	//CHEAT Casser toutes les briques
-	var cheatBrickFunc = function () {
-		moveBalle = false;
-		moveRaquette = false;
-		if (cheatBrick < 90) {
-			pattern[cheatBrick] = 0;
-			cheatBrick += 1;
-			setTimeout(cheatBrickFunc, 60);
-		}
-		animation();
-		win();
-	};
-	if (keyState[51] && cheatBrick === 0) {
-		cheatBrickFunc();
-	}
-
-	//CHEAT vies illimitées
-	if (keyState[53]) {
-		nblife = 999;
-	}
-
 	//Lancement pupDirection
 	if (keyState[40]) {
 		if (nbPupDirection > 0) {
@@ -869,7 +808,7 @@ drawLife = function () {
 		scene.drawImage(vieImg, 0, 750, 75, 50);
 	}
 	if (nblife >= 3) {
-        scene.drawImage(vieImg, 75, 750, 75, 50);
+		scene.drawImage(vieImg, 75, 750, 75, 50);
 	}
 	if (nblife > 3) {
 		scene.drawImage(vieCheatImg, 0, 750, 225, 50);
@@ -930,7 +869,11 @@ animation = function () {
 	}
 	for (l = 0; l < project.length; l += 1) {
 		if (!project[l].touch) {
-			scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+			if (!aie) {
+				scene.drawImage(projectileImg, project[l].xProject, project[l].yProject, 5, 5);
+			} else {
+				scene.drawImage(projectilePowerImg, project[l].xProject, project[l].yProject, 5, 5);
+			}
 			if (!stopTime) {
 				project[l].xProject += project[l].xPasProject;
 				project[l].yProject += project[l].yPasProject;
@@ -958,11 +901,6 @@ animation = function () {
 				yCapsule += 4;
 			}
 		}
-	}
-	if (nbPupDirection === 1) {
-		scene.drawImage(voyantRouge, 1250, 770, 20, 20);
-	} else if (nbPupDirection > 1) {
-		scene.drawImage(voyantVert, 1250, 770, 20, 20);
 	}
 	if (!dead) {
 		scene.drawImage(bossImg, xBoss, yBoss, 320, 160);
@@ -1000,13 +938,21 @@ animation = function () {
 		if (!project[m].touch) {
 			if (!pupDef) {
 				if (project[m].xProject < xRaquette + 200 && project[m].xProject + 5 > xRaquette && project[m].yProject + 5 > yRaquette && project[m].yProject + 15 > yRaquette && project[m].yProject - 5 < yRaquette) { //collision sur le dessus
-					lifeRaquette -= 0.1;
+					if (!aie) {
+						lifeRaquette -= 0.1;
+					} else {
+						lifeRaquette -= 0.2;
+					}
 					alreadyHitProject = true;
 					project[m].touch = true;
 				}
 			} else {
 				if (project[m].xProject < xRaquette + 288 && project[m].xProject + 5 > xRaquette && project[m].yProject + 5 > yRaquette && project[m].yProject + 15 > yRaquette && project[m].yProject - 5 < yRaquette) { //collision sur le dessus
-					lifeRaquette -= 0.01;
+					if (!aie) {
+						lifeRaquette -= 0.01;
+					} else {
+						lifeRaquette -= 0.02;
+					}
 					alreadyHitProject = true;
 					project[m].touch = true;
 				}
@@ -1382,7 +1328,6 @@ animation = function () {
 					win();
 				}
 			}
-			briquesObj[j].hit = false;
 			if (briquesObj[j].rev) {
 				if (j === 0 || j === 1 || j === 2 || j === 5 || j === 6 || j === 7) {
 					if (!stopTime) {
@@ -1421,6 +1366,7 @@ animation = function () {
 				}
 			}
 		}
+		briquesObj[j].hit = false;
 	}
 	if (!machineGun && !stopTime) {
 		if (hitBoss <= 10) {
@@ -1435,7 +1381,8 @@ animation = function () {
 				almost = true;
 			}
 			if (difficulty === 3) {
-				lancementProjec = Math.floor((Math.random() * 7) + 1);
+				lancementProjec = Math.floor((Math.random() * 15) + 1);
+				aie = true;
 			} else if (difficulty === 2) {
 				lancementProjec = Math.floor((Math.random() * 15) + 1);
 			} else if (difficulty === 1) {
