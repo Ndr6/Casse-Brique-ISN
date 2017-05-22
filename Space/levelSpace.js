@@ -289,7 +289,6 @@ timer1 = function () {
 		if (!pause && !stopTime) {
 			secon -= 1;
 		}
-		document.forsec.sec.value = " " + secon;
 		compte = setTimeout(timer1, 1000);
 		if (secon === 0) {
 			powerup = Math.floor((Math.random() * 100) + 1);
@@ -1031,25 +1030,25 @@ animation = function () {
 	if (yBalle + 50 > yBriqueIndest && yBalle + 40 < yBriqueIndest && yBalle + 60 > yBriqueIndest && xBalle + 50 > xBriqueIndest && xBalle < xBriqueIndest + 120) {
 		if (!inversTrajectoire) {
 			if (!revxBrique && revx) {
-				angleLine -= 0.15;
-			} else if (!revxBrique && !revx) {
 				angleLine += 0.15;
+			} else if (!revxBrique && !revx) {
+				angleLine -= 0.15;
 			}
 			if (revxBrique && revx) {
-				angleLine += 0.15;
-			} else if (revxBrique && !revx) {
 				angleLine -= 0.15;
+			} else if (revxBrique && !revx) {
+				angleLine += 0.15;
 			}
 		} else {
 			if (!revxBrique && revx) {
-				angleLine += 0.15;
-			} else if (!revxBrique && !revx) {
 				angleLine -= 0.15;
+			} else if (!revxBrique && !revx) {
+				angleLine += 0.15;
 			}
 			if (revxBrique && revx) {
-				angleLine -= 0.15;
-			} else if (revxBrique && !revx) {
 				angleLine += 0.15;
+			} else if (revxBrique && !revx) {
+				angleLine -= 0.15;
 			}
 		}
 		revy = true;
