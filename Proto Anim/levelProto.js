@@ -781,30 +781,26 @@ animation = function () {
 	scene.clearRect(0, 0, 1280, 800);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
     
-    if (0 < nbCombo && nbCombo < 9) {
-        canvas.style.fontFamily = "Fixedsys";
-        scene.font = "50px Fixedsys";
-        //mettre le changement de couleur ici
-        scene.fillText(nbCombo, 300, 786, 500);
-    }
-    if (10 < nbCombo && nbCombo < 19) {
-        canvas.style.fontFamily = "Fixedsys";
-        scene.font = "50px Fixedsys";
-        //mettre le changement de couleur ici
-        scene.fillText(nbCombo, 300, 786, 500);
-    }
-    if (20 < nbCombo) {
-        canvas.style.fontFamily = "Fixedsys";
-        scene.font = "50px Fixedsys";
-        //mettre le changement de couleur ici
-        scene.fillText(nbCombo, 300, 786, 500);
-    }
-    
     canvas.style.fontFamily = "Fixedsys";
-    scene.font = "50px Fixedsys";
-    //mettre le changement de couleur ici
-    scene.fillText(nbScore, 400, 786, 500);
-
+    scene.font = "50px Fixedsys"; //applique la police et la taille de la police à tout le canvas
+        
+    if (0 < nbCombo && nbCombo < 10) {
+        scene.fillStyle = "deepskyblue";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en bleu s'il est inférieur à 10
+        
+    }
+    if (10 <= nbCombo && nbCombo < 20) {
+        scene.fillStyle = "orange";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en orange s'il est entre 10 et 20
+        
+    }
+    if (20 <= nbCombo) {
+        scene.fillStyle = "red";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en rouge s'il est supérieur à 20
+        
+    }
+    scene.fillStyle = "deepskyblue";
+    scene.fillText(nbScore, 400, 786, 500); //affiche le score
     
 	for (k = 0; k < briquesObj.length; k = k + 1) {
 		if (briquesObj[k].life) {
@@ -866,35 +862,43 @@ animation = function () {
 		if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) { //collision sur le dessus
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 21 > xRaquette + 200) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 	} else {
 		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) { //collision sur le dessus
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 288 && xCapsule - 10 < xRaquette + 288 && xCapsule + 21 > xRaquette + 288) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 	}
 	if (yCapsule > 800) {
