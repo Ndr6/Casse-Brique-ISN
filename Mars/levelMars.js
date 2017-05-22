@@ -22,6 +22,8 @@ var win; //Bah quand on gagne, quoi
 var timer1; //Fonction qui permet d'avoir le décompte du powerup
 var timerBoss;
 var go; //Game over
+var combo; //fonction compteur de combo
+
 
 //Variables son
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
@@ -246,6 +248,11 @@ var pause = false; //Drapeaux activation pause
 //Compteur de vie
 var drawLife;
 var nblife = 3; //Nombre de vie
+
+//compteur de combo
+var nbCombo = 0; //nombre de briques détruites avant la fin du décompte
+var clkCombo = 5; //décompte avant fin du combo
+var nbScore = 0; //le score commence à 0
 
 var vieImg = new Image();
 vieImg.src = "gfx/vieImg.png";
@@ -623,6 +630,41 @@ go = function () { //Perte des vies
 	}
 };
 
+combo = function () {
+    "use strict";
+    
+    if (clkCombo > 0) { //ajoute 1 au combo et remet le decompte à 5 s'il n'est pas arrivé à 0
+        nbCombo += 1;
+        clkCombo = 5;
+    } else {  //
+        clkCombo = 5;
+        nbCombo = 1; //redémare le décompte s'il etait arrivé à 0;
+    }
+    console.log("combo actuel:", nbCombo);
+    
+    
+};
+
+
+function horlogeCombo() { //horloge du combo qui est appelée par la fonction intervale, retire 1 à la variable qui fait le décomtpe
+    "use strict";
+    clkCombo -= 1;
+    //console.log("décompte:", clkCombo);
+    if (clkCombo === 0) {
+        nbCombo = 0;
+    }
+}
+setInterval(horlogeCombo, 1000); //intervale qui apelle la fonction au dessus toutes les secondes
+
+function score() {
+    "use strict";
+    if (nbCombo < 10) {
+        nbScore += 10;
+    } else {
+        nbScore += 10 + nbCombo;
+    }
+}
+
 function win() {
 	"use strict";
 	var addLife, sumLife;
@@ -630,6 +672,8 @@ function win() {
 		return a + b;
 	};
 	sumLife = pattern.reduce(addLife, 0);
+	combo();
+    score();
 	console.log(sumLife);
 	console.log(pattern);
 	if (sumLife === 0 || dead) {
@@ -850,6 +894,27 @@ animation = function () {
 	//(Re)construction de la scène
 	scene.clearRect(0, 0, 1280, 800);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
+	
+	canvas.style.fontFamily = "Fixedsys";
+    scene.font = "50px Fixedsys"; //applique la police et la taille de la police à tout le canvas
+        
+    if (0 < nbCombo && nbCombo < 9) {
+        scene.fillStyle = "deepskyblue";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en bleu s'il est inférieur à 10
+        
+    }
+    if (10 <= nbCombo && nbCombo < 19) {
+        scene.fillStyle = "orange";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en orange s'il est entre 10 et 20
+        
+    }
+    if (20 <= nbCombo) {
+        scene.fillStyle = "red";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en rouge s'il est supérieur à 20
+        
+    }
+    scene.fillStyle = "deepskyblue";
+    scene.fillText(nbScore, 400, 786, 500); //affiche le score
 	for (k = 0; k < briquesObj.length; k = k + 1) {
 		if (briquesObj[k].life) {
 			if (pattern[k] === 4) {
@@ -907,6 +972,11 @@ animation = function () {
 	//Trajectoire de la balle (à isoler)
 	xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
 	yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
+    if (angleLine < -Math.PI / 2) {
+        inversTrajectoire = true;
+    } else if (angleLine > -Math.PI / 2) {
+        inversTrajectoire = false;
+    }
 	if (moveRaquette) {
 		if (xBalle < 0) {
 			revx = false;
@@ -944,6 +1014,7 @@ animation = function () {
 					}
 					alreadyHitProject = true;
 					project[m].touch = true;
+					briqueSfx.play();
 				}
 			} else {
 				if (project[m].xProject < xRaquette + 288 && project[m].xProject + 5 > xRaquette && project[m].yProject + 5 > yRaquette && project[m].yProject + 15 > yRaquette && project[m].yProject - 5 < yRaquette) { //collision sur le dessus
@@ -954,11 +1025,13 @@ animation = function () {
 					}
 					alreadyHitProject = true;
 					project[m].touch = true;
+					briqueSfx.play();
 				}
 			}
 			alreadyHitProject = false;
 			if (!alreadyHitProject) {
 				if (project[m].yProject > 850) {
+					nbScore += 1;
 					project[m].touch = true;
 				}
 			}
@@ -976,35 +1049,43 @@ animation = function () {
 		if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) { //collision sur le dessus
 			masquagePup = false;
 			collisionPupRaquette = true;
+			nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
+			nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 21 > xRaquette + 200) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+			nbScore += 100;
 		}
 		if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+			nbScore += 100;
 		}
 	} else {
 		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) { //collision sur le dessus
 			masquagePup = false;
 			collisionPupRaquette = true;
+			nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
+			nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 288 && xCapsule - 10 < xRaquette + 288 && xCapsule + 21 > xRaquette + 288) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+			nbScore += 100;
 		}
 		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+			nbScore += 100;
 		}
 	}
 	if (yCapsule > 800) {
@@ -1168,6 +1249,9 @@ animation = function () {
 			if (hitBoss <= 0) {
 				dead = true;
 			}
+			briqueSfx.play();
+			nbScore += 20;
+			combo();
 		}
 		if (yBalle + 50 > yBoss && yBalle < yBoss + 160 && xBalle < xBoss + 320 && xBalle - 10 < xBoss + 320 && xBalle + 10 > xBoss + 320) { //collision droite
 			revx = false;
@@ -1180,6 +1264,9 @@ animation = function () {
 			if (hitBoss <= 0) {
 				dead = true;
 			}
+			briqueSfx.play();
+			nbScore += 20;
+			combo();
 		}
 		if (yBalle < yBoss + 160 && yBalle - 10 < yBoss + 160 && yBalle + 10 > yBoss + 160 && xBalle + 50 > xBoss && xBalle < xBoss + 320) { //collision bas
 			revy = false;
@@ -1192,6 +1279,9 @@ animation = function () {
 			if (hitBoss <= 0) {
 				dead = true;
 			}
+			briqueSfx.play();
+			nbScore += 20;
+			combo();
 		}
 		if (yBalle + 50 > yBoss && yBalle + 40 < yBoss && yBalle + 60 > yBoss && xBalle + 50 > xBoss && xBalle < xBoss + 320) { //collision haut
 			revy = true;
@@ -1204,6 +1294,9 @@ animation = function () {
 			if (hitBoss <= 0) {
 				dead = true;
 			}
+			briqueSfx.play();
+			nbScore += 20;
+			combo();
 		}
 		alreadyHit = false;
 	}
