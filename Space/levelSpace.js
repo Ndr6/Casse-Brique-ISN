@@ -695,6 +695,11 @@ animation = function () {
 	//Trajectoire de la balle (à isoler)
 	xPasAnim = 7.07 * Math.abs(Math.cos(angleLine));
 	yPasAnim = 7.07 * Math.abs(Math.sin(angleLine));
+    if (angleLine < -Math.PI / 2) {
+        inversTrajectoire = true;
+    } else if (angleLine > -Math.PI / 2) {
+        inversTrajectoire = false;
+    }
 	if (moveRaquette) {
 		if (xBalle < 0) {
 			revx = false;
