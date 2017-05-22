@@ -20,6 +20,7 @@ var backgroundMusic; //Ce nom est assez explicite je pense
 var win; //Bah quand on gagne, quoi
 var timer1; //Fonction qui permet d'avoir le décompte du powerup
 var go; //Game over
+var combo; //fonction compteur de combo
 
 //Variables son
 var pupLoseSfx = new Audio("sfx/PUP_Lose.wav");
@@ -196,6 +197,11 @@ var pause = false; //Drapeaux activation pause
 var drawLife;
 var nblife = 3; //Nombre de vie
 
+//compteur de combo
+var nbCombo = 0; //nombre de briques détruites avant la fin du décompte
+var clkCombo = 5; //décompte avant fin du combo
+var nbScore = 0; //le score commence à 0
+
 var vieImg = new Image();
 vieImg.src = "gfx/vieImg.png";
 
@@ -220,7 +226,7 @@ var gameoverSfx = new Audio("sfx/gameoverSfx.wav");
 //Fonction de définition du pattern de briques (plutôt basique pour l'instant)
 var creaBriques = function () {
 	"use strict";
-	canvas = document.getElementById('canvas');
+	canvas = document.getElementById("canvas");
 	scene = canvas.getContext("2d");
 
 	var v, i, Briques = function (xBriques, yBriques, life, hit) { //C'est juste des variables pour les boucles for
@@ -420,6 +426,8 @@ pupDirection = function () {
 loseLife = function () {
 	"use strict";
 	moveBalle = false;
+    nbCombo = 0;
+    nbScore -= 100;
 	yBalle = 649;
 	scene.clearRect(xRaquette, yRaquette, raquetteImg.width, raquetteImg.height);
 	scene.clearRect(xBalle, yBalle, 50, 50);
@@ -455,7 +463,6 @@ go = function () { //Perte des vies
 	"use strict";
 	nblife -= 1;
 	loseLifeSfx.play();
-	console.log(nblife);
 	if (nblife <= 0) {
 		scene.drawImage(goImg, 440, 300, goImg.width, goImg.height);
 		moveBalle = false;
@@ -465,6 +472,42 @@ go = function () { //Perte des vies
 	}
 };
 
+combo = function () {
+    "use strict";
+    
+    if (clkCombo > 0) { //ajoute 1 au combo et remet le decompte à 5 s'il n'est pas arrivé à 0
+        nbCombo += 1;
+        clkCombo = 5;
+    } else {  //
+        clkCombo = 5;
+        nbCombo = 1; //redémare le décompte s'il etait arrivé à 0;
+    }
+    console.log("combo actuel:", nbCombo);
+    
+    
+};
+
+
+function horlogeCombo() { //horloge du combo qui est appelée par la fonction intervale, retire 1 à la variable qui fait le décomtpe
+    "use strict";
+    clkCombo -= 1;
+    //console.log("décompte:", clkCombo);
+    if (clkCombo === 0) {
+        nbCombo = 0;
+    }
+}
+setInterval(horlogeCombo, 1000); //intervale qui apelle la fonction au dessus toutes les secondes
+
+function score() {
+    "use strict";
+    if (nbCombo < 10) {
+        nbScore += 10;
+    } else {
+        nbScore += 10 + nbCombo;
+    }
+}
+              
+
 function win() {
 	"use strict";
 	var addLife, sumLife;
@@ -472,8 +515,10 @@ function win() {
 		return a + b;
 	};
 	sumLife = pattern.reduce(addLife, 0);
-	console.log(sumLife);
-	console.log(pattern);
+	//console.log(sumLife);
+	//console.log(pattern);
+    combo();
+    score();
 	if (sumLife === 0) {
 		hasWon = true;
 		moveBalle = false;
@@ -735,6 +780,28 @@ animation = function () {
 	//(Re)construction de la scène
 	scene.clearRect(0, 0, 1280, 800);
 	scene.drawImage(balleImg, xBalle, yBalle, 50, 50);
+    
+    canvas.style.fontFamily = "Fixedsys";
+    scene.font = "50px Fixedsys"; //applique la police et la taille de la police à tout le canvas
+        
+    if (0 < nbCombo && nbCombo < 10) {
+        scene.fillStyle = "deepskyblue";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en bleu s'il est inférieur à 10
+        
+    }
+    if (10 <= nbCombo && nbCombo < 20) {
+        scene.fillStyle = "orange";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en orange s'il est entre 10 et 20
+        
+    }
+    if (20 <= nbCombo) {
+        scene.fillStyle = "red";
+        scene.fillText(nbCombo, 300, 786, 500); //affiche le combo en rouge s'il est supérieur à 20
+        
+    }
+    scene.fillStyle = "deepskyblue";
+    scene.fillText(nbScore, 400, 786, 500); //affiche le score
+    
 	for (k = 0; k < briquesObj.length; k = k + 1) {
 		if (briquesObj[k].life) {
 			if (pattern[k] === 1) {
@@ -800,35 +867,43 @@ animation = function () {
 		if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) { //collision sur le dessus
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 200 && xCapsule - 10 < xRaquette + 200 && xCapsule + 21 > xRaquette + 200) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (xCapsule < xRaquette + 200 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 	} else {
 		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule + 80 > yRaquette && yCapsule + 90 > yRaquette && yCapsule + 70 < yRaquette) { //collision sur le dessus
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule + 40 > xRaquette && xCapsule + 19 < xRaquette && xCapsule + 50 > xRaquette) { //collision gauche
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (yCapsule + 80 > yRaquette && yCapsule < yRaquette + 50 && xCapsule < xRaquette + 288 && xCapsule - 10 < xRaquette + 288 && xCapsule + 21 > xRaquette + 288) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 		if (xCapsule < xRaquette + 288 && xCapsule + 40 > xRaquette && yCapsule < yRaquette + 50 && yCapsule + 10 > yRaquette + 50 && yCapsule - 10 < yRaquette + 50) {
 			masquagePup = false;
 			collisionPupRaquette = true;
+            nbScore += 100;
 		}
 	}
 	if (yCapsule > 800) {
